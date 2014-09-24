@@ -1,0 +1,145 @@
+
+
+body{
+    font-family: ProximaNova, Arial, Helvetica, sans-serif;
+    font-size: smaller;
+    margin: 0;
+}
+
+h2{
+    margin: 0;
+    padding-bottom: 0.3em;
+    border-bottom: thin #b3b3b3 dashed;
+    color: #000;
+    font-weight: normal;
+}
+
+.message{
+    color: #5e5e5e;
+}
+
+/* head */
+
+body > .head{
+    padding: 1em;
+    background: #000 linear-gradient(#555, #000);
+    color: #fff;
+}
+
+body > .head .greater{
+    color: #777;
+}
+
+body > .head h1{
+    font-weight: normal;
+    margin: 0;
+    display: inline-block;
+}
+
+body > .head a{
+    float: right;
+    color: #fff;
+    padding: 0.7em;
+}
+
+/* group */
+
+body > div.group{
+    background: #eee linear-gradient(#fff, #eee);
+    padding: 1em;
+}
+
+/* elements */
+
+div.sliders > div{
+    width: 15em;
+    padding: 1em;
+}
+
+div.sliders > div h3{
+    color: #000;
+    font-weight: normal;
+}
+
+div.sliders > div p.message{
+    margin-bottom: 0;
+}
+
+/* flow */
+
+div.flow > div{
+    vertical-align: top;
+    display: inline-block;
+}
+
+/* storage-required */
+body > div.storage-required {
+    padding: 1em;
+}
+
+body > div.storage-required table {
+    font-size: larger;
+}
+
+body > div.storage-required table thead tr > td + td{
+    font-size: smaller;
+}
+
+body > div.storage-required table td{
+    padding: 0.5em;
+}
+
+body > div.storage-required table tr > td + td{
+    text-align: right;
+}
+
+body > div.storage-required table tr + tr + tr + tr{
+    font-size: larger;
+    font-weight: bolder;
+}
+
+body > div.storage-required table tr + tr + tr + tr  > td + td > span {
+/*    background-color: #57ff00;
+    border-radius: 0.5em;
+    padding: 0.3em;*/
+}
+
+/* storage-configuration */
+body > div.storage-configuration {
+    padding: 1em;
+}
+
+body > div.storage-configuration table {
+    font-size: larger;
+}
+
+body > div.storage-configuration table tr > *{
+    padding: 0.5em;
+    text-align: left;
+}
+
+/* physical-storage */
+
+body > div.physical-storage div.options > div {
+    padding: 1em;
+}
+
+body > div.physical-storage table {
+    font-size: larger;
+}
+
+body > div.physical-storage table thead tr > td + td{
+    font-size: smaller;
+}
+
+body > div.physical-storage table td{
+    padding: 0.5em;
+}
+
+body > div.physical-storage table tr > td + td{
+    text-align: right;
+}
+
+body > div.physical-storage .gb-pricing input[type='text'] {
+  width: 3em;
+}

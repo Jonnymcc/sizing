@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>Splunk Sizing</title>
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <link rel="stylesheet" href="jquery-ui.css" />
+        <link rel="stylesheet" href="ui-textfield.css" />
+        <link rel="stylesheet" href="index.css" />
+        <script src="jquery.min.js"></script>
+        <script src="jquery-ui.min.js"></script>
+        <script src="ui-textfield.js"></script>
+        <script src="sliderWithLabel.js"></script>
+        <script src="index.js"></script>
+        <script src="jquery.ba-bbq.min.js"></script>
+        <script src="numeral.min.js"></script>
+    </head>
+    <body>
+        <div class="head">
+            <h1>splunk<span class="greater">></span> Storage Sizing</h1>
+            <a id="whatsnew" href="#">
+              What's New
+              <div class="dialog" title="What's New" style="display: none;">
+                <ul>
+                  <li>22th September 2014: New Storage Configuration (supporting per volume RAID configuration)</li>
+                  <li>11th August 2014: Disk Space Contingency</li>
+                  <li>11th August 2014: Calculation of number of required physical disk based on selected RAID level and disk size</li>
+                  <li>11th August 2014: Defaults for Enterprice Tier Prices per GB</li>
+                  <li>11th August 2014: Changed retention time range (minimum 0 days, maximum 7 years)</li>
+                  <li>8th August 2014: Changed input volume range (minimum 1 GB, maximum 100 TB)</li>
+                  <li>7th August 2014: Fixed bug storage calculation</li>
+                  <li>5th August 2014: Changed input data and retention sliders from linear scale to scale with incrementing step values</li>
+                  <li>31th July 2014: Split 'Data Retention' into three categories ('Hot, Warm', Cold, Frozen), Added option to select pricing model (Physical Disks, Enterprice Tier), Allow 'Frozen' retention period to be set to zero, Allow daily data volume up to 3 TB (slider starts with  10 GB values changes, later 50 GB and at the end of the slider 100 GB)</li>
+                </ul>
+              </div>
+            </a>
+            <a id="subscribe" href="#">
+              Subscribe
+              <div class="dialog" title="Subscribe for Updates" style="display: none;">
+                  <div id="subscribe_subscribe">
+                      <p>
+                          Email address:
+                          <input id="subscribe_address" type="text" style="width: 10em;">
+                          <button type="button" id="subscribe_button">Subscribe</button>
+                      </p>
+                  </div>
+                  <div id="subscribe_successful">
+                      <p>
+                          Subscription successful!
+                      </p>
+                      <p style="font-style: italic">
+                          Please check your inbox to confirm the email address.
+                      </p>
+                  </div>
+                  <div id="subscribe_failed">
+                      <p>
+                          Subscription failed!
+                      </p>
+                      <p id="subscribe_failed_message" style="font-style: italic"></p>
+                      <p>
+                          <button type="button" id="subscribe_failed_back">Back</button>
+                      </p>
+                  </div>
+              </div>
+            </a>
+        </div>
+        <div class="flow group">
+            <div>
+                <h2>Input data</h2>
+                <div class="flow sliders">
+                    <div>
+                        <h3>Daily Data Volume</h3>
+                        <div id="raw-volume-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                    </div>
+                    <div>
+                        <h3>Compression Factor</h3>
+                        <div id="compression-factor-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                    </div>
+                    <div>
+                        <h3>Metadata Size Factor</h3>
+                        <div id="index-factor-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="flow group">
+            <div>
+                <h2>Data Retention</h2>
+                <div class="flow sliders">
+                    <div>
+                        <h3>Hot, Warm</h3>
+                        <div id="hotwarm-retention-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                    </div>
+                    <div>
+                        <h3>Cold</h3>
+                        <div id="cold-retention-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                    </div>
+                    <div>
+                        <h3>Archived (Frozen)</h3>
+                        <div id="frozen-retention-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="flow group">
+            <div>
+                <h2>
+                    Architecture
+                    <span style="display: inline-block; font-size: small; margin-left: 2em;">
+                        <input type="checkbox" id="enable-cluster-replication">
+                        <label for="enable-cluster-replication">Cluster</label>
+                    </span>
+                </h2>
+                <div class="flow sliders">
+                    <div>
+                        <h3>Number of Nodes</h3>
+                        <div id="indexers-retention-slider"></div>
+                        <div><span class="slider-value"></span> node(s)</div>
+                    </div>
+                </div>
+            </div>
+            <div id="replication-policy-group" style="display: none;">
+                <h2>Replication Policy</h2>
+                <div class="flow sliders">
+                    <div id="search-factor-retention">
+                        <h3>Searchability Factor</h3>
+                        <div id="search-factor-retention-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                        <p style="display: none; text-align: center;" id="search-factor-max-message" class="message">
+                            (reached number of nodes limit)</p>
+                    </div>
+                    <div id="replication-factor-retention">
+                        <h3>Replication Factor</h3>
+                        <div id="replication-factor-retention-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                        <p style="display: none; text-align: center;" id="replication-factor-max-message" class="message">
+                            (reached number of nodes limit)</p>
+                    </div>
+                </div>
+            </div>
+    <!--        <p>
+                <button style="outline: none;">A button element</button>
+            </p>-->
+        </div>
+        <div class="group storage-required">
+            <h2>Storage Required</h2>
+            <table style="width: 100%;">
+                <thead>
+                    <tr class="message">
+                        <td></td>
+                        <td>(per Indexer)</td>
+                        <td>(all Indexers)</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Hot, Warm</td>
+                        <td><div id="hotwarm-indexer-storage" ></div></td>
+                        <td><div id="hotwarm-storage"></div></td>
+                    </tr>
+                    <tr>
+                        <td>Cold</td>
+                        <td><div id="cold-indexer-storage" ></div></td>
+                        <td><div id="cold-storage"></div></td>
+                    </tr>
+                    <tr>
+                        <td>Archived</td>
+                        <td><div id="frozen-indexer-storage"></div></td>
+                        <td><div id="frozen-storage"></div></td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td><span id="indexer-storage"></span></td>
+                        <td><span id="total-storage"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="group storage-configuration">
+            <h2>Storage Configuration</h2>
+            <table cellspacing="10px">
+                <tr>
+                    <th>Buckets</th>
+                    <th>Storage Type</th>
+                </tr>
+                <tr>
+                    <td><label for="storage-configuration-hotwarm">Hot, Warm</label></td>
+                    <td>
+                        <select id="storage-configuration-hotwarm">
+                            <option value="detailed">Detailed</option>
+                            <option value="summary">Summary</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label for="storage-configuration-hotwarm-volume"></label>
+                        <select id="storage-configuration-hotwarm-volume">
+                            <option value="1">Volume 1</option>
+                            <option value="2">Volume 2</option>
+                            <option value="3">Volume 3</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="storage-configuration-cold">Cold</label></td>
+                    <td>
+                        <select id="storage-configuration-cold">
+                            <option value="detailed">Detailed</option>
+                            <option value="summary">Summary</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label for="storage-configuration-cold-volume"></label>
+                        <select id="storage-configuration-cold-volume">
+                            <option value="1">Volume 1</option>
+                            <option value="2">Volume 2</option>
+                            <option value="3">Volume 3</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="storage-configuration-archived">Archived</label></td>
+                    <td>
+                        <select id="storage-configuration-archived">
+                            <option value="detailed">Detailed</option>
+                            <option value="summary">Summary</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label for="storage-configuration-archived-volume"></label>
+                        <select id="storage-configuration-archived-volume">
+                            <option value="1">Volume 1</option>
+                            <option value="2">Volume 2</option>
+                            <option value="3">Volume 3</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="group physical-storage" id="detailed-storage-volume1">
+            <h2>Detailed Storage on Volume 1 for <span id="detailed-storage-volume1-buckets"></span> Buckets</h2>
+            <div class="flow options">
+                <div>
+                    <label for="raid-level-volume1">RAID Level:</label>
+                    <select id="raid-level-volume1">
+                        <option value="0">RAID 0</option>
+                        <option value="10">RAID 10</option>
+                        <option value="0+1">RAID 0+1</option>
+                        <option value="5">RAID 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="disk-size-volume1">Disk Size:</label>
+                    <select id="disk-size-volume1">
+                        <option value="1">1 TB</option>
+                        <option value="2">2 TB</option>
+                        <option value="3">3 TB</option>
+                        <option value="4">4 TB</option>
+                        <option value="5">5 TB</option>
+                    </select>
+                </div>
+                <div class="message">
+                    Splunk does not recommend use of Parity based RAID, since this will have a very negative impact on performance
+                </div>
+                <div>Disk Space Contingency:</div>
+                <div style="width: 5em; padding: 1em;">
+                    <div id="disk-space-contingency-slider-volume1"></div>
+                </div>
+                <div id="disk-space-contingency-volume1">???</div>
+            </div>
+            <table style="width: 100%;">
+                <thead>
+                    <tr class="message">
+                        <td></td>
+                        <td>(per Indexer)</td>
+                        <td>(all Indexers)</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Number of Disks</td>
+                        <td><div id="disk-count-per-indexer-volume1">???</div></td>
+                        <td><div id="disk-count-total-volume1">???</div></td>
+                    </tr>
+                    <tr>
+                        <td>Physical Disk Space</td>
+                        <td><div id="physical-space-per-indexer-volume1">???</div></td>
+                        <td><div id="physical-space-total-volume1">???</div></td>
+                    </tr>
+                    <tr>
+                        <td>Effective Disk Space</td>
+                        <td><div id="effective-space-per-indexer-volume1">???</div></td>
+                        <td><div id="effective-space-total-volume1">???</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="group physical-storage" id="detailed-storage-volume2">
+            <h2>Detailed Storage on Volume 2 for <span id="detailed-storage-volume2-buckets"></span> Buckets</h2>
+            <div class="flow options">
+                <div>
+                    <label for="raid-level-volume2">RAID Level:</label>
+                    <select id="raid-level-volume2">
+                        <option value="0">RAID 0</option>
+                        <option value="10">RAID 10</option>
+                        <option value="0+1">RAID 0+1</option>
+                        <option value="5">RAID 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="disk-size-volume2">Disk Size:</label>
+                    <select id="disk-size-volume2">
+                        <option value="1">1 TB</option>
+                        <option value="2">2 TB</option>
+                        <option value="3">3 TB</option>
+                        <option value="4">4 TB</option>
+                        <option value="5">5 TB</option>
+                    </select>
+                </div>
+                <div class="message">
+                    Splunk does not recommend use of Parity based RAID, since this will have a very negative impact on performance
+                </div>
+                <div>Disk Space Contingency:</div>
+                <div style="width: 5em; padding: 1em;">
+                    <div id="disk-space-contingency-slider-volume2"></div>
+                </div>
+                <div id="disk-space-contingency-volume2">???</div>
+            </div>
+            <table style="width: 100%;">
+                <thead>
+                    <tr class="message">
+                        <td></td>
+                        <td>(per Indexer)</td>
+                        <td>(all Indexers)</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Number of Disks</td>
+                        <td><div id="disk-count-per-indexer-volume2">???</div></td>
+                        <td><div id="disk-count-total-volume2">???</div></td>
+                    </tr>
+                    <tr>
+                        <td>Physical Disk Space</td>
+                        <td><div id="physical-space-per-indexer-volume2">???</div></td>
+                        <td><div id="physical-space-total-volume2">???</div></td>
+                    </tr>
+                    <tr>
+                        <td>Effective Disk Space</td>
+                        <td><div id="effective-space-per-indexer-volume2">???</div></td>
+                        <td><div id="effective-space-total-volume2">???</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="group physical-storage" id="detailed-storage-volume3">
+            <h2>Detailed Storage on Volume 3 for <span id="detailed-storage-volume3-buckets"></span> Buckets</h2>
+            <div class="flow options">
+                <div>
+                    <label for="raid-level-volume3">RAID Level:</label>
+                    <select id="raid-level-volume3">
+                        <option value="0">RAID 0</option>
+                        <option value="10">RAID 10</option>
+                        <option value="0+1">RAID 0+1</option>
+                        <option value="5">RAID 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="disk-size-volume3">Disk Size:</label>
+                    <select id="disk-size-volume3">
+                        <option value="1">1 TB</option>
+                        <option value="2">2 TB</option>
+                        <option value="3">3 TB</option>
+                        <option value="4">4 TB</option>
+                        <option value="5">5 TB</option>
+                    </select>
+                </div>
+                <div class="message">
+                    Splunk does not recommend use of Parity based RAID, since this will have a very negative impact on performance
+                </div>
+                <div>Disk Space Contingency:</div>
+                <div style="width: 5em; padding: 1em;">
+                    <div id="disk-space-contingency-slider-volume3"></div>
+                </div>
+                <div id="disk-space-contingency-volume3">???</div>
+            </div>
+            <table style="width: 100%;">
+                <thead>
+                    <tr class="message">
+                        <td></td>
+                        <td>(per Indexer)</td>
+                        <td>(all Indexers)</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Number of Disks</td>
+                        <td><div id="disk-count-per-indexer-volume3">???</div></td>
+                        <td><div id="disk-count-total-volume3">???</div></td>
+                    </tr>
+                    <tr>
+                        <td>Physical Disk Space</td>
+                        <td><div id="physical-space-per-indexer-volume3">???</div></td>
+                        <td><div id="physical-space-total-volume3">???</div></td>
+                    </tr>
+                    <tr>
+                        <td>Effective Disk Space</td>
+                        <td><div id="effective-space-per-indexer-volume3">???</div></td>
+                        <td><div id="effective-space-total-volume3">???</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="group physical-storage" id="summary-storage">
+            <h2>Summary Storage for <span id="summary-storage-buckets"></span> Buckets</h2>
+            <table style="width: 100%;">
+                <thead>
+                    <tr class="message">
+                        <td></td>
+                        <td>Price per GB</td>
+                        <td>Size</td>
+                        <td>Totel Price</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="summary-storage-hotwarm-row">
+                        <td>Hot Warm</td>
+                        <td><label for="hotwarm-price-gb">$</label> <input type="text" id="hotwarm-price-gb" value="0.02"></td>
+                        <td><div id="hotwarm-summary-storage-size">?</div></td>
+                        <td><div id="hotwarm-price">?</div></td>
+                    </tr>
+                    <tr id="summary-storage-cold-row">
+                        <td>Cold</td>
+                        <td><label for="cold-price-gb">$</label> <input type="text" id="cold-price-gb" value="0.02"></td>
+                        <td><div id="cold-summary-storage-size">?</div></td>
+                        <td><div id="cold-price">?</div></td>
+                    </tr>
+                    <tr id="summary-storage-archived-row">
+                        <td>Archived</td>
+                        <td><label for="frozen-price-gb">$</label> <input type="text" id="frozen-price-gb" value="0.02"></td>
+                        <td><div id="archived-summary-storage-size">?</div></td>
+                        <td><div id="frozen-price">?</div></td>
+                    </tr>
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td></td>
+                        <td></td>
+                        <td><div id="total-price">?</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="group">
+            TODO: When using apps like NetApp or ES (3x), allocate more space for
+            tsidx files,
+            summary indexes or
+            data models
+        </div>
+        <div class="group">
+            TODO: estimate IO OPS
+        </div>
+        <div class="group">
+            TODO: Support multi-site settings
+        </div>
+        <div class="group">
+            TODO: checkbox for header based index time field extraction
+        </div>
+        <div class="group">
+            TODO: provide sample Splunk .conf files reflecting the above configuration
+        </div>
+        <div class="group">
+            TODO: estimate number of nodes (250 GB per day per node)
+        </div>
+    </body>
+</html>

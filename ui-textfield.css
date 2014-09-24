@@ -1,0 +1,10 @@
+.textfield {
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    outline: none;
+    cursor: text;
+    width: 3em;
+    background: #fff none;
+    padding: .2em .5em !important;
+}
