@@ -455,6 +455,35 @@
                 </tbody>
             </table>
         </div>
+        <div class="group config-files">
+            <h2>Configuration Files</h2>
+            <div class="file">
+                <h3>indexes.conf</h3>
+                <pre># volume definitions
+
+[volume:hot1]
+path = /mnt/fast_disk
+maxVolumeDataSizeMB = ???
+
+[volume:cold1]
+path = /mnt/big_disk
+maxVolumeDataSizeMB = ???
+
+# index definitions
+
+[idx1]
+homePath = volume:hot1/idx1
+coldPath = volume:cold1/idx1
+thawedPath = $SPLUNK_DB/idx1/thaweddb
+
+[idx2]
+homePath = volume:hot1/idx1
+coldPath = volume:cold1/idx1
+thawedPath = $SPLUNK_DB/idx1/thaweddb
+
+                </pre>
+            </div>
+        </div>
         <div class="group">
             TODO: When using apps like NetApp or ES (3x), allocate more space for
             tsidx files,

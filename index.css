@@ -143,3 +143,15 @@ body > div.physical-storage table tr > td + td{
 body > div.physical-storage .gb-pricing input[type='text'] {
   width: 3em;
 }
+
+/* config-files */
+
+body > div.config-files div.file{
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 2em;
+}
+
+body > div.config-files div.file > pre{
+    font-size: larger;
+}
