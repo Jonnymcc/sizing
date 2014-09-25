@@ -1178,4 +1178,26 @@ $(function() {
             width: $(document).width()/2
         });
     });
+    var shareLink=$('#share_link');
+    var shareForm=$('#share_form');
+    shareLink.focus(function() {
+        shareLink.select();
+    });
+    $('#share').click(function(e){
+        e.preventDefault();
+        $('.dialog',$(this))['dialog']({
+            draggable: false,
+            resizable: false,
+            modal: true,
+            open: function() {
+                shareLink.val(window.location);
+                shareLink.focus();
+                shareForm.attr('action','mailto:?subject=Splunk Storage Configuration&body='+encodeURIComponent(window.location));
+            },
+            close: function(){
+                $(this)['dialog']("destroy");
+            },
+            width: $(document).width()/2
+        });
+    });
 });
