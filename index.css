@@ -18,6 +18,10 @@ h2{
     color: #5e5e5e;
 }
 
+.ui-widget-overlay{
+    background-image: none;
+}
+
 /* head */
 
 body > .head{
