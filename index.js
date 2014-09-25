@@ -1,6 +1,16 @@
 $(function() {
     $("button").css('outline','none').button();
     $('input:text').textfield();
+    $(document).tooltip({
+      show: null,
+      position: {
+        my: "left top",
+        at: "left bottom"
+      },
+      open: function( event, ui ) {
+          //ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast" );
+      }
+    });
 
     var dailyVolumeDefaultValue = 200;
     var compressionFactorDefaultValue = 0.15;
