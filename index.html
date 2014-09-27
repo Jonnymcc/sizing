@@ -22,6 +22,9 @@
               What's New
               <div class="dialog" title="What's New" style="display: none;">
                 <ul>
+                  <li>25th September 2014: Added 'Share' button allowing users to copy and send the link to the current configuration</li>
+                  <li>24th September 2014: Added 'Feedback' button that opens an email to developer</li>
+                  <li>23th September 2014: Added 'Subscribe' button to allow users to subscribe for news/updates</li>
                   <li>22th September 2014: New Storage Configuration (supporting per volume RAID configuration)</li>
                   <li>11th August 2014: Disk Space Contingency</li>
                   <li>11th August 2014: Calculation of number of required physical disk based on selected RAID level and disk size</li>
@@ -64,6 +67,17 @@
                           <button type="button" id="subscribe_failed_back">Back</button>
                       </p>
                   </div>
+              </div>
+            </a>
+            <a id="share" href="#">
+                Share
+                <div class="dialog" title="Share Configuration" style="display: none;">
+                    <p>Just copy and share the link below:</p>
+                    <form id="share_form" method="post" style="display: inline">
+                        Link
+                        <input type="text" value="test" readonly="true" id="share_link" style="width: 50%;" autofocus>
+                        <button type="submit">Send</button>
+                    </form>
               </div>
             </a>
         </div>
