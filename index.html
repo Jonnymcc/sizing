@@ -21,7 +21,10 @@
             <a id="whatsnew" href="#">
               What's New
               <div class="dialog" title="What's New" style="display: none;">
-                <ul>
+                <ul style="font-size: smaller;">
+                  <li>25th September 2014: Added 'Share' button allowing users to copy and send the link to the current configuration</li>
+                  <li>24th September 2014: Added 'Feedback' button that opens an email to developer</li>
+                  <li>23th September 2014: Added 'Subscribe' button to allow users to subscribe for news/updates</li>
                   <li>22th September 2014: New Storage Configuration (supporting per volume RAID configuration)</li>
                   <li>11th August 2014: Disk Space Contingency</li>
                   <li>11th August 2014: Calculation of number of required physical disk based on selected RAID level and disk size</li>
@@ -33,6 +36,9 @@
                   <li>31th July 2014: Split 'Data Retention' into three categories ('Hot, Warm', Cold, Frozen), Added option to select pricing model (Physical Disks, Enterprice Tier), Allow 'Frozen' retention period to be set to zero, Allow daily data volume up to 3 TB (slider starts with  10 GB values changes, later 50 GB and at the end of the slider 100 GB)</li>
                 </ul>
               </div>
+            </a>
+            <a id="feedback" href="mailto:rfujara@splunk.com">
+                Feedback
             </a>
             <a id="subscribe" href="#">
               Subscribe
@@ -61,6 +67,17 @@
                           <button type="button" id="subscribe_failed_back">Back</button>
                       </p>
                   </div>
+              </div>
+            </a>
+            <a id="share" href="#">
+                Share
+                <div class="dialog" title="Share Configuration" style="display: none;">
+                    <p>Just copy and share the link below:</p>
+                    <form id="share_form" method="post" style="display: inline">
+                        Link
+                        <input type="text" value="test" readonly="true" id="share_link" style="width: 50%;" autofocus>
+                        <button type="submit">Send</button>
+                    </form>
               </div>
             </a>
         </div>
@@ -502,5 +519,13 @@ thawedPath = $SPLUNK_DB/idx1/thaweddb
         <div class="group">
             TODO: estimate number of nodes (250 GB per day per node)
         </div>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-55129940-1', 'auto');
+            ga('send', 'pageview');
+        </script>
     </body>
 </html>
