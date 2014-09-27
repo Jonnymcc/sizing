@@ -1,6 +1,7 @@
 $(function() {
     $("button").css('outline','none').button();
     $('input:text').textfield();
+
     $(document).tooltip({
       show: null,
       position: {
@@ -8,7 +9,14 @@ $(function() {
         at: "left bottom"
       },
       open: function( event, ui ) {
-          //ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast" );
+          ui.tooltip.css('opacity',0);
+          ui.tooltip.animate({
+              opacity: 0,
+          }, 100 );
+          ui.tooltip.animate({
+              opacity: 1,
+              top: ui.tooltip.position().top + 10
+          }, "fast" );
       }
     });
 
@@ -189,7 +197,8 @@ $(function() {
     var searchFactorMaxMessage = $('#search-factor-max-message');
     var replicationFactorMaxMessage = $('#replication-factor-max-message');
     var indexersSlider = $('#indexers-retention-slider');
-    var replicationPolicyGroup = $('#replication-policy-group');
+    var searchFactorRetentionDiv = $('#search-factor-retention');
+    var replicationFactorRetentionDiv = $('#replication-factor-retention');
     var enableClusterReplicationCheckBox = $('#enable-cluster-replication');
     var totalStorage = $('#total-storage');
     var hotWarmStorage = $('#hotwarm-storage');
@@ -788,18 +797,21 @@ $(function() {
     updateReplicationFactorMaxMessage();
     enableClusterReplicationCheckBox.prop('checked', clusterReplicationDefaultValue);
     if(clusterReplicationDefaultValue){
-        replicationPolicyGroup.show();
+        replicationFactorRetentionDiv.show();
+        searchFactorRetentionDiv.show();
         searchFactorSlider('trigger','change');
         replicationFactorSlider('trigger','change');
     }
     enableClusterReplicationCheckBox.change(function(){
         var checked = $(this).is(':checked');
         if(checked){
-            replicationPolicyGroup.show();
+            replicationFactorRetentionDiv.show();
+            searchFactorRetentionDiv.show();
             searchFactorSlider('trigger','change');
             replicationFactorSlider('trigger','change');
         }else{
-            replicationPolicyGroup.hide();
+            replicationFactorRetentionDiv.hide();
+            searchFactorRetentionDiv.hide();
         }
         var state = {};
         state[clusterReplicationKey] = checked?1:0;

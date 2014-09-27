@@ -53,6 +53,11 @@ body > div.group{
     padding: 1em;
 }
 
+body > div.group p.description{
+    font-style: italic;
+    color: #5e5e5e;
+}
+
 /* elements */
 
 div.sliders > div{
