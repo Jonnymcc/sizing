@@ -9,6 +9,7 @@ $(function() {
     var coldRetensionDefaultValue = 25;
     var frozenRetensionDefaultValue = 60;
     var indexersDefaultValue = 2;
+    var indexersCalculatedAutomatically = true;
     var clusterReplicationDefaultValue = false;
     var searchFactorDefaultValue = 2;
     var replicationFactorDefaultValue = 2;
@@ -79,7 +80,10 @@ $(function() {
     var frozenRetensionFromHash = $.bbq.getState(frozenRetensionKey);
     if($.isNumeric(frozenRetensionFromHash)) frozenRetensionDefaultValue = parseInt(frozenRetensionFromHash);
     var indexersFromHash = $.bbq.getState(indexersKey);
-    if($.isNumeric(indexersFromHash)) indexersDefaultValue = parseInt(indexersFromHash);
+    if($.isNumeric(indexersFromHash)) {
+        indexersDefaultValue = parseInt(indexersFromHash);
+        indexersCalculatedAutomatically = false;
+    }
     var clusterReplicationFromHash = $.bbq.getState(clusterReplicationKey);
     if($.isNumeric(clusterReplicationFromHash)) clusterReplicationDefaultValue = parseInt(clusterReplicationFromHash)!=0;
     var searchFactorFromHash = $.bbq.getState(searchFactorKey);
@@ -178,7 +182,8 @@ $(function() {
     var replicationFactorSlider = $('#replication-factor-retention-slider');
     var searchFactorMaxMessage = $('#search-factor-max-message');
     var replicationFactorMaxMessage = $('#replication-factor-max-message');
-    var indexersSlider = $('#indexers-retention-slider');
+    var indexersSlider = $('#indexers-count-slider');
+    var calculateNumberCheckbox = $('#calculate_number_of_nodes');
     var replicationPolicyGroup = $('#replication-policy-group');
     var enableClusterReplicationCheckBox = $('#enable-cluster-replication');
     var totalStorage = $('#total-storage');
@@ -718,6 +723,25 @@ $(function() {
             history.replaceState(undefined, null, hash);
         }
     });
+    var calculateNumberOfNodes=function(){
+    };
+    calculateNumberCheckbox.prop('checked', indexersCalculatedAutomatically);
+    calculateNumberCheckbox.change(function(){
+        indexersCalculatedAutomatically = $(this).is(':checked');
+        var state = {};
+        if(indexersCalculatedAutomatically){
+            indexersSlider('object').css('opacity',0.5);
+            delete state[indexersKey];
+        }else{
+            indexersSlider('object').css('opacity',1);
+            state[indexersKey] = indexersDefaultValue;
+        }
+        var hash = $.param.fragment(window.location.hash,state);
+        history.replaceState(undefined, null, hash);
+        calculateNumberOfNodes();
+    });
+    calculateNumberCheckbox.change();
+    //calculateNumberOfNodes();
     if(clusterReplicationDefaultValue){
         if(searchFactorDefaultValue>indexersDefaultValue){
             searchFactorDefaultValue=indexersDefaultValue;
