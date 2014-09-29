@@ -21,7 +21,8 @@
             <a id="whatsnew" href="#">
               What's New
               <div class="dialog" title="What's New" style="display: none;">
-                <ul>
+                <ul style="font-size: smaller;">
+                  <li>29th September 2014: Added 'Configuration Files' section previewing indexes.conf</li>
                   <li>25th September 2014: Added 'Share' button allowing users to copy and send the link to the current configuration</li>
                   <li>24th September 2014: Added 'Feedback' button that opens an email to developer</li>
                   <li>23th September 2014: Added 'Subscribe' button to allow users to subscribe for news/updates</li>
@@ -467,6 +468,40 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="group config-files">
+            <h2>Configuration Files</h2>
+            <div class="file">
+                <h3>indexes.conf</h3>
+                <pre># volume definitions
+<div id="conffile-volume1">
+[volume:<span id="conffile-volume1-name" class="important-conf-value"></span>]
+path = /mnt/<span id="conffile-volume1-pathname" class="important-conf-value"></span>
+maxVolumeDataSizeMB = <span id="conffile-volume1-maxVolumeDataSizeMB" class="important-conf-value"></span>
+</div><div id="conffile-volume2">
+[volume:<span id="conffile-volume2-name" class="important-conf-value"></span>]
+path = /mnt/<span id="conffile-volume2-pathname" class="important-conf-value"></span>
+maxVolumeDataSizeMB = <span id="conffile-volume2-maxVolumeDataSizeMB" class="important-conf-value"></span>
+</div><div id="conffile-volume3">
+[volume:<span id="conffile-volume3-name" class="important-conf-value"></span>]
+path = /mnt/<span id="conffile-volume3-pathname" class="important-conf-value"></span>
+maxVolumeDataSizeMB = <span id="conffile-volume3-maxVolumeDataSizeMB" class="important-conf-value"></span>
+</div><div id="conffile-summaryvolume">
+[volume:<span id="conffile-summaryvolume-name" class="important-conf-value"></span>]
+path = /mnt/<span id="conffile-summaryvolume-pathname" class="important-conf-value"></span>
+</div>
+# index definition (calculation is based on a single index)
+
+[main]
+homePath = volume:<span id="conffile-index-hotwarm-volumename" class="important-conf-value"></span>/main/db
+coldPath = volume:<span id="conffile-index-cold-volumename" class="important-conf-value"></span>/main/colddb
+thawedPath = $SPLUNK_DB/main/thaweddb
+homePath.maxDataSizeMB = <span id="conffile-index-hotwarm-maxDataSizeMB" class="important-conf-value"></span>
+coldPath.maxDataSizeMB = <span id="conffile-index-cold-maxDataSizeMB" class="important-conf-value"></span>
+maxWarmDBCount = <span class="important-conf-value">4294967295</span>
+frozenTimePeriodInSecs = <span id="conffile-index-frozenTimePeriodInSecs" class="important-conf-value"></span>
+maxDataSize = <span id="conffile-index-maxDataSize" class="important-conf-value"></span></pre>
+            </div>
         </div>
         <div class="group">
             <h2>Roadmap</h2>
