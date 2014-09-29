@@ -11,8 +11,8 @@ $(function() {
       open: function( event, ui ) {
           ui.tooltip.css('opacity',0);
           ui.tooltip.animate({
-              opacity: 0,
-          }, 100 );
+              opacity: 0
+          }, 1000 );
           ui.tooltip.animate({
               opacity: 1,
               top: ui.tooltip.position().top + 10
