@@ -682,7 +682,7 @@ $(function() {
             configFilesSummaryVolumeVolumeNameParts.push('archived');
         }
         var configFilesSummaryVolumeVolumeName=configFilesSummaryVolumeVolumeNameParts.join('_');
-        var summaryStorageSizeTotal = storageHotWarmTotal+storageColdTotal+storageFrozenTotal;
+
         if(configFilesSummaryVolumeVolumeContainsHotWarm){
             configFilesHotWarmVolumeName=configFilesSummaryVolumeVolumeName;
         }
