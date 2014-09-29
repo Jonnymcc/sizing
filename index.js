@@ -717,31 +717,40 @@ $(function() {
             calculate();
         },
         'change': function(){
-            var state = {};
-            state[indexersKey] = indexersSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            if(!indexersCalculatedAutomatically){
+                var state = {};
+                state[indexersKey] = indexersSlider('value');
+                var hash = $.param.fragment(window.location.hash,state);
+                history.replaceState(undefined, null, hash);
+            }else{
+                //console.log('uncheck');
+                calculateNumberCheckbox.prop('checked', false);
+                calculateNumberCheckbox.change();
+            }
         }
     });
     var calculateNumberOfNodes=function(){
+        indexersSlider('value',2);
+        indexersSlider('trigger','change');
     };
     calculateNumberCheckbox.prop('checked', indexersCalculatedAutomatically);
     calculateNumberCheckbox.change(function(){
         indexersCalculatedAutomatically = $(this).is(':checked');
-        var state = {};
+        var state = $.deparam.fragment(window.location.hash);
         if(indexersCalculatedAutomatically){
             indexersSlider('object').css('opacity',0.5);
             delete state[indexersKey];
         }else{
             indexersSlider('object').css('opacity',1);
-            state[indexersKey] = indexersDefaultValue;
+            state[indexersKey] = indexersSlider('value');
         }
-        var hash = $.param.fragment(window.location.hash,state);
+        var hash = $.param.fragment(window.location.hash,state,2);
         history.replaceState(undefined, null, hash);
-        calculateNumberOfNodes();
+        if(indexersCalculatedAutomatically){
+            calculateNumberOfNodes();
+        }
+        calculate();
     });
-    calculateNumberCheckbox.change();
-    //calculateNumberOfNodes();
     if(clusterReplicationDefaultValue){
         if(searchFactorDefaultValue>indexersDefaultValue){
             searchFactorDefaultValue=indexersDefaultValue;
@@ -1140,6 +1149,9 @@ $(function() {
     onHotWarmStorageTypeChanged();
     onColdStorageTypeChanged();
     onArchivedStorageTypeChanged();
+    if(indexersCalculatedAutomatically){
+        calculateNumberOfNodes();
+    }
 
     $(window).bind('hashchange', function() {
         window.location.reload();
