@@ -159,3 +159,7 @@ body > div.config-files div.file{
 body > div.config-files div.file > pre{
     font-size: larger;
 }
+
+body > div.config-files div.file > pre .important-conf-value{
+    font-weight: bolder;
+}
