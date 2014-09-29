@@ -272,10 +272,6 @@ $(function() {
         var diskSizeGBVolume3 = parseInt(diskSizeVolume3Select.val())*1024;
         var diskSpaceContingencyVolume3 = parseFloat(diskSpaceContingencyVolume3Slider('value'));
 
-        diskSizeGBVolume1 -= diskSizeGBVolume1*diskSpaceContingencyVolume1;
-        diskSizeGBVolume2 -= diskSizeGBVolume2*diskSpaceContingencyVolume2;
-        diskSizeGBVolume3 -= diskSizeGBVolume3*diskSpaceContingencyVolume3;
-
         if(!isCluster){
           searchFactor = 1;
           replicationFactor = 1;
@@ -444,7 +440,7 @@ $(function() {
         };
 
         var volume1PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
-            storageVolume1PerIndexer,
+            storageVolume1PerIndexer + (storageVolume1PerIndexer*diskSpaceContingencyVolume1),
             raidLevelVolume1,
             diskSizeGBVolume1);
         console.debug('diskCountVolume1PerIndexer: '+volume1PerIndexer.diskCount);
@@ -465,7 +461,7 @@ $(function() {
         effectiveDiskSpaceTotalVolume1Div.text(numeral(effectiveDiskSpaceVolume1Total*gbtobytesFactor).format('0.0 b'));
 
         var volume2PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
-            storageVolume2PerIndexer,
+            storageVolume2PerIndexer + (storageVolume2PerIndexer*diskSpaceContingencyVolume2),
             raidLevelVolume2,
             diskSizeGBVolume2);
         console.debug('diskCountVolume2PerIndexer: '+volume2PerIndexer.diskCount);
@@ -486,7 +482,7 @@ $(function() {
         effectiveDiskSpaceTotalVolume2Div.text(numeral(effectiveDiskSpaceVolume2Total*gbtobytesFactor).format('0.0 b'));
         
         var volume3PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
-            storageVolume3PerIndexer,
+            storageVolume3PerIndexer + (storageVolume3PerIndexer*diskSpaceContingencyVolume3),
             raidLevelVolume3,
             diskSizeGBVolume3);
         console.debug('diskCountVolume3PerIndexer: '+volume3PerIndexer.diskCount);
