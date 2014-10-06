@@ -717,31 +717,46 @@ $(function() {
             calculate();
         },
         'change': function(){
-            if(!indexersCalculatedAutomatically){
-                var state = {};
-                state[indexersKey] = indexersSlider('value');
-                var hash = $.param.fragment(window.location.hash,state);
-                history.replaceState(undefined, null, hash);
-            }else{
-                //console.log('uncheck');
-                calculateNumberCheckbox.prop('checked', false);
-                calculateNumberCheckbox.change();
+            if(!calculatingNumberOfNodes){
+                if(!indexersCalculatedAutomatically){
+                    var state = {};
+                    state[indexersKey] = indexersSlider('value');
+                    var hash = $.param.fragment(window.location.hash,state);
+                    history.replaceState(undefined, null, hash);
+                    calculate();
+                }else{
+                    calculateNumberCheckbox.prop('checked', false);
+                    calculateNumberCheckbox.change();
+                }
             }
         }
     });
+    var calculatingNumberOfNodes = false;
     var calculateNumberOfNodes=function(){
-        indexersSlider('value',2);
-        indexersSlider('trigger','change');
+        calculatingNumberOfNodes=true;
+        if(calculatingNumberOfNodes){
+            indexersSlider('value',3);
+            indexersSlider('trigger','change');
+            calculatingNumberOfNodes=false;
+        }
     };
-    calculateNumberCheckbox.prop('checked', indexersCalculatedAutomatically);
-    calculateNumberCheckbox.change(function(){
-        indexersCalculatedAutomatically = $(this).is(':checked');
-        var state = $.deparam.fragment(window.location.hash);
+    var updateIndexerCountOpacity=function(){
+        indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
         if(indexersCalculatedAutomatically){
             indexersSlider('object').css('opacity',0.5);
-            delete state[indexersKey];
         }else{
             indexersSlider('object').css('opacity',1);
+        }
+    };
+    calculateNumberCheckbox.prop('checked', indexersCalculatedAutomatically);
+    updateIndexerCountOpacity();
+    calculateNumberCheckbox.change(function(){
+        updateIndexerCountOpacity();
+        indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
+        var state = $.deparam.fragment(window.location.hash);
+        if(indexersCalculatedAutomatically){
+            delete state[indexersKey];
+        }else{
             state[indexersKey] = indexersSlider('value');
         }
         var hash = $.param.fragment(window.location.hash,state,2);
