@@ -197,6 +197,7 @@ $(function() {
     var frozenPriceDiv = $('#frozen-price');
     var totalPriceDiv = $('#total-price');
     var raidLevelVolume1Select = $('#raid-level-volume1');
+    var physicalStorageVolume1RaidParityWarning = $('#physical-storage-volume1-raid-parity-warning');
     var diskSizeVolume1Select = $('#disk-size-volume1');
     var diskCountPerIndexerVolume1Div = $('#disk-count-per-indexer-volume1');
     var diskCountTotalVolume1Div = $('#disk-count-total-volume1');
@@ -207,6 +208,7 @@ $(function() {
     var diskSpaceContingencyVolume1Slider = $('#disk-space-contingency-slider-volume1');
     var diskSpaceContingencyVolume1Div = $('#disk-space-contingency-volume1');
     var raidLevelVolume2Select = $('#raid-level-volume2');
+    var physicalStorageVolume2RaidParityWarning = $('#physical-storage-volume2-raid-parity-warning');
     var diskSizeVolume2Select = $('#disk-size-volume2');
     var diskCountPerIndexerVolume2Div = $('#disk-count-per-indexer-volume2');
     var diskCountTotalVolume2Div = $('#disk-count-total-volume2');
@@ -217,6 +219,7 @@ $(function() {
     var diskSpaceContingencyVolume2Slider = $('#disk-space-contingency-slider-volume2');
     var diskSpaceContingencyVolume2Div = $('#disk-space-contingency-volume2');
     var raidLevelVolume3Select = $('#raid-level-volume3');
+    var physicalStorageVolume3RaidParityWarning = $('#physical-storage-volume3-raid-parity-warning');
     var diskSizeVolume3Select = $('#disk-size-volume3');
     var diskCountPerIndexerVolume3Div = $('#disk-count-per-indexer-volume3');
     var diskCountTotalVolume3Div = $('#disk-count-total-volume3');
@@ -1024,8 +1027,17 @@ $(function() {
         }
     });
     diskSpaceContingencyVolume1Div.text(parseInt(diskSpaceContingencyVolume1DefaultValue*100)+' %');
+    var updatePhysicalStorageVolume1RaidParityWarningVisibility = function(){
+        if(raidLevelVolume1Select.val()=='5'){
+            physicalStorageVolume1RaidParityWarning.show();
+        }else{
+            physicalStorageVolume1RaidParityWarning.hide();
+        }
+    };
     raidLevelVolume1Select.val(raidLevelVolume1DefaultValue);
+    updatePhysicalStorageVolume1RaidParityWarningVisibility();
     raidLevelVolume1Select.change(function(){
+        updatePhysicalStorageVolume1RaidParityWarningVisibility();
       var raidLevel = raidLevelVolume1Select.val();
       var state = {}; state[raidLevelVolume1Key] = raidLevel;
       var hash = $.param.fragment(window.location.hash,state);
@@ -1057,8 +1069,17 @@ $(function() {
         }
     });
     diskSpaceContingencyVolume2Div.text(parseInt(diskSpaceContingencyVolume2DefaultValue*100)+' %');
+    var updatePhysicalStorageVolume2RaidParityWarningVisibility = function(){
+        if(raidLevelVolume2Select.val()=='5'){
+            physicalStorageVolume2RaidParityWarning.show();
+        }else{
+            physicalStorageVolume2RaidParityWarning.hide();
+        }
+    };
     raidLevelVolume2Select.val(raidLevelVolume2DefaultValue);
+    updatePhysicalStorageVolume2RaidParityWarningVisibility();
     raidLevelVolume2Select.change(function(){
+        updatePhysicalStorageVolume2RaidParityWarningVisibility();
       var raidLevel = raidLevelVolume2Select.val();
       var state = {}; state[raidLevelVolume2Key] = raidLevel;
       var hash = $.param.fragment(window.location.hash,state);
@@ -1090,21 +1111,30 @@ $(function() {
         }
     });
     diskSpaceContingencyVolume3Div.text(parseInt(diskSpaceContingencyVolume3DefaultValue*100)+' %');
+    var updatePhysicalStorageVolume3RaidParityWarningVisibility = function(){
+        if(raidLevelVolume3Select.val()=='5'){
+            physicalStorageVolume3RaidParityWarning.show();
+        }else{
+            physicalStorageVolume3RaidParityWarning.hide();
+        }
+    };
     raidLevelVolume3Select.val(raidLevelVolume3DefaultValue);
+    updatePhysicalStorageVolume3RaidParityWarningVisibility();
     raidLevelVolume3Select.change(function(){
-      var raidLevel = raidLevelVolume3Select.val();
-      var state = {}; state[raidLevelVolume3Key] = raidLevel;
-      var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
-      calculate();
+        updatePhysicalStorageVolume3RaidParityWarningVisibility();
+        var raidLevel = raidLevelVolume3Select.val();
+        var state = {}; state[raidLevelVolume3Key] = raidLevel;
+        var hash = $.param.fragment(window.location.hash,state);
+        history.replaceState(undefined, null, hash);
+        calculate();
     });
     diskSizeVolume3Select.val(diskSizeVolume3DefaultValue);
     diskSizeVolume3Select.change(function(){
-      var diskSize = diskSizeVolume3Select.val();
-      var state = {}; state[diskSizeVolume3Key] = diskSize;
-      var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
-      calculate();
+        var diskSize = diskSizeVolume3Select.val();
+        var state = {}; state[diskSizeVolume3Key] = diskSize;
+        var hash = $.param.fragment(window.location.hash,state);
+        history.replaceState(undefined, null, hash);
+        calculate();
     });
     
     storageConfigurationHotWarm.val(hotWarmStorageTypeDefaultValue);
