@@ -3,21 +3,23 @@ $(function() {
     $('input:text').textfield();
 
     $(document).tooltip({
-      show: null,
-      position: {
-        my: "left top",
-        at: "left bottom"
-      },
-      open: function( event, ui ) {
-          ui.tooltip.css('opacity',0);
-          ui.tooltip.animate({
-              opacity: 0
-          }, 1000 );
-          ui.tooltip.animate({
-              opacity: 1,
-              top: ui.tooltip.position().top + 10
-          }, "fast" );
-      }
+        show: null,
+        position: {
+            my: "left top",
+            at: "left bottom"
+        },
+        open: function( event, ui ) {
+            ui.tooltip.hide();
+            /*
+            ui.tooltip.css('opacity',0);
+            ui.tooltip.animate({
+            opacity: 0
+            }, 1000 );
+            ui.tooltip.animate({
+            opacity: 1,
+            top: ui.tooltip.position().top + 10
+            }, "fast" );*/
+        }
     });
 
     var dailyVolumeDefaultValue = 200;
