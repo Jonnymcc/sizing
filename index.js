@@ -776,6 +776,9 @@ $(function() {
         'value': dailyVolumeDefaultValue,
         'step': 0.02,
         'changed': function(){
+            if(indexersCalculatedAutomatically){
+                calculateNumberOfNodes();
+            }
             calculate();
         },
         'change': function(){
@@ -912,7 +915,7 @@ $(function() {
     });
     indexersSlider = indexersSlider.slideWithLabel({
         'value': indexersDefaultValue,
-        'min': 1, 'max': 20, 'step': 1,
+        'min': 1, 'max': 50, 'step': 1,
         'changed': function(){
             var value = indexersSlider('value');
             var searchFactor = searchFactorSlider('value');
@@ -948,7 +951,9 @@ $(function() {
     var calculateNumberOfNodes=function(){
         calculatingNumberOfNodes=true;
         if(calculatingNumberOfNodes){
-            indexersSlider('value',3);
+            var rawVolume = rawVolumeSlider('value');
+            var numberOfNodes = Math.ceil(rawVolume/220);
+            indexersSlider('value',parseInt(numberOfNodes));
             indexersSlider('trigger','change');
             calculatingNumberOfNodes=false;
         }
