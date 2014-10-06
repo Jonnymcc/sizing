@@ -202,6 +202,7 @@ $(function() {
     var frozenPriceDiv = $('#frozen-price');
     var totalPriceDiv = $('#total-price');
     var raidLevelVolume1Select = $('#raid-level-volume1');
+    var physicalStorageVolume1RaidParityWarning = $('#physical-storage-volume1-raid-parity-warning');
     var diskSizeVolume1Select = $('#disk-size-volume1');
     var diskCountPerIndexerVolume1Div = $('#disk-count-per-indexer-volume1');
     var diskCountTotalVolume1Div = $('#disk-count-total-volume1');
@@ -212,6 +213,7 @@ $(function() {
     var diskSpaceContingencyVolume1Slider = $('#disk-space-contingency-slider-volume1');
     var diskSpaceContingencyVolume1Div = $('#disk-space-contingency-volume1');
     var raidLevelVolume2Select = $('#raid-level-volume2');
+    var physicalStorageVolume2RaidParityWarning = $('#physical-storage-volume2-raid-parity-warning');
     var diskSizeVolume2Select = $('#disk-size-volume2');
     var diskCountPerIndexerVolume2Div = $('#disk-count-per-indexer-volume2');
     var diskCountTotalVolume2Div = $('#disk-count-total-volume2');
@@ -222,6 +224,7 @@ $(function() {
     var diskSpaceContingencyVolume2Slider = $('#disk-space-contingency-slider-volume2');
     var diskSpaceContingencyVolume2Div = $('#disk-space-contingency-volume2');
     var raidLevelVolume3Select = $('#raid-level-volume3');
+    var physicalStorageVolume3RaidParityWarning = $('#physical-storage-volume3-raid-parity-warning');
     var diskSizeVolume3Select = $('#disk-size-volume3');
     var diskCountPerIndexerVolume3Div = $('#disk-count-per-indexer-volume3');
     var diskCountTotalVolume3Div = $('#disk-count-total-volume3');
@@ -251,6 +254,27 @@ $(function() {
     var hotwarmSummaryStorageSize = $('#hotwarm-summary-storage-size');
     var coldSummaryStorageSize = $('#cold-summary-storage-size');
     var archivedSummaryStorageSize = $('#archived-summary-storage-size');
+    var conffileVolume1 = $('#conffile-volume1');
+    var conffileVolume2 = $('#conffile-volume2');
+    var conffileVolume3 = $('#conffile-volume3');
+    var conffileSummaryVolume = $('#conffile-summaryvolume');
+    var conffileVolume1Name = $('#conffile-volume1-name');
+    var conffileVolume2Name = $('#conffile-volume2-name');
+    var conffileVolume3Name = $('#conffile-volume3-name');
+    var conffileSummaryVolumeName = $('#conffile-summaryvolume-name');
+    var conffileVolume1Pathname = $('#conffile-volume1-pathname');
+    var conffileVolume2Pathname = $('#conffile-volume2-pathname');
+    var conffileVolume3Pathname = $('#conffile-volume3-pathname');
+    var conffileSummaryVolumePathname = $('#conffile-summaryvolume-pathname');
+    var conffileVolume1MaxVolumeDataSizeMB = $('#conffile-volume1-maxVolumeDataSizeMB');
+    var conffileVolume2MaxVolumeDataSizeMB = $('#conffile-volume2-maxVolumeDataSizeMB');
+    var conffileVolume3MaxVolumeDataSizeMB = $('#conffile-volume3-maxVolumeDataSizeMB');
+    var conffileIndexHotwarmVolumeName = $('#conffile-index-hotwarm-volumename');
+    var conffileIndexColdVolumeName = $('#conffile-index-cold-volumename');
+    var conffileIndexHotwarmMaxDataSizeMB = $('#conffile-index-hotwarm-maxDataSizeMB');
+    var conffileIndexColdMaxDataSizeMB = $('#conffile-index-cold-maxDataSizeMB');
+    var conffileIndexFrozenTimePeriodInSecs = $('#conffile-index-frozenTimePeriodInSecs');
+    var conffileIndexMaxDataSize = $('#conffile-index-maxDataSize');
 
     var calculate = function(){
         console.debug("calculating...");
@@ -276,10 +300,6 @@ $(function() {
         var raidLevelVolume3 = raidLevelVolume3Select.val();
         var diskSizeGBVolume3 = parseInt(diskSizeVolume3Select.val())*1024;
         var diskSpaceContingencyVolume3 = parseFloat(diskSpaceContingencyVolume3Slider('value'));
-
-        diskSizeGBVolume1 -= diskSizeGBVolume1*diskSpaceContingencyVolume1;
-        diskSizeGBVolume2 -= diskSizeGBVolume2*diskSpaceContingencyVolume2;
-        diskSizeGBVolume3 -= diskSizeGBVolume3*diskSpaceContingencyVolume3;
 
         if(!isCluster){
           searchFactor = 1;
@@ -401,6 +421,7 @@ $(function() {
         var totalPrice = hotWarmPrice+coldPrice+frozenPrice;
 
         var gbtobytesFactor=1024*1024*1024;
+        var GBtoMBFactor=1024;
         totalStorage.text(numeral(storageTotal*gbtobytesFactor).format('0.0 b'));
         hotWarmStorage.text(numeral(storageHotWarmTotal*gbtobytesFactor).format('0.0 b'));
         coldStorage.text(numeral(storageColdTotal*gbtobytesFactor).format('0.0 b'));
@@ -449,7 +470,7 @@ $(function() {
         };
 
         var volume1PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
-            storageVolume1PerIndexer,
+            storageVolume1PerIndexer + (storageVolume1PerIndexer*diskSpaceContingencyVolume1),
             raidLevelVolume1,
             diskSizeGBVolume1);
         console.debug('diskCountVolume1PerIndexer: '+volume1PerIndexer.diskCount);
@@ -470,7 +491,7 @@ $(function() {
         effectiveDiskSpaceTotalVolume1Div.text(numeral(effectiveDiskSpaceVolume1Total*gbtobytesFactor).format('0.0 b'));
 
         var volume2PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
-            storageVolume2PerIndexer,
+            storageVolume2PerIndexer + (storageVolume2PerIndexer*diskSpaceContingencyVolume2),
             raidLevelVolume2,
             diskSizeGBVolume2);
         console.debug('diskCountVolume2PerIndexer: '+volume2PerIndexer.diskCount);
@@ -491,7 +512,7 @@ $(function() {
         effectiveDiskSpaceTotalVolume2Div.text(numeral(effectiveDiskSpaceVolume2Total*gbtobytesFactor).format('0.0 b'));
         
         var volume3PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
-            storageVolume3PerIndexer,
+            storageVolume3PerIndexer + (storageVolume3PerIndexer*diskSpaceContingencyVolume3),
             raidLevelVolume3,
             diskSizeGBVolume3);
         console.debug('diskCountVolume3PerIndexer: '+volume3PerIndexer.diskCount);
@@ -510,6 +531,177 @@ $(function() {
         physicalDiskSpaceTotalVolume3Div.text(numeral(physicalDiskSpaceVolume3Total*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpacePerIndexerVolume3Div.text(numeral(volume3PerIndexer.effectiveSpace*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpaceTotalVolume3Div.text(numeral(effectiveDiskSpaceVolume3Total*gbtobytesFactor).format('0.0 b'));
+
+        var configFilesHotWarmVolumeName;
+        var configFilesColdVolumeName;
+
+        var configFilesVolume1VolumeNameParts=[];
+        var configFilesVolume1VolumeContainsHotWarm=false;
+        var configFilesVolume1VolumeContainsCold=false;
+        if(storageConfigurationHotWarm.val()==storageTypeDetailed &&
+            storageConfigurationHotWarmVolume.val()==detailedVolume1)
+        {
+            configFilesVolume1VolumeNameParts.push('hotwarm');
+            configFilesVolume1VolumeContainsHotWarm=true;
+        }
+        if(storageConfigurationCold.val()==storageTypeDetailed &&
+            storageConfigurationColdVolume.val()==detailedVolume1)
+        {
+            configFilesVolume1VolumeNameParts.push('cold');
+            configFilesVolume1VolumeContainsCold=true;
+        }
+        if(storageConfigurationArchived.val()==storageTypeDetailed &&
+            storageConfigurationArchivedVolume.val()==detailedVolume1)
+        {
+            configFilesVolume1VolumeNameParts.push('archived');
+        }
+        var configFilesVolume1VolumeName=configFilesVolume1VolumeNameParts.join('_');
+        var maxVolumeDataSizeMBVolume1=volume1PerIndexer.effectiveSpace*GBtoMBFactor;
+        maxVolumeDataSizeMBVolume1-=parseInt(maxVolumeDataSizeMBVolume1*diskSpaceContingencyVolume3);
+        if(configFilesVolume1VolumeContainsHotWarm){
+            configFilesHotWarmVolumeName=configFilesVolume1VolumeName;
+        }
+        if(configFilesVolume1VolumeContainsCold){
+            configFilesColdVolumeName=configFilesVolume1VolumeName;
+        }
+        if(configFilesVolume1VolumeNameParts.length>0){
+            conffileVolume1.show();
+            conffileVolume1Name.text(configFilesVolume1VolumeName);
+            if(configFilesVolume1VolumeContainsHotWarm){
+                conffileVolume1Pathname.text('fast_disk');
+            }else{
+                conffileVolume1Pathname.text('big_disk');
+            }
+            conffileVolume1MaxVolumeDataSizeMB.text(maxVolumeDataSizeMBVolume1);
+        }else{
+            conffileVolume1.hide();
+        }
+
+        var configFilesVolume2VolumeNameParts=[];
+        var configFilesVolume2VolumeContainsHotWarm=false;
+        var configFilesVolume2VolumeContainsCold=false;
+        if(storageConfigurationHotWarm.val()==storageTypeDetailed &&
+            storageConfigurationHotWarmVolume.val()==detailedVolume2)
+        {
+            configFilesVolume2VolumeNameParts.push('hotwarm');
+            configFilesVolume2VolumeContainsHotWarm=true;
+        }
+        if(storageConfigurationCold.val()==storageTypeDetailed &&
+            storageConfigurationColdVolume.val()==detailedVolume2)
+        {
+            configFilesVolume2VolumeNameParts.push('cold');
+            configFilesVolume2VolumeContainsCold=true;
+        }
+        if(storageConfigurationArchived.val()==storageTypeDetailed &&
+            storageConfigurationArchivedVolume.val()==detailedVolume2)
+        {
+            configFilesVolume2VolumeNameParts.push('archived');
+        }
+        var configFilesVolume2VolumeName=configFilesVolume2VolumeNameParts.join('_');
+        var maxVolumeDataSizeMBVolume2=volume2PerIndexer.effectiveSpace*GBtoMBFactor;
+        maxVolumeDataSizeMBVolume2-=parseInt(maxVolumeDataSizeMBVolume2*diskSpaceContingencyVolume3);
+        if(configFilesVolume2VolumeContainsHotWarm){
+            configFilesHotWarmVolumeName=configFilesVolume2VolumeName;
+        }
+        if(configFilesVolume2VolumeContainsCold){
+            configFilesColdVolumeName=configFilesVolume2VolumeName;
+        }
+        if(configFilesVolume2VolumeNameParts.length>0){
+            conffileVolume2.show();
+            conffileVolume2Name.text(configFilesVolume2VolumeName);
+            if(configFilesVolume2VolumeContainsHotWarm){
+                conffileVolume2Pathname.text('fast_disk');
+            }else{
+                conffileVolume2Pathname.text('big_disk');
+            }
+            conffileVolume2MaxVolumeDataSizeMB.text(maxVolumeDataSizeMBVolume2);
+        }else{
+            conffileVolume2.hide();
+        }
+
+        var configFilesVolume3VolumeNameParts=[];
+        var configFilesVolume3VolumeContainsHotWarm=false;
+        if(storageConfigurationHotWarm.val()==storageTypeDetailed &&
+            storageConfigurationHotWarmVolume.val()==detailedVolume3)
+        {
+            configFilesVolume3VolumeNameParts.push('hotwarm');
+            configFilesVolume3VolumeContainsHotWarm=true;
+        }
+        if(storageConfigurationCold.val()==storageTypeDetailed &&
+            storageConfigurationColdVolume.val()==detailedVolume3)
+        {
+            configFilesVolume3VolumeNameParts.push('cold');
+        }
+        if(storageConfigurationArchived.val()==storageTypeDetailed &&
+            storageConfigurationArchivedVolume.val()==detailedVolume3)
+        {
+            configFilesVolume3VolumeNameParts.push('archived');
+        }
+        var configFilesVolume3VolumeName=configFilesVolume3VolumeNameParts.join('_');
+        var maxVolumeDataSizeMBVolume3=volume3PerIndexer.effectiveSpace*GBtoMBFactor;
+        maxVolumeDataSizeMBVolume3-=parseInt(maxVolumeDataSizeMBVolume3*diskSpaceContingencyVolume3);
+        if(configFilesVolume3VolumeNameParts.length>0){
+            conffileVolume3.show();
+            conffileVolume3Name.text(configFilesVolume3VolumeName);
+            if(configFilesVolume3VolumeContainsHotWarm){
+                conffileVolume3Pathname.text('fast_disk');
+            }else{
+                conffileVolume3Pathname.text('big_disk');
+            }
+            conffileVolume3MaxVolumeDataSizeMB.text(maxVolumeDataSizeMBVolume3);
+        }else{
+            conffileVolume3.hide();
+        }
+
+        var configFilesSummaryVolumeVolumeNameParts=[];
+        var configFilesSummaryVolumeVolumeContainsHotWarm=false;
+        var configFilesSummaryVolumeVolumeContainsCold=false;
+        if(storageConfigurationHotWarm.val()==storageTypeSummary)
+        {
+            configFilesSummaryVolumeVolumeNameParts.push('hotwarm');
+            configFilesSummaryVolumeVolumeContainsHotWarm=true;
+        }
+        if(storageConfigurationCold.val()==storageTypeSummary)
+        {
+            configFilesSummaryVolumeVolumeNameParts.push('cold');
+            configFilesSummaryVolumeVolumeContainsCold=true;
+        }
+        if(storageConfigurationArchived.val()==storageTypeSummary)
+        {
+            configFilesSummaryVolumeVolumeNameParts.push('archived');
+        }
+        var configFilesSummaryVolumeVolumeName=configFilesSummaryVolumeVolumeNameParts.join('_');
+        var summaryStorageSizeTotal = storageHotWarmTotal+storageColdTotal+storageFrozenTotal;
+        if(configFilesSummaryVolumeVolumeContainsHotWarm){
+            configFilesHotWarmVolumeName=configFilesSummaryVolumeVolumeName;
+        }
+        if(configFilesSummaryVolumeVolumeContainsCold){
+            configFilesColdVolumeName=configFilesSummaryVolumeVolumeName;
+        }
+        if(configFilesSummaryVolumeVolumeNameParts.length>0){
+            conffileSummaryVolume.show();
+            conffileSummaryVolumeName.text(configFilesSummaryVolumeVolumeName);
+            if(configFilesSummaryVolumeVolumeContainsHotWarm){
+                conffileSummaryVolumePathname.text('fast_storage');
+            }else{
+                conffileSummaryVolumePathname.text('big_storage');
+            }
+        }else{
+            conffileSummaryVolume.hide();
+        }
+
+        conffileIndexHotwarmVolumeName.text(configFilesHotWarmVolumeName);
+        conffileIndexColdVolumeName.text(configFilesColdVolumeName);
+        conffileIndexHotwarmMaxDataSizeMB.text(parseInt(storageHotWarmPerIndexer*GBtoMBFactor));
+        conffileIndexColdMaxDataSizeMB.text(parseInt(storageColdPerIndexer*GBtoMBFactor));
+        var hotWarmRetentionSeconds = hotWarmRetentionSlider('value')*24*60*60;
+        var coldRetentionSeconds = coldRetentionSlider('value')*24*60*60;
+        conffileIndexFrozenTimePeriodInSecs.text(hotWarmRetentionSeconds+coldRetentionSeconds);
+        if((rawVolume/indexers)>10){
+            conffileIndexMaxDataSize.text('auto_high_volume');
+        }else{
+            conffileIndexMaxDataSize.text('auto');
+        }
     };
 
     var retensionSliderConvertFromDays = function(value){
@@ -883,8 +1075,17 @@ $(function() {
         }
     });
     diskSpaceContingencyVolume1Div.text(parseInt(diskSpaceContingencyVolume1DefaultValue*100)+' %');
+    var updatePhysicalStorageVolume1RaidParityWarningVisibility = function(){
+        if(raidLevelVolume1Select.val()=='5'){
+            physicalStorageVolume1RaidParityWarning.show();
+        }else{
+            physicalStorageVolume1RaidParityWarning.hide();
+        }
+    };
     raidLevelVolume1Select.val(raidLevelVolume1DefaultValue);
+    updatePhysicalStorageVolume1RaidParityWarningVisibility();
     raidLevelVolume1Select.change(function(){
+        updatePhysicalStorageVolume1RaidParityWarningVisibility();
       var raidLevel = raidLevelVolume1Select.val();
       var state = {}; state[raidLevelVolume1Key] = raidLevel;
       var hash = $.param.fragment(window.location.hash,state);
@@ -916,8 +1117,17 @@ $(function() {
         }
     });
     diskSpaceContingencyVolume2Div.text(parseInt(diskSpaceContingencyVolume2DefaultValue*100)+' %');
+    var updatePhysicalStorageVolume2RaidParityWarningVisibility = function(){
+        if(raidLevelVolume2Select.val()=='5'){
+            physicalStorageVolume2RaidParityWarning.show();
+        }else{
+            physicalStorageVolume2RaidParityWarning.hide();
+        }
+    };
     raidLevelVolume2Select.val(raidLevelVolume2DefaultValue);
+    updatePhysicalStorageVolume2RaidParityWarningVisibility();
     raidLevelVolume2Select.change(function(){
+        updatePhysicalStorageVolume2RaidParityWarningVisibility();
       var raidLevel = raidLevelVolume2Select.val();
       var state = {}; state[raidLevelVolume2Key] = raidLevel;
       var hash = $.param.fragment(window.location.hash,state);
@@ -949,21 +1159,30 @@ $(function() {
         }
     });
     diskSpaceContingencyVolume3Div.text(parseInt(diskSpaceContingencyVolume3DefaultValue*100)+' %');
+    var updatePhysicalStorageVolume3RaidParityWarningVisibility = function(){
+        if(raidLevelVolume3Select.val()=='5'){
+            physicalStorageVolume3RaidParityWarning.show();
+        }else{
+            physicalStorageVolume3RaidParityWarning.hide();
+        }
+    };
     raidLevelVolume3Select.val(raidLevelVolume3DefaultValue);
+    updatePhysicalStorageVolume3RaidParityWarningVisibility();
     raidLevelVolume3Select.change(function(){
-      var raidLevel = raidLevelVolume3Select.val();
-      var state = {}; state[raidLevelVolume3Key] = raidLevel;
-      var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
-      calculate();
+        updatePhysicalStorageVolume3RaidParityWarningVisibility();
+        var raidLevel = raidLevelVolume3Select.val();
+        var state = {}; state[raidLevelVolume3Key] = raidLevel;
+        var hash = $.param.fragment(window.location.hash,state);
+        history.replaceState(undefined, null, hash);
+        calculate();
     });
     diskSizeVolume3Select.val(diskSizeVolume3DefaultValue);
     diskSizeVolume3Select.change(function(){
-      var diskSize = diskSizeVolume3Select.val();
-      var state = {}; state[diskSizeVolume3Key] = diskSize;
-      var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
-      calculate();
+        var diskSize = diskSizeVolume3Select.val();
+        var state = {}; state[diskSizeVolume3Key] = diskSize;
+        var hash = $.param.fragment(window.location.hash,state);
+        history.replaceState(undefined, null, hash);
+        calculate();
     });
     
     storageConfigurationHotWarm.val(hotWarmStorageTypeDefaultValue);
