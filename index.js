@@ -912,7 +912,7 @@ $(function() {
     });
     indexersSlider = indexersSlider.slideWithLabel({
         'value': indexersDefaultValue,
-        'min': 1, 'max': 20, 'step': 1,
+        'min': 1, 'max': 50, 'step': 1,
         'changed': function(){
             var value = indexersSlider('value');
             var searchFactor = searchFactorSlider('value');
