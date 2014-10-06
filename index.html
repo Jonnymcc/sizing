@@ -129,7 +129,11 @@
             <div>
                 <h2>
                     Architecture
-                    <span style="display: inline-block; font-size: small; margin-left: 2em;">
+                    <span style="display: inline-block; font-size: small; margin-left: 1em;">
+                        <input type="checkbox" id="calculate_number_of_nodes">
+                        <label for="calculate_number_of_nodes">Estimate automatically</label>
+                    </span>
+                    <span style="display: inline-block; font-size: small; margin-left: 1em; margin-right: 1em;">
                         <input type="checkbox" id="enable-cluster-replication">
                         <label for="enable-cluster-replication">Cluster</label>
                     </span>
@@ -139,10 +143,6 @@
                         <h3>Number of Nodes</h3>
                         <div id="indexers-count-slider" style="opacity: 0.5"></div>
                         <div><span class="slider-value"></span> node(s)</div>
-                        <p>
-                            <input type="checkbox" id="calculate_number_of_nodes">
-                            <label for="calculate_number_of_nodes">Estimate automatically (move to top)</label>
-                        </p>
                     </div>
                 </div>
             </div>
