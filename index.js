@@ -29,6 +29,7 @@ $(function() {
     var coldRetensionDefaultValue = 25;
     var frozenRetensionDefaultValue = 60;
     var indexersDefaultValue = 2;
+    var indexersCalculatedAutomatically = true;
     var clusterReplicationDefaultValue = false;
     var searchFactorDefaultValue = 2;
     var replicationFactorDefaultValue = 2;
@@ -99,7 +100,10 @@ $(function() {
     var frozenRetensionFromHash = $.bbq.getState(frozenRetensionKey);
     if($.isNumeric(frozenRetensionFromHash)) frozenRetensionDefaultValue = parseInt(frozenRetensionFromHash);
     var indexersFromHash = $.bbq.getState(indexersKey);
-    if($.isNumeric(indexersFromHash)) indexersDefaultValue = parseInt(indexersFromHash);
+    if($.isNumeric(indexersFromHash)) {
+        indexersDefaultValue = parseInt(indexersFromHash);
+        indexersCalculatedAutomatically = false;
+    }
     var clusterReplicationFromHash = $.bbq.getState(clusterReplicationKey);
     if($.isNumeric(clusterReplicationFromHash)) clusterReplicationDefaultValue = parseInt(clusterReplicationFromHash)!=0;
     var searchFactorFromHash = $.bbq.getState(searchFactorKey);
@@ -201,6 +205,7 @@ $(function() {
     var indexersSlider = $('#indexers-retention-slider');
     var searchFactorRetentionDiv = $('#search-factor-retention');
     var replicationFactorRetentionDiv = $('#replication-factor-retention');
+    var calculateNumberCheckbox = $('#calculate_number_of_nodes');
     var enableClusterReplicationCheckBox = $('#enable-cluster-replication');
     var totalStorage = $('#total-storage');
     var hotWarmStorage = $('#hotwarm-storage');
@@ -925,11 +930,54 @@ $(function() {
             calculate();
         },
         'change': function(){
-            var state = {};
-            state[indexersKey] = indexersSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            if(!calculatingNumberOfNodes){
+                if(!indexersCalculatedAutomatically){
+                    var state = {};
+                    state[indexersKey] = indexersSlider('value');
+                    var hash = $.param.fragment(window.location.hash,state);
+                    history.replaceState(undefined, null, hash);
+                    calculate();
+                }else{
+                    calculateNumberCheckbox.prop('checked', false);
+                    calculateNumberCheckbox.change();
+                }
+            }
         }
+    });
+    var calculatingNumberOfNodes = false;
+    var calculateNumberOfNodes=function(){
+        calculatingNumberOfNodes=true;
+        if(calculatingNumberOfNodes){
+            indexersSlider('value',3);
+            indexersSlider('trigger','change');
+            calculatingNumberOfNodes=false;
+        }
+    };
+    var updateIndexerCountOpacity=function(){
+        indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
+        if(indexersCalculatedAutomatically){
+            indexersSlider('object').css('opacity',0.5);
+        }else{
+            indexersSlider('object').css('opacity',1);
+        }
+    };
+    calculateNumberCheckbox.prop('checked', indexersCalculatedAutomatically);
+    updateIndexerCountOpacity();
+    calculateNumberCheckbox.change(function(){
+        updateIndexerCountOpacity();
+        indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
+        var state = $.deparam.fragment(window.location.hash);
+        if(indexersCalculatedAutomatically){
+            delete state[indexersKey];
+        }else{
+            state[indexersKey] = indexersSlider('value');
+        }
+        var hash = $.param.fragment(window.location.hash,state,2);
+        history.replaceState(undefined, null, hash);
+        if(indexersCalculatedAutomatically){
+            calculateNumberOfNodes();
+        }
+        calculate();
     });
     if(clusterReplicationDefaultValue){
         if(searchFactorDefaultValue>indexersDefaultValue){
@@ -1359,6 +1407,9 @@ $(function() {
     onHotWarmStorageTypeChanged();
     onColdStorageTypeChanged();
     onArchivedStorageTypeChanged();
+    if(indexersCalculatedAutomatically){
+        calculateNumberOfNodes();
+    }
 
     $(window).bind('hashchange', function() {
         window.location.reload();

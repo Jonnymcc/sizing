@@ -92,6 +92,9 @@ $.fn.slideWithLabel = function(options) {
         var toValue=convertToSliderValue(fromValue);
         return slider['slider']('value',toValue);
       }
+      if(arguments.length==1 && arguments[0]=='object'){
+        return self;
+      }
       if(arguments.length==1 && arguments[0]=='value'){
         return getValue();
       }
