@@ -776,6 +776,9 @@ $(function() {
         'value': dailyVolumeDefaultValue,
         'step': 0.02,
         'changed': function(){
+            if(indexersCalculatedAutomatically){
+                calculateNumberOfNodes();
+            }
             calculate();
         },
         'change': function(){
@@ -948,7 +951,11 @@ $(function() {
     var calculateNumberOfNodes=function(){
         calculatingNumberOfNodes=true;
         if(calculatingNumberOfNodes){
-            indexersSlider('value',3);
+            var rawVolume = rawVolumeSlider('value');
+            console.log(rawVolume);
+            var numberOfNodes = Math.ceil(rawVolume/220);
+            console.log(numberOfNodes);
+            indexersSlider('value',parseInt(numberOfNodes));
             indexersSlider('trigger','change');
             calculatingNumberOfNodes=false;
         }
