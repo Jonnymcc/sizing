@@ -173,13 +173,18 @@ body > div.config-files div.file > pre .important-conf-value{
 /* retention bar */
 
 .itunes{
+    padding-left: 1em;
+}
+
+.itunes h3{
+    color: #000;
+    font-weight: normal;
 }
 
 .itunes .info{
-    float: left;
+    float: right;
     height: 2.5em;
     padding-left: 1em;
-    padding-right: 1em;
     display: table;
 }
 

@@ -339,13 +339,13 @@ $(function() {
         var frozenRetentionPercent = 100 - homeRetentionPercent - coldRetentionPercent;
         retentionBarFrozenPart.css('width',frozenRetentionPercent+'%');
         if(total<=90){
-            retentionBarTotal.text(total+' Days');
+            retentionBarTotal.text(total+' days');
         }
         else if(total<=30*36){
-            retentionBarTotal.text(Math.round(total/30)+' Months');
+            retentionBarTotal.text(Math.round(total/30)+' months');
         }
         else{
-            retentionBarTotal.text(Math.round(total/30/12)+' Years');
+            retentionBarTotal.text(Math.round(total/30/12)+' years');
         }
 
 
