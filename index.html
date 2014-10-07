@@ -536,6 +536,19 @@ maxWarmDBCount = <span class="important-conf-value">4294967295</span>
 frozenTimePeriodInSecs = <span id="conffile-index-frozenTimePeriodInSecs" class="important-conf-value"></span>
 maxDataSize = <span id="conffile-index-maxDataSize" class="important-conf-value"></span></pre>
             </div>
+            <div class="file">
+                <h3>server.conf (for cluster master)</h3>
+                <pre>[clustering]
+mode = master
+                </pre>
+            </div>
+            <div class="file">
+                <h3>server.conf (for cluster slave)</h3>
+                <pre>[clustering]
+mode = slave
+master_uri = &lt;uri&gt;: &lt;scheme&gt;://&lt;hostname&gt;:&lt;port&gt;
+                </pre>
+            </div>
         </div>
         <div class="group">
             <h2>Roadmap</h2>
