@@ -296,6 +296,10 @@ $(function() {
     var conffileIndexColdMaxDataSizeMB = $('#conffile-index-cold-maxDataSizeMB');
     var conffileIndexFrozenTimePeriodInSecs = $('#conffile-index-frozenTimePeriodInSecs');
     var conffileIndexMaxDataSize = $('#conffile-index-maxDataSize');
+    var retentionBarHomePart = $('.itunes > .bar-container > .bar > .home');
+    var retentionBarColdPart = $('.itunes > .bar-container > .bar > .cold');
+    var retentionBarFrozenPart = $('.itunes > .bar-container > .bar > .frozen');
+    var retentionBarTotal = $('#total-rentention');
 
     var calculate = function(){
         console.debug("calculating...");
@@ -326,6 +330,24 @@ $(function() {
           searchFactor = 1;
           replicationFactor = 1;
         }
+
+        var total = hotWarmRetention + coldRetention + frozenRetention;
+        var homeRetentionPercent = Math.round(hotWarmRetention / total * 100);
+        retentionBarHomePart.css('width',homeRetentionPercent+'%');
+        var coldRetentionPercent = Math.round(coldRetention / total * 100);
+        retentionBarColdPart.css('width',coldRetentionPercent+'%');
+        var frozenRetentionPercent = 100 - homeRetentionPercent - coldRetentionPercent;
+        retentionBarFrozenPart.css('width',frozenRetentionPercent+'%');
+        if(total<=90){
+            retentionBarTotal.text(total+' Days');
+        }
+        else if(total<=30*36){
+            retentionBarTotal.text(Math.round(total/30)+' Months');
+        }
+        else{
+            retentionBarTotal.text(Math.round(total/30/12)+' Years');
+        }
+
 
         var newRawDataPerDay = rawVolume * compressionFactor;
         console.debug("rawDataPerDay: "+newRawDataPerDay+" GB");
