@@ -22,6 +22,8 @@
               What's New
               <div class="dialog" title="What's New" style="display: none;">
                 <ul style="font-size: smaller;">
+                  <li>7th October 2014: Retention time visualization</li>
+                  <li>6th October 2014: Estimate number of required nodes/indexers based on daily input data volume</li>
                   <li>29th September 2014: Added 'Configuration Files' section previewing indexes.conf</li>
                   <li>25th September 2014: Added 'Share' button allowing users to copy and send the link to the current configuration</li>
                   <li>24th September 2014: Added 'Feedback' button that opens an email to developer</li>
@@ -105,25 +107,46 @@
             <p style="display: none;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
           </div>
           <div class="flow group">
-            <h2>Data Retention</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            <div class="flow sliders">
-                <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
-                    <h3>Hot, Warm</h3>
-                    <div id="hotwarm-retention-slider"></div>
-                    <div><span class="slider-value"></span></div>
+                <h2>Data Retention</h2>
+                <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <div class="flow sliders">
+                    <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                        <h3>Hot, Warm</h3>
+                        <div id="hotwarm-retention-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                    </div>
+                    <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                        <h3>Cold</h3>
+                        <div id="cold-retention-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                    </div>
+                    <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                        <h3>Archived (Frozen)</h3>
+                        <div id="frozen-retention-slider"></div>
+                        <div><span class="slider-value"></span></div>
+                    </div>
                 </div>
-                <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
-                    <h3>Cold</h3>
-                    <div id="cold-retention-slider"></div>
-                    <div><span class="slider-value"></span></div>
+                <div class="itunes">
+                    <h3>Retention Time</h3>
+                    <div class="bar-container">
+                        <div class="bar">
+                            <div class="inner"></div>
+                            <div class="home"></div>
+                            <div class="cold"></div>
+                            <div class="frozen"></div>
+                        </div>
+                        <div class="legend">
+                            <div><span class="home"></span>Hot, Warm</div>
+                            <div><span class="cold"></span>Cold</div>
+                            <div><span class="frozen"></span>Archived</div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <p>
+                            Total = <span id="total-rentention">XX</span>
+                        </p>
+                    </div>
                 </div>
-                <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
-                    <h3>Archived (Frozen)</h3>
-                    <div id="frozen-retention-slider"></div>
-                    <div><span class="slider-value"></span></div>
-                </div>
-            </div>
           </div>
           <div class="flow group">
             <h2>
@@ -532,9 +555,6 @@ maxDataSize = <span id="conffile-index-maxDataSize" class="important-conf-value"
                 </li>
                 <li>
                     checkbox for header based index time field extraction
-                </li>
-                <li>
-                    estimate number of nodes (250 GB per day per node)
                 </li>
                 <li>
                     architecture diagram
