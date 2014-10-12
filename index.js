@@ -22,6 +22,9 @@ $(function() {
         }
     });
 
+    var gbtobytesFactor=1024*1024*1024;
+    var GBtoMBFactor=1024;
+
     var dailyVolumeDefaultValue = 200;
     var compressionFactorDefaultValue = 0.15;
     var indexFactorDefaultValue = 0.35;
@@ -193,6 +196,8 @@ $(function() {
     }
 
     var rawVolumeSlider = $('#raw-volume-slider');
+    var sizeByEventsPerSecCheckbox = $('#size-by-events-per-sec');
+    var eventsPerSecondSlider = $('#events-per-second-slider');
     var compressionFactorSlider = $('#compression-factor-slider');
     var indexFactorSlider = $('#index-factor-slider');
     var hotWarmRetentionSlider = $('#hotwarm-retention-slider');
@@ -301,9 +306,22 @@ $(function() {
     var retentionBarFrozenPart = $('.itunes > .bar-container > .bar > .frozen');
     var retentionBarTotal = $('#total-rentention');
 
+    var getDataVolumePerDay=function(){
+        var sizeByEventsPerSec = sizeByEventsPerSecCheckbox.is(":checked");
+        if(sizeByEventsPerSec){
+            var eventsPerSecond = eventsPerSecondSlider('value');
+            var eventsPerDay = eventsPerSecond*60*60*24;
+            var averageMessageSizeBytes = 320;
+            var dailyBytes = eventsPerDay*averageMessageSizeBytes;
+            return dailyBytes/gbtobytesFactor;
+        }else{
+            return rawVolumeSlider('value');
+        }
+    };
+
     var calculate = function(){
         console.debug("calculating...");
-        var rawVolume = rawVolumeSlider('value');
+        var rawVolume = getDataVolumePerDay();
         var compressionFactor = compressionFactorSlider('value');
         var indexFactor = indexFactorSlider('value');
         var hotWarmRetention = hotWarmRetentionSlider('value');
@@ -463,8 +481,6 @@ $(function() {
         }
         var totalPrice = hotWarmPrice+coldPrice+frozenPrice;
 
-        var gbtobytesFactor=1024*1024*1024;
-        var GBtoMBFactor=1024;
         totalStorage.text(numeral(storageTotal*gbtobytesFactor).format('0.0 b'));
         hotWarmStorage.text(numeral(storageHotWarmTotal*gbtobytesFactor).format('0.0 b'));
         coldStorage.text(numeral(storageColdTotal*gbtobytesFactor).format('0.0 b'));
@@ -861,6 +877,64 @@ $(function() {
           //return result;
         }
     });
+    eventsPerSecondSlider = eventsPerSecondSlider.slideWithLabel({
+        'value': 100,
+        'step': 0.02,
+        'changed': function(){
+            if(indexersCalculatedAutomatically){
+                calculateNumberOfNodes();
+            }
+            calculate();
+        },
+        'change': function(){
+            //var state = {};
+            //state[dailyVolumeKey] = rawVolumeSlider('value');
+            //var hash = $.param.fragment(window.location.hash,state);
+            //history.replaceState(undefined, null, hash);
+        },
+        'toSlider': function(value){
+            value/=50;
+            var result;
+            if(value<10) { // 0.00 - 0.16
+                result = (value-1)/50;
+            } else if(value<100) { // 0.18 - 0.34
+                result = 0.18+(value-10)/500;
+            } else if(value<1000) { // 0.36 - 0.52
+                result = 0.36+(value-100)/5000;
+            } else if(value<20000) { // 0.54 - 0.90
+                result = 0.54+(value-1000)/50000;
+            } else if(value<100000) { // 0.92 - 0.98
+                result = 0.92+(value-20000)/500000;
+            } else { // 1.00
+                result = 1.0;
+            }
+            result = Math.round(result*100)/100;
+            //console.log('toSlider('+value+') -> '+result);
+            return result;
+        },
+        'fromSlider': function(percent){
+            var result;
+            if(percent<0.18)
+                result = 1+percent*50;
+            else if(percent<0.36)
+                result = 10+(percent-0.18)*500;
+            else if(percent<0.54)
+                result = 100+(percent-0.36)*5000;
+            else if(percent<0.92)
+                result = 1000+(percent-0.54)*50000;
+            else if(percent<1.00)
+                result = 20000+(percent-0.92)*500000;
+            else
+                result = 100000;
+            result = Math.round(result);
+            //console.log('fromSlider('+percent+') -> '+result);
+            result*=50;
+            return result;
+        },
+        'display': function(value){
+            return value;
+        }
+    });
     compressionFactorSlider = compressionFactorSlider.slideWithLabel({
         'value': compressionFactorDefaultValue,
         'min': 0.01, 'max': 0.4, 'step': 0.01,
@@ -973,7 +1047,7 @@ $(function() {
     var calculateNumberOfNodes=function(){
         calculatingNumberOfNodes=true;
         if(calculatingNumberOfNodes){
-            var rawVolume = rawVolumeSlider('value');
+            var rawVolume = getDataVolumePerDay();
             var numberOfNodes = Math.ceil(rawVolume/220);
             indexersSlider('value',parseInt(numberOfNodes));
             indexersSlider('trigger','change');
