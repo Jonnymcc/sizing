@@ -25,6 +25,10 @@ $(function() {
     var gbtobytesFactor=1024*1024*1024;
     var GBtoMBFactor=1024;
 
+    var sizeTypeEventsPerSecond = 'eps';
+    var sizeTypeDailyVolume = 'v';
+    var sizeTypeDefaultValue = sizeTypeDailyVolume;
+    var eventsPerSecondDefaultValue = 5000;
     var dailyVolumeDefaultValue = 200;
     var compressionFactorDefaultValue = 0.15;
     var indexFactorDefaultValue = 0.35;
@@ -60,6 +64,8 @@ $(function() {
     var coldDetailedVolumeDefaultValue = detailedVolume1;
     var archivedDetailedVolumeDefaultValue = detailedVolume2;
 
+    var sizeTypeKey = 'st';
+    var eventsPerSecondKey = 'eps';
     var dailyVolumeKey = 'v';
     var compressionFactorKey = 'cf';
     var indexFactorKey = 'if';
@@ -89,8 +95,12 @@ $(function() {
     var coldDetailedVolumeKey = 'cdv';
     var archivedDetailedVolumeKey = 'adv';
 
+    var sizeTypeKeyFromHash = $.bbq.getState(sizeTypeKey);
+    if(Object.prototype.toString.call(sizeTypeKeyFromHash)=='[object String]') sizeTypeDefaultValue = sizeTypeKeyFromHash;
     var dailyVolumeFromHash = $.bbq.getState(dailyVolumeKey);
     if($.isNumeric(dailyVolumeFromHash)) dailyVolumeDefaultValue = parseInt(dailyVolumeFromHash);
+    var eventsPerSecondFromHash = $.bbq.getState(eventsPerSecondKey);
+    if($.isNumeric(eventsPerSecondFromHash)) eventsPerSecondDefaultValue = parseInt(eventsPerSecondFromHash);
     var compressionFactorFromHash = $.bbq.getState(compressionFactorKey);
     if($.isNumeric(compressionFactorFromHash)) compressionFactorDefaultValue = parseFloat(compressionFactorFromHash);
     var indexFactorFromHash = $.bbq.getState(indexFactorKey);
@@ -196,8 +206,10 @@ $(function() {
     }
 
     var rawVolumeSlider = $('#raw-volume-slider');
+    var rawVolumeDiv = $('#raw-volume-div');
     var sizeByEventsPerSecCheckbox = $('#size-by-events-per-sec');
     var eventsPerSecondSlider = $('#events-per-second-slider');
+    var eventsPerSecondDiv = $('#events-per-second-div');
     var compressionFactorSlider = $('#compression-factor-slider');
     var indexFactorSlider = $('#index-factor-slider');
     var hotWarmRetentionSlider = $('#hotwarm-retention-slider');
@@ -878,7 +890,7 @@ $(function() {
         }
     });
     eventsPerSecondSlider = eventsPerSecondSlider.slideWithLabel({
-        'value': 100,
+        'value': eventsPerSecondDefaultValue,
         'step': 0.02,
         'changed': function(){
             if(indexersCalculatedAutomatically){
@@ -887,10 +899,10 @@ $(function() {
             calculate();
         },
         'change': function(){
-            //var state = {};
-            //state[dailyVolumeKey] = rawVolumeSlider('value');
-            //var hash = $.param.fragment(window.location.hash,state);
-            //history.replaceState(undefined, null, hash);
+            var state = {};
+            state[eventsPerSecondKey] = eventsPerSecondSlider('value');
+            var hash = $.param.fragment(window.location.hash,state);
+            history.replaceState(undefined, null, hash);
         },
         'toSlider': function(value){
             value/=50;
@@ -934,6 +946,39 @@ $(function() {
         'display': function(value){
             return value;
         }
+    });
+    if(sizeTypeDefaultValue==sizeTypeEventsPerSecond){
+        eventsPerSecondDiv.show();
+        rawVolumeDiv.hide();
+        sizeByEventsPerSecCheckbox.prop('checked', true);
+    }
+    else if(sizeTypeDefaultValue==sizeTypeDailyVolume){
+        eventsPerSecondDiv.hide();
+        rawVolumeDiv.show();
+        sizeByEventsPerSecCheckbox.prop('checked', false);
+    }
+    sizeByEventsPerSecCheckbox.change(function(){
+        var state = {};
+        if(sizeByEventsPerSecCheckbox.is(':checked')){
+            state[sizeTypeKey] = sizeTypeEventsPerSecond;
+            eventsPerSecondDiv.show();
+            rawVolumeDiv.hide();
+            eventsPerSecondSlider('trigger','change');
+            if(indexersCalculatedAutomatically){
+                calculateNumberOfNodes();
+            }
+        }else{
+            state[sizeTypeKey] = sizeTypeDailyVolume;
+            eventsPerSecondDiv.hide();
+            rawVolumeDiv.show();
+            rawVolumeSlider('trigger','change');
+            if(indexersCalculatedAutomatically){
+                calculateNumberOfNodes();
+            }
+        }
+        var hash = $.param.fragment(window.location.hash,state);
+        history.replaceState(undefined, null, hash);
+        calculate();
     });
     compressionFactorSlider = compressionFactorSlider.slideWithLabel({
         'value': compressionFactorDefaultValue,
