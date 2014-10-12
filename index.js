@@ -37,13 +37,13 @@ $(function() {
     var coldPriceDefaultValue = '0.05';
     var frozenPriceDefaultValue = '0.01';
     var raidLevelVolume1DefaultValue = '0';
-    var diskSizeVolume1DefaultValue = 1;
+    var diskSizeVolume1DefaultValue = '1024';
     var diskSpaceContingencyVolume1DefaultValue = 0.05;
     var raidLevelVolume2DefaultValue = '0';
-    var diskSizeVolume2DefaultValue = 1;
+    var diskSizeVolume2DefaultValue = '1024';
     var diskSpaceContingencyVolume2DefaultValue = 0.05;
     var raidLevelVolume3DefaultValue = '0';
-    var diskSizeVolume3DefaultValue = 1;
+    var diskSizeVolume3DefaultValue = '1024';
     var diskSpaceContingencyVolume3DefaultValue = 0.05;
     var storageTypeDetailed = 'detailed';
     var storageTypeSummary = 'summary';
@@ -121,21 +121,60 @@ $(function() {
     var raidLevelVolume1FromHash = $.bbq.getState(raidLevelVolume1Key);
     if(Object.prototype.toString.call(raidLevelVolume1FromHash)=='[object String]') raidLevelVolume1DefaultValue = raidLevelVolume1FromHash;
     var diskSizeVolume1FromHash = $.bbq.getState(diskSizeVolume1Key);
-    if($.isNumeric(diskSizeVolume1FromHash)) diskSizeVolume1DefaultValue = parseFloat(diskSizeVolume1FromHash);
+    if(Object.prototype.toString.call(diskSizeVolume1FromHash)=='[object String]') {
+        diskSizeVolume1DefaultValue = diskSizeVolume1FromHash;
+    }
+    if($.isNumeric(diskSizeVolume1DefaultValue)){
+        if(parseInt(diskSizeVolume1DefaultValue)<=6){
+            (function(){
+                diskSizeVolume1DefaultValue = parseInt(diskSizeVolume1DefaultValue)*1024;
+                var state = {};
+                state[diskSizeVolume1Key] = diskSizeVolume1DefaultValue;
+                var hash = $.param.fragment(window.location.hash,state);
+                history.replaceState(undefined, null, hash);
+            })();
+        }
+    }
     var diskSpaceContingencyVolume1FromHash = $.bbq.getState(diskSpaceContingencyVolume1Key);
     if($.isNumeric(diskSpaceContingencyVolume1FromHash)) diskSpaceContingencyVolume1DefaultValue = parseFloat(diskSpaceContingencyVolume1FromHash);
 
     var raidLevelVolume2FromHash = $.bbq.getState(raidLevelVolume2Key);
     if(Object.prototype.toString.call(raidLevelVolume2FromHash)=='[object String]') raidLevelVolume2DefaultValue = raidLevelVolume2FromHash;
     var diskSizeVolume2FromHash = $.bbq.getState(diskSizeVolume2Key);
-    if($.isNumeric(diskSizeVolume2FromHash)) diskSizeVolume2DefaultValue = parseFloat(diskSizeVolume2FromHash);
+    if(Object.prototype.toString.call(diskSizeVolume2FromHash)=='[object String]') {
+        diskSizeVolume2DefaultValue = diskSizeVolume2FromHash;
+    }
+    if($.isNumeric(diskSizeVolume2DefaultValue)){
+        if(parseInt(diskSizeVolume2DefaultValue)<=6){
+            (function(){
+                diskSizeVolume2DefaultValue = parseInt(diskSizeVolume2DefaultValue)*1024;
+                var state = {};
+                state[diskSizeVolume2Key] = diskSizeVolume2DefaultValue;
+                var hash = $.param.fragment(window.location.hash,state);
+                history.replaceState(undefined, null, hash);
+            })();
+        }
+    }
     var diskSpaceContingencyVolume2FromHash = $.bbq.getState(diskSpaceContingencyVolume2Key);
     if($.isNumeric(diskSpaceContingencyVolume2FromHash)) diskSpaceContingencyVolume2DefaultValue = parseFloat(diskSpaceContingencyVolume2FromHash);
 
     var raidLevelVolume3FromHash = $.bbq.getState(raidLevelVolume3Key);
     if(Object.prototype.toString.call(raidLevelVolume3FromHash)=='[object String]') raidLevelVolume3DefaultValue = raidLevelVolume3FromHash;
     var diskSizeVolume3FromHash = $.bbq.getState(diskSizeVolume3Key);
-    if($.isNumeric(diskSizeVolume3FromHash)) diskSizeVolume3DefaultValue = parseFloat(diskSizeVolume3FromHash);
+    if(Object.prototype.toString.call(diskSizeVolume3FromHash)=='[object String]') {
+        diskSizeVolume3DefaultValue = diskSizeVolume3FromHash;
+    }
+    if($.isNumeric(diskSizeVolume3DefaultValue)){
+        if(parseInt(diskSizeVolume3DefaultValue)<=6){
+            (function(){
+                diskSizeVolume3DefaultValue = parseInt(diskSizeVolume3DefaultValue)*1024;
+                var state = {};
+                state[diskSizeVolume3Key] = diskSizeVolume3DefaultValue;
+                var hash = $.param.fragment(window.location.hash,state);
+                history.replaceState(undefined, null, hash);
+            })();
+        }
+    }
     var diskSpaceContingencyVolume3FromHash = $.bbq.getState(diskSpaceContingencyVolume3Key);
     if($.isNumeric(diskSpaceContingencyVolume3FromHash)) diskSpaceContingencyVolume3DefaultValue = parseFloat(diskSpaceContingencyVolume3FromHash);
 
@@ -317,13 +356,13 @@ $(function() {
         var coldPriceGB = parseFloat(coldPriceGBInput.val());
         var frozenPriceGB = parseFloat(frozenPriceGBInput.val());
         var raidLevelVolume1 = raidLevelVolume1Select.val();
-        var diskSizeGBVolume1 = parseInt(diskSizeVolume1Select.val())*1024;
+        var diskSizeGBVolume1 = parseInt(diskSizeVolume1Select.val());
         var diskSpaceContingencyVolume1 = parseFloat(diskSpaceContingencyVolume1Slider('value'));
         var raidLevelVolume2 = raidLevelVolume2Select.val();
-        var diskSizeGBVolume2 = parseInt(diskSizeVolume2Select.val())*1024;
+        var diskSizeGBVolume2 = parseInt(diskSizeVolume2Select.val());
         var diskSpaceContingencyVolume2 = parseFloat(diskSpaceContingencyVolume2Slider('value'));
         var raidLevelVolume3 = raidLevelVolume3Select.val();
-        var diskSizeGBVolume3 = parseInt(diskSizeVolume3Select.val())*1024;
+        var diskSizeGBVolume3 = parseInt(diskSizeVolume3Select.val());
         var diskSpaceContingencyVolume3 = parseFloat(diskSpaceContingencyVolume3Slider('value'));
 
         if(!isCluster){
