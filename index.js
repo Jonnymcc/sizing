@@ -944,7 +944,7 @@ $(function() {
             return result;
         },
         'display': function(value){
-            return value;
+            return numeral(value).format('0a');
         }
     });
     if(sizeTypeDefaultValue==sizeTypeEventsPerSecond){
