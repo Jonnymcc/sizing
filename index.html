@@ -22,6 +22,8 @@
               What's New
               <div class="dialog" title="What's New" style="display: none;">
                 <ul style="font-size: smaller;">
+                  <li>7th October 2014: Retention time visualization</li>
+                  <li>6th October 2014: Estimate number of required nodes/indexers based on daily input data volume</li>
                   <li>29th September 2014: Added 'Configuration Files' section previewing indexes.conf</li>
                   <li>25th September 2014: Added 'Share' button allowing users to copy and send the link to the current configuration</li>
                   <li>24th September 2014: Added 'Feedback' button that opens an email to developer</li>
@@ -83,91 +85,107 @@
             </a>
         </div>
         <div class="flow group">
-            <div>
-                <h2>Input data</h2>
-                <div class="flow sliders">
-                    <div>
-                        <h3>Daily Data Volume</h3>
-                        <div id="raw-volume-slider"></div>
-                        <div><span class="slider-value"></span></div>
-                    </div>
-                    <div>
-                        <h3>Compression Factor</h3>
-                        <div id="compression-factor-slider"></div>
-                        <div><span class="slider-value"></span></div>
-                    </div>
-                    <div>
-                        <h3>Metadata Size Factor</h3>
-                        <div id="index-factor-slider"></div>
-                        <div><span class="slider-value"></span></div>
-                    </div>
+            <h2>Input data</h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <div class="flow sliders">
+                <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                    <h3>Daily Data Volume</h3>
+                    <div id="raw-volume-slider"></div>
+                    <div><span class="slider-value"></span></div>
+                </div>
+                <div title="Typically, the compressed rawdata file is 10% the size of the incoming, pre-indexed raw data. The number of unique terms in the data affect this value.">
+                    <h3>Compression Factor</h3>
+                    <div id="compression-factor-slider"></div>
+                    <div><span class="slider-value"></span></div>
+                </div>
+                <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                    <h3>Metadata Size Factor</h3>
+                    <div id="index-factor-slider"></div>
+                    <div><span class="slider-value"></span></div>
                 </div>
             </div>
+            <p style="display: none;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
           </div>
           <div class="flow group">
-            <div>
                 <h2>Data Retention</h2>
+                <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 <div class="flow sliders">
-                    <div>
+                    <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
                         <h3>Hot, Warm</h3>
                         <div id="hotwarm-retention-slider"></div>
                         <div><span class="slider-value"></span></div>
                     </div>
-                    <div>
+                    <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
                         <h3>Cold</h3>
                         <div id="cold-retention-slider"></div>
                         <div><span class="slider-value"></span></div>
                     </div>
-                    <div>
+                    <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
                         <h3>Archived (Frozen)</h3>
                         <div id="frozen-retention-slider"></div>
                         <div><span class="slider-value"></span></div>
                     </div>
                 </div>
-            </div>
+                <div class="itunes">
+                    <h3>Retention Time</h3>
+                    <div class="bar-container">
+                        <div class="bar">
+                            <div class="inner"></div>
+                            <div class="home"></div>
+                            <div class="cold"></div>
+                            <div class="frozen"></div>
+                        </div>
+                        <div class="legend">
+                            <div><span class="home"></span>Hot, Warm</div>
+                            <div><span class="cold"></span>Cold</div>
+                            <div><span class="frozen"></span>Archived</div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <p>
+                            Total = <span id="total-rentention">XX</span>
+                        </p>
+                    </div>
+                </div>
           </div>
           <div class="flow group">
-            <div>
-                <h2>
-                    Architecture
-                    <span style="display: inline-block; font-size: small; margin-left: 2em;">
-                        <input type="checkbox" id="enable-cluster-replication">
-                        <label for="enable-cluster-replication">Cluster</label>
-                    </span>
-                </h2>
-                <div class="flow sliders">
-                    <div>
-                        <h3>Number of Nodes</h3>
-                        <div id="indexers-retention-slider"></div>
-                        <div><span class="slider-value"></span> node(s)</div>
-                    </div>
+            <h2>
+                Architecture
+                <span style="display: inline-block; font-size: small; margin-left: 2em;">
+                    <input type="checkbox" id="enable-cluster-replication">
+                    <label for="enable-cluster-replication">Cluster Replication</label>
+                </span>
+                <span style="display: inline-block; font-size: small; margin-left: 1em;">
+                    <input type="checkbox" id="calculate_number_of_nodes">
+                    <label for="calculate_number_of_nodes">Estimate automatically</label>
+                </span>
+            </h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <div class="flow sliders">
+                <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                    <h3>Number of Nodes</h3>
+                    <div id="indexers-retention-slider"></div>
+                    <div><span class="slider-value"></span> node(s)</div>
+                </div>
+                <div id="search-factor-retention" style="display: none;" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                    <h3>Searchability Factor</h3>
+                    <div id="search-factor-retention-slider"></div>
+                    <div><span class="slider-value"></span></div>
+                    <p style="display: none; text-align: center;" id="search-factor-max-message" class="message">
+                        (reached number of nodes limit)</p>
+                </div>
+                <div id="replication-factor-retention" style="display: none;" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                    <h3>Replication Factor</h3>
+                    <div id="replication-factor-retention-slider"></div>
+                    <div><span class="slider-value"></span></div>
+                    <p style="display: none; text-align: center;" id="replication-factor-max-message" class="message">
+                        (reached number of nodes limit)</p>
                 </div>
             </div>
-            <div id="replication-policy-group" style="display: none;">
-                <h2>Replication Policy</h2>
-                <div class="flow sliders">
-                    <div id="search-factor-retention">
-                        <h3>Searchability Factor</h3>
-                        <div id="search-factor-retention-slider"></div>
-                        <div><span class="slider-value"></span></div>
-                        <p style="display: none; text-align: center;" id="search-factor-max-message" class="message">
-                            (reached number of nodes limit)</p>
-                    </div>
-                    <div id="replication-factor-retention">
-                        <h3>Replication Factor</h3>
-                        <div id="replication-factor-retention-slider"></div>
-                        <div><span class="slider-value"></span></div>
-                        <p style="display: none; text-align: center;" id="replication-factor-max-message" class="message">
-                            (reached number of nodes limit)</p>
-                    </div>
-                </div>
-            </div>
-    <!--        <p>
-                <button style="outline: none;">A button element</button>
-            </p>-->
         </div>
         <div class="group storage-required">
             <h2>Storage Required</h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <table style="width: 100%;">
                 <thead>
                     <tr class="message">
@@ -202,6 +220,7 @@
         </div>
         <div class="group storage-configuration">
             <h2>Storage Configuration</h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <table cellspacing="10px">
                 <tr>
                     <th>Buckets</th>
@@ -262,6 +281,7 @@
         </div>
         <div class="group physical-storage" id="detailed-storage-volume1">
             <h2>Detailed Storage on Volume 1 for <span id="detailed-storage-volume1-buckets"></span> Buckets</h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <div class="flow options">
                 <div>
                     <label for="raid-level-volume1">RAID Level:</label>
@@ -282,14 +302,16 @@
                         <option value="5">5 TB</option>
                     </select>
                 </div>
-                <div class="message">
+                <div id="physical-storage-volume1-raid-parity-warning" class="message">
                     Splunk does not recommend use of Parity based RAID, since this will have a very negative impact on performance
                 </div>
-                <div>Disk Space Contingency:</div>
-                <div style="width: 5em; padding: 1em;">
-                    <div id="disk-space-contingency-slider-volume1"></div>
+                <div class="flow">
+                    <div style="vertical-align: sub;">Disk Space Contingency:</div>
+                    <div style="width: 5em; padding-left: 1em; padding-right: 1em; margin-top: 0.2em;">
+                        <div id="disk-space-contingency-slider-volume1"></div>
+                    </div>
+                    <div style="vertical-align: sub;" id="disk-space-contingency-volume1">???</div>
                 </div>
-                <div id="disk-space-contingency-volume1">???</div>
             </div>
             <table style="width: 100%;">
                 <thead>
@@ -320,6 +342,7 @@
         </div>
         <div class="group physical-storage" id="detailed-storage-volume2">
             <h2>Detailed Storage on Volume 2 for <span id="detailed-storage-volume2-buckets"></span> Buckets</h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <div class="flow options">
                 <div>
                     <label for="raid-level-volume2">RAID Level:</label>
@@ -340,14 +363,16 @@
                         <option value="5">5 TB</option>
                     </select>
                 </div>
-                <div class="message">
+                <div id="physical-storage-volume2-raid-parity-warning" class="message">
                     Splunk does not recommend use of Parity based RAID, since this will have a very negative impact on performance
                 </div>
-                <div>Disk Space Contingency:</div>
-                <div style="width: 5em; padding: 1em;">
-                    <div id="disk-space-contingency-slider-volume2"></div>
+                <div class="flow">
+                    <div style="vertical-align: sub;">Disk Space Contingency:</div>
+                    <div style="width: 5em; padding-left: 1em; padding-right: 1em; margin-top: 0.2em;">
+                        <div id="disk-space-contingency-slider-volume2"></div>
+                    </div>
+                    <div style="vertical-align: sub;" id="disk-space-contingency-volume2">???</div>
                 </div>
-                <div id="disk-space-contingency-volume2">???</div>
             </div>
             <table style="width: 100%;">
                 <thead>
@@ -378,6 +403,7 @@
         </div>
         <div class="group physical-storage" id="detailed-storage-volume3">
             <h2>Detailed Storage on Volume 3 for <span id="detailed-storage-volume3-buckets"></span> Buckets</h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <div class="flow options">
                 <div>
                     <label for="raid-level-volume3">RAID Level:</label>
@@ -398,14 +424,16 @@
                         <option value="5">5 TB</option>
                     </select>
                 </div>
-                <div class="message">
+                <div id="physical-storage-volume3-raid-parity-warning" class="message">
                     Splunk does not recommend use of Parity based RAID, since this will have a very negative impact on performance
                 </div>
-                <div>Disk Space Contingency:</div>
-                <div style="width: 5em; padding: 1em;">
-                    <div id="disk-space-contingency-slider-volume3"></div>
+                <div class="flow">
+                    <div style="vertical-align: sub;">Disk Space Contingency:</div>
+                    <div style="width: 5em; padding-left: 1em; padding-right: 1em; margin-top: 0.2em;">
+                        <div id="disk-space-contingency-slider-volume3"></div>
+                    </div>
+                    <div style="vertical-align: sub;" id="disk-space-contingency-volume3">???</div>
                 </div>
-                <div id="disk-space-contingency-volume3">???</div>
             </div>
             <table style="width: 100%;">
                 <thead>
@@ -436,6 +464,7 @@
         </div>
         <div class="group physical-storage" id="summary-storage">
             <h2>Summary Storage for <span id="summary-storage-buckets"></span> Buckets</h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <table style="width: 100%;">
                 <thead>
                     <tr class="message">
@@ -475,6 +504,7 @@
         </div>
         <div class="group config-files">
             <h2>Configuration Files</h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <div class="file">
                 <h3>indexes.conf</h3>
                 <pre># volume definitions
@@ -508,22 +538,28 @@ maxDataSize = <span id="conffile-index-maxDataSize" class="important-conf-value"
             </div>
         </div>
         <div class="group">
-            TODO: When using apps like NetApp or ES (3x), allocate more space for
-            tsidx files,
-            summary indexes or
-            data models
-        </div>
-        <div class="group">
-            TODO: estimate IO OPS
-        </div>
-        <div class="group">
-            TODO: Support multi-site settings
-        </div>
-        <div class="group">
-            TODO: checkbox for header based index time field extraction
-        </div>
-        <div class="group">
-            TODO: estimate number of nodes (250 GB per day per node)
+            <h2>Roadmap</h2>
+            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <ul>
+                <li>
+                    When using apps like NetApp or ES (3x), allocate more space for
+                    tsidx files,
+                    summary indexes or
+                    data models
+                </li>
+                <li>
+                    estimate IO OPS
+                </li>
+                <li>
+                    Support multi-site settings
+                </li>
+                <li>
+                    checkbox for header based index time field extraction
+                </li>
+                <li>
+                    architecture diagram
+                </li>
+            </ul>
         </div>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

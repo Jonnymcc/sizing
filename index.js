@@ -2,6 +2,26 @@ $(function() {
     $("button").css('outline','none').button();
     $('input:text').textfield();
 
+    $(document).tooltip({
+        show: null,
+        position: {
+            my: "left top",
+            at: "left bottom"
+        },
+        open: function( event, ui ) {
+            ui.tooltip.hide();
+            /*
+            ui.tooltip.css('opacity',0);
+            ui.tooltip.animate({
+            opacity: 0
+            }, 1000 );
+            ui.tooltip.animate({
+            opacity: 1,
+            top: ui.tooltip.position().top + 10
+            }, "fast" );*/
+        }
+    });
+
     var dailyVolumeDefaultValue = 200;
     var compressionFactorDefaultValue = 0.15;
     var indexFactorDefaultValue = 0.35;
@@ -9,6 +29,7 @@ $(function() {
     var coldRetensionDefaultValue = 25;
     var frozenRetensionDefaultValue = 60;
     var indexersDefaultValue = 2;
+    var indexersCalculatedAutomatically = true;
     var clusterReplicationDefaultValue = false;
     var searchFactorDefaultValue = 2;
     var replicationFactorDefaultValue = 2;
@@ -79,7 +100,10 @@ $(function() {
     var frozenRetensionFromHash = $.bbq.getState(frozenRetensionKey);
     if($.isNumeric(frozenRetensionFromHash)) frozenRetensionDefaultValue = parseInt(frozenRetensionFromHash);
     var indexersFromHash = $.bbq.getState(indexersKey);
-    if($.isNumeric(indexersFromHash)) indexersDefaultValue = parseInt(indexersFromHash);
+    if($.isNumeric(indexersFromHash)) {
+        indexersDefaultValue = parseInt(indexersFromHash);
+        indexersCalculatedAutomatically = false;
+    }
     var clusterReplicationFromHash = $.bbq.getState(clusterReplicationKey);
     if($.isNumeric(clusterReplicationFromHash)) clusterReplicationDefaultValue = parseInt(clusterReplicationFromHash)!=0;
     var searchFactorFromHash = $.bbq.getState(searchFactorKey);
@@ -179,7 +203,9 @@ $(function() {
     var searchFactorMaxMessage = $('#search-factor-max-message');
     var replicationFactorMaxMessage = $('#replication-factor-max-message');
     var indexersSlider = $('#indexers-retention-slider');
-    var replicationPolicyGroup = $('#replication-policy-group');
+    var searchFactorRetentionDiv = $('#search-factor-retention');
+    var replicationFactorRetentionDiv = $('#replication-factor-retention');
+    var calculateNumberCheckbox = $('#calculate_number_of_nodes');
     var enableClusterReplicationCheckBox = $('#enable-cluster-replication');
     var totalStorage = $('#total-storage');
     var hotWarmStorage = $('#hotwarm-storage');
@@ -197,6 +223,7 @@ $(function() {
     var frozenPriceDiv = $('#frozen-price');
     var totalPriceDiv = $('#total-price');
     var raidLevelVolume1Select = $('#raid-level-volume1');
+    var physicalStorageVolume1RaidParityWarning = $('#physical-storage-volume1-raid-parity-warning');
     var diskSizeVolume1Select = $('#disk-size-volume1');
     var diskCountPerIndexerVolume1Div = $('#disk-count-per-indexer-volume1');
     var diskCountTotalVolume1Div = $('#disk-count-total-volume1');
@@ -207,6 +234,7 @@ $(function() {
     var diskSpaceContingencyVolume1Slider = $('#disk-space-contingency-slider-volume1');
     var diskSpaceContingencyVolume1Div = $('#disk-space-contingency-volume1');
     var raidLevelVolume2Select = $('#raid-level-volume2');
+    var physicalStorageVolume2RaidParityWarning = $('#physical-storage-volume2-raid-parity-warning');
     var diskSizeVolume2Select = $('#disk-size-volume2');
     var diskCountPerIndexerVolume2Div = $('#disk-count-per-indexer-volume2');
     var diskCountTotalVolume2Div = $('#disk-count-total-volume2');
@@ -217,6 +245,7 @@ $(function() {
     var diskSpaceContingencyVolume2Slider = $('#disk-space-contingency-slider-volume2');
     var diskSpaceContingencyVolume2Div = $('#disk-space-contingency-volume2');
     var raidLevelVolume3Select = $('#raid-level-volume3');
+    var physicalStorageVolume3RaidParityWarning = $('#physical-storage-volume3-raid-parity-warning');
     var diskSizeVolume3Select = $('#disk-size-volume3');
     var diskCountPerIndexerVolume3Div = $('#disk-count-per-indexer-volume3');
     var diskCountTotalVolume3Div = $('#disk-count-total-volume3');
@@ -267,6 +296,10 @@ $(function() {
     var conffileIndexColdMaxDataSizeMB = $('#conffile-index-cold-maxDataSizeMB');
     var conffileIndexFrozenTimePeriodInSecs = $('#conffile-index-frozenTimePeriodInSecs');
     var conffileIndexMaxDataSize = $('#conffile-index-maxDataSize');
+    var retentionBarHomePart = $('.itunes > .bar-container > .bar > .home');
+    var retentionBarColdPart = $('.itunes > .bar-container > .bar > .cold');
+    var retentionBarFrozenPart = $('.itunes > .bar-container > .bar > .frozen');
+    var retentionBarTotal = $('#total-rentention');
 
     var calculate = function(){
         console.debug("calculating...");
@@ -297,6 +330,24 @@ $(function() {
           searchFactor = 1;
           replicationFactor = 1;
         }
+
+        var total = hotWarmRetention + coldRetention + frozenRetention;
+        var homeRetentionPercent = Math.round(hotWarmRetention / total * 100);
+        retentionBarHomePart.css('width',homeRetentionPercent+'%');
+        var coldRetentionPercent = Math.round(coldRetention / total * 100);
+        retentionBarColdPart.css('width',coldRetentionPercent+'%');
+        var frozenRetentionPercent = 100 - homeRetentionPercent - coldRetentionPercent;
+        retentionBarFrozenPart.css('width',frozenRetentionPercent+'%');
+        if(total<=90){
+            retentionBarTotal.text(total+' days');
+        }
+        else if(total<=30*36){
+            retentionBarTotal.text(Math.round(total/30)+' months');
+        }
+        else{
+            retentionBarTotal.text(Math.round(total/30/12)+' years');
+        }
+
 
         var newRawDataPerDay = rawVolume * compressionFactor;
         console.debug("rawDataPerDay: "+newRawDataPerDay+" GB");
@@ -663,7 +714,7 @@ $(function() {
             configFilesSummaryVolumeVolumeNameParts.push('archived');
         }
         var configFilesSummaryVolumeVolumeName=configFilesSummaryVolumeVolumeNameParts.join('_');
-        var summaryStorageSizeTotal = storageHotWarmTotal+storageColdTotal+storageFrozenTotal;
+
         if(configFilesSummaryVolumeVolumeContainsHotWarm){
             configFilesHotWarmVolumeName=configFilesSummaryVolumeVolumeName;
         }
@@ -747,6 +798,9 @@ $(function() {
         'value': dailyVolumeDefaultValue,
         'step': 0.02,
         'changed': function(){
+            if(indexersCalculatedAutomatically){
+                calculateNumberOfNodes();
+            }
             calculate();
         },
         'change': function(){
@@ -883,7 +937,7 @@ $(function() {
     });
     indexersSlider = indexersSlider.slideWithLabel({
         'value': indexersDefaultValue,
-        'min': 1, 'max': 20, 'step': 1,
+        'min': 1, 'max': 50, 'step': 1,
         'changed': function(){
             var value = indexersSlider('value');
             var searchFactor = searchFactorSlider('value');
@@ -901,11 +955,56 @@ $(function() {
             calculate();
         },
         'change': function(){
-            var state = {};
-            state[indexersKey] = indexersSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            if(!calculatingNumberOfNodes){
+                if(!indexersCalculatedAutomatically){
+                    var state = {};
+                    state[indexersKey] = indexersSlider('value');
+                    var hash = $.param.fragment(window.location.hash,state);
+                    history.replaceState(undefined, null, hash);
+                    calculate();
+                }else{
+                    calculateNumberCheckbox.prop('checked', false);
+                    calculateNumberCheckbox.change();
+                }
+            }
         }
+    });
+    var calculatingNumberOfNodes = false;
+    var calculateNumberOfNodes=function(){
+        calculatingNumberOfNodes=true;
+        if(calculatingNumberOfNodes){
+            var rawVolume = rawVolumeSlider('value');
+            var numberOfNodes = Math.ceil(rawVolume/220);
+            indexersSlider('value',parseInt(numberOfNodes));
+            indexersSlider('trigger','change');
+            calculatingNumberOfNodes=false;
+        }
+    };
+    var updateIndexerCountOpacity=function(){
+        indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
+        if(indexersCalculatedAutomatically){
+            indexersSlider('object').css('opacity',0.5);
+        }else{
+            indexersSlider('object').css('opacity',1);
+        }
+    };
+    calculateNumberCheckbox.prop('checked', indexersCalculatedAutomatically);
+    updateIndexerCountOpacity();
+    calculateNumberCheckbox.change(function(){
+        updateIndexerCountOpacity();
+        indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
+        var state = $.deparam.fragment(window.location.hash);
+        if(indexersCalculatedAutomatically){
+            delete state[indexersKey];
+        }else{
+            state[indexersKey] = indexersSlider('value');
+        }
+        var hash = $.param.fragment(window.location.hash,state,2);
+        history.replaceState(undefined, null, hash);
+        if(indexersCalculatedAutomatically){
+            calculateNumberOfNodes();
+        }
+        calculate();
     });
     if(clusterReplicationDefaultValue){
         if(searchFactorDefaultValue>indexersDefaultValue){
@@ -967,18 +1066,21 @@ $(function() {
     updateReplicationFactorMaxMessage();
     enableClusterReplicationCheckBox.prop('checked', clusterReplicationDefaultValue);
     if(clusterReplicationDefaultValue){
-        replicationPolicyGroup.show();
+        replicationFactorRetentionDiv.show();
+        searchFactorRetentionDiv.show();
         searchFactorSlider('trigger','change');
         replicationFactorSlider('trigger','change');
     }
     enableClusterReplicationCheckBox.change(function(){
         var checked = $(this).is(':checked');
         if(checked){
-            replicationPolicyGroup.show();
+            replicationFactorRetentionDiv.show();
+            searchFactorRetentionDiv.show();
             searchFactorSlider('trigger','change');
             replicationFactorSlider('trigger','change');
         }else{
-            replicationPolicyGroup.hide();
+            replicationFactorRetentionDiv.hide();
+            searchFactorRetentionDiv.hide();
         }
         var state = {};
         state[clusterReplicationKey] = checked?1:0;
@@ -1024,8 +1126,17 @@ $(function() {
         }
     });
     diskSpaceContingencyVolume1Div.text(parseInt(diskSpaceContingencyVolume1DefaultValue*100)+' %');
+    var updatePhysicalStorageVolume1RaidParityWarningVisibility = function(){
+        if(raidLevelVolume1Select.val()=='5'){
+            physicalStorageVolume1RaidParityWarning.show();
+        }else{
+            physicalStorageVolume1RaidParityWarning.hide();
+        }
+    };
     raidLevelVolume1Select.val(raidLevelVolume1DefaultValue);
+    updatePhysicalStorageVolume1RaidParityWarningVisibility();
     raidLevelVolume1Select.change(function(){
+        updatePhysicalStorageVolume1RaidParityWarningVisibility();
       var raidLevel = raidLevelVolume1Select.val();
       var state = {}; state[raidLevelVolume1Key] = raidLevel;
       var hash = $.param.fragment(window.location.hash,state);
@@ -1057,8 +1168,17 @@ $(function() {
         }
     });
     diskSpaceContingencyVolume2Div.text(parseInt(diskSpaceContingencyVolume2DefaultValue*100)+' %');
+    var updatePhysicalStorageVolume2RaidParityWarningVisibility = function(){
+        if(raidLevelVolume2Select.val()=='5'){
+            physicalStorageVolume2RaidParityWarning.show();
+        }else{
+            physicalStorageVolume2RaidParityWarning.hide();
+        }
+    };
     raidLevelVolume2Select.val(raidLevelVolume2DefaultValue);
+    updatePhysicalStorageVolume2RaidParityWarningVisibility();
     raidLevelVolume2Select.change(function(){
+        updatePhysicalStorageVolume2RaidParityWarningVisibility();
       var raidLevel = raidLevelVolume2Select.val();
       var state = {}; state[raidLevelVolume2Key] = raidLevel;
       var hash = $.param.fragment(window.location.hash,state);
@@ -1090,21 +1210,30 @@ $(function() {
         }
     });
     diskSpaceContingencyVolume3Div.text(parseInt(diskSpaceContingencyVolume3DefaultValue*100)+' %');
+    var updatePhysicalStorageVolume3RaidParityWarningVisibility = function(){
+        if(raidLevelVolume3Select.val()=='5'){
+            physicalStorageVolume3RaidParityWarning.show();
+        }else{
+            physicalStorageVolume3RaidParityWarning.hide();
+        }
+    };
     raidLevelVolume3Select.val(raidLevelVolume3DefaultValue);
+    updatePhysicalStorageVolume3RaidParityWarningVisibility();
     raidLevelVolume3Select.change(function(){
-      var raidLevel = raidLevelVolume3Select.val();
-      var state = {}; state[raidLevelVolume3Key] = raidLevel;
-      var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
-      calculate();
+        updatePhysicalStorageVolume3RaidParityWarningVisibility();
+        var raidLevel = raidLevelVolume3Select.val();
+        var state = {}; state[raidLevelVolume3Key] = raidLevel;
+        var hash = $.param.fragment(window.location.hash,state);
+        history.replaceState(undefined, null, hash);
+        calculate();
     });
     diskSizeVolume3Select.val(diskSizeVolume3DefaultValue);
     diskSizeVolume3Select.change(function(){
-      var diskSize = diskSizeVolume3Select.val();
-      var state = {}; state[diskSizeVolume3Key] = diskSize;
-      var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
-      calculate();
+        var diskSize = diskSizeVolume3Select.val();
+        var state = {}; state[diskSizeVolume3Key] = diskSize;
+        var hash = $.param.fragment(window.location.hash,state);
+        history.replaceState(undefined, null, hash);
+        calculate();
     });
     
     storageConfigurationHotWarm.val(hotWarmStorageTypeDefaultValue);
@@ -1305,6 +1434,9 @@ $(function() {
     onHotWarmStorageTypeChanged();
     onColdStorageTypeChanged();
     onArchivedStorageTypeChanged();
+    if(indexersCalculatedAutomatically){
+        calculateNumberOfNodes();
+    }
 
     $(window).bind('hashchange', function() {
         window.location.reload();
