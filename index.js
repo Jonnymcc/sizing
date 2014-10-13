@@ -9,16 +9,14 @@ $(function() {
             at: "left bottom"
         },
         open: function( event, ui ) {
-            ui.tooltip.hide();
-            /*
             ui.tooltip.css('opacity',0);
             ui.tooltip.animate({
-            opacity: 0
+                opacity: 0
             }, 1000 );
             ui.tooltip.animate({
-            opacity: 1,
-            top: ui.tooltip.position().top + 10
-            }, "fast" );*/
+                opacity: 1,
+                top: ui.tooltip.position().top + 10
+            }, "fast" );
         }
     });
 

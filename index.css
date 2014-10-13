@@ -56,7 +56,6 @@ body > div.group{
 body > div.group p.description{
     font-style: italic;
     color: #5e5e5e;
-    display: none;
 }
 
 /* elements */

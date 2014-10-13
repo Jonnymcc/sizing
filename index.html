@@ -92,9 +92,9 @@
                     <label for="size-by-events-per-sec">Size by Events/Sec</label>
                 </span>
             </h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">Estimate the average daily amount of data to be ingested. The more data you send to Splunk Enterprise, the more time Splunk needs to index it into results that you can search, report and generate alerts on.</p>
             <div class="flow sliders">
-                <div id="events-per-second-div" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                <div id="events-per-second-div" title="The average amount of uncompressed raw data that Splunk will ingest.">
                     <h3>Events per Second</h3>
                     <div id="events-per-second-slider"></div>
                     <div><span class="slider-value"></span></div>
@@ -109,7 +109,7 @@
                     <div id="compression-factor-slider"></div>
                     <div><span class="slider-value"></span></div>
                 </div>
-                <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                <div title="Typically, metadata is 35% of the raw  data. The type of data and index time field extractions will affect this value.">
                     <h3>Metadata Size Factor</h3>
                     <div id="index-factor-slider"></div>
                     <div><span class="slider-value"></span></div>
@@ -119,19 +119,19 @@
           </div>
           <div class="flow group">
                 <h2>Data Retention</h2>
-                <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p class="description">Specify the amount of time to retain data for each category. Data will be rolled through each category dependant on its age.</p>
                 <div class="flow sliders">
-                    <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                    <div title="Hot/Warm data will generally be accessed regularly. It should reside on the fastest disk to improve indexing and search performance.">
                         <h3>Hot, Warm</h3>
                         <div id="hotwarm-retention-slider"></div>
                         <div><span class="slider-value"></span></div>
                     </div>
-                    <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                    <div title="Cold data is generally older and not accessed regularly. It should reside on slower, cheaper disk as search performance is generally not critical.">
                         <h3>Cold</h3>
                         <div id="cold-retention-slider"></div>
                         <div><span class="slider-value"></span></div>
                     </div>
-                    <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                    <div title="Frozen data is not searchable and should reside on the slowest, cheapest disk">
                         <h3>Archived (Frozen)</h3>
                         <div id="frozen-retention-slider"></div>
                         <div><span class="slider-value"></span></div>
@@ -171,21 +171,21 @@
                     <label for="calculate_number_of_nodes">Estimate automatically</label>
                 </span>
             </h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">Specify the number of nodes required. The more data to ingest, the greater the number of nodes required. Adding more nodes will improve indexing throughput and search performance.</p>
             <div class="flow sliders">
-                <div title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                <div title="The number of indexers needed to meet the requirements.">
                     <h3>Number of Nodes</h3>
                     <div id="indexers-retention-slider"></div>
                     <div><span class="slider-value"></span> node(s)</div>
                 </div>
-                <div id="search-factor-retention" style="display: none;" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                <div id="search-factor-retention" style="display: none;" title="The number of searchable copies of the data to be retained across the cluster. This must be the same or less than the Replication Factor">
                     <h3>Searchability Factor</h3>
                     <div id="search-factor-retention-slider"></div>
                     <div><span class="slider-value"></span></div>
                     <p style="display: none; text-align: center;" id="search-factor-max-message" class="message">
                         (reached number of nodes limit)</p>
                 </div>
-                <div id="replication-factor-retention" style="display: none;" title="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+                <div id="replication-factor-retention" style="display: none;" title="The total number of searchable and non-searchable copies of the data to be retained across the cluster. This must be the same or greater than the Searchability Factor.">
                     <h3>Replication Factor</h3>
                     <div id="replication-factor-retention-slider"></div>
                     <div><span class="slider-value"></span></div>
@@ -196,7 +196,7 @@
         </div>
         <div class="group storage-required">
             <h2>Storage Required</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">This is a breakdown of the overall storage requirement.</p>
             <table style="width: 100%;">
                 <thead>
                     <tr class="message">
@@ -231,7 +231,7 @@
         </div>
         <div class="group storage-configuration">
             <h2>Storage Configuration</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">Specify the location of the storage configuration. If possible, spread each type of data across separate volumes to improve performance. Hot/Warm data should be on the fasted disk, cold data on slower disk and archived data on the slowest disk.</p>
             <table cellspacing="10px">
                 <tr>
                     <th>Buckets</th>
@@ -292,7 +292,7 @@
         </div>
         <div class="group physical-storage" id="detailed-storage-volume1">
             <h2>Detailed Storage on Volume 1 for <span id="detailed-storage-volume1-buckets"></span> Buckets</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">Specify the RAID level, size of individual disks and contingency required for this volume. RAID configurations that stripe will yield significantly superior performance to parity based RAID. That is, RAID 0, 10 and 0+1 will give the best performance, while RAID 5 will offer the worst performance.</p>
             <div class="flow options">
                 <div>
                     <label for="raid-level-volume1">RAID Level:</label>
@@ -353,7 +353,7 @@
         </div>
         <div class="group physical-storage" id="detailed-storage-volume2">
             <h2>Detailed Storage on Volume 2 for <span id="detailed-storage-volume2-buckets"></span> Buckets</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">Specify the RAID level, size of individual disks and contingency required for this volume. RAID configurations that stripe will yield significantly superior performance to parity based RAID. That is, RAID 0, 10 and 0+1 will give the best performance, while RAID 5 will offer the worst performance.</p>
             <div class="flow options">
                 <div>
                     <label for="raid-level-volume2">RAID Level:</label>
@@ -414,7 +414,7 @@
         </div>
         <div class="group physical-storage" id="detailed-storage-volume3">
             <h2>Detailed Storage on Volume 3 for <span id="detailed-storage-volume3-buckets"></span> Buckets</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">Specify the RAID level, size of individual disks and contingency required for this volume. RAID configurations that stripe will yield significantly superior performance to parity based RAID. That is, RAID 0, 10 and 0+1 will give the best performance, while RAID 5 will offer the worst performance.</p>
             <div class="flow options">
                 <div>
                     <label for="raid-level-volume3">RAID Level:</label>
@@ -475,7 +475,7 @@
         </div>
         <div class="group physical-storage" id="summary-storage">
             <h2>Summary Storage for <span id="summary-storage-buckets"></span> Buckets</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">Specify the price per GB of storage. Hot/Warm data should be on the most expensive disk, cold data on cheaper disk and archived data on the cheapest disk.</p>
             <table style="width: 100%;">
                 <thead>
                     <tr class="message">
@@ -515,7 +515,7 @@
         </div>
         <div class="group config-files">
             <h2>Configuration Files</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">This is an example configuration file that describes the volume configuration for each data type. Note: The path should be modified to point to each disk type. It assumes that all data will be stored in the main index.</p>
             <div class="file">
                 <h3>indexes.conf</h3>
                 <pre># volume definitions
@@ -550,7 +550,7 @@ maxDataSize = <span id="conffile-index-maxDataSize" class="important-conf-value"
         </div>
         <div class="group">
             <h2>Roadmap</h2>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="description">Please use the link above to send feedback and request additional features.</p>
             <ul>
                 <li>
                     When using apps like NetApp or ES (3x), allocate more space for
