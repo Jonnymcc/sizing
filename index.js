@@ -354,6 +354,8 @@ $(function() {
     var retentionBarColdPart = $('.itunes > .bar-container > .bar > .cold');
     var retentionBarFrozenPart = $('.itunes > .bar-container > .bar > .frozen');
     var retentionBarTotal = $('#total-rentention');
+    var inputDataDescriptionEventsPerSecond = $('#input-data-description-events-per-second');
+    var inputDataDescriptionDailyAmount = $('#input-data-description-daily-amount');
 
     var getDataVolumePerDay=function(){
         var sizeByEventsPerSec = sizeByEventsPerSecCheckbox.is(":checked");
@@ -987,11 +989,15 @@ $(function() {
     if(sizeTypeDefaultValue==sizeTypeEventsPerSecond){
         eventsPerSecondDiv.show();
         rawVolumeDiv.hide();
+        inputDataDescriptionEventsPerSecond.show();
+        inputDataDescriptionDailyAmount.hide();
         sizeByEventsPerSecCheckbox.prop('checked', true);
     }
     else if(sizeTypeDefaultValue==sizeTypeDailyVolume){
         eventsPerSecondDiv.hide();
         rawVolumeDiv.show();
+        inputDataDescriptionEventsPerSecond.hide();
+        inputDataDescriptionDailyAmount.show();
         sizeByEventsPerSecCheckbox.prop('checked', false);
     }
     sizeByEventsPerSecCheckbox.change(function(){
@@ -1000,6 +1006,8 @@ $(function() {
             state[sizeTypeKey] = sizeTypeEventsPerSecond;
             eventsPerSecondDiv.show();
             rawVolumeDiv.hide();
+            inputDataDescriptionEventsPerSecond.show();
+            inputDataDescriptionDailyAmount.hide();
             eventsPerSecondSlider('trigger','change');
             if(indexersCalculatedAutomatically){
                 calculateNumberOfNodes();
@@ -1008,6 +1016,8 @@ $(function() {
             state[sizeTypeKey] = sizeTypeDailyVolume;
             eventsPerSecondDiv.hide();
             rawVolumeDiv.show();
+            inputDataDescriptionEventsPerSecond.hide();
+            inputDataDescriptionDailyAmount.show();
             rawVolumeSlider('trigger','change');
             if(indexersCalculatedAutomatically){
                 calculateNumberOfNodes();
