@@ -1687,4 +1687,27 @@ $(function() {
             width: $(document).width()/2
         });
     });
+
+    var todoItemTemplate = $('#todo-item-template');
+    var templateItemContainer = todoItemTemplate.parent();
+    $.ajax({
+        url: 'https://api.github.com/repos/rfsp/sizing/issues',
+        data: {
+            'labels': 'enhancement'
+        }
+    }).done(function(data) {
+        todoItemTemplate.remove();
+        data.forEach(function(data){
+            var item = todoItemTemplate.clone();
+            var anchor = $('a',item);
+            anchor.text(data['title']);
+            anchor.attr('href',data['html_url']);
+            templateItemContainer.append(item);
+        });
+    }).fail(function(){
+        todoItemTemplate.remove();
+        var p = templateItemContainer.parent();
+        templateItemContainer.remove();
+        p.append('<p><i>Unable to load list</i></p>');
+    });
 });
