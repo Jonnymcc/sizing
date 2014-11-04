@@ -101,9 +101,14 @@
             <p id="input-data-description-events-per-second" class="description">Estimate the amount of data based on a number of events per second – this calculates based on a typical event size. The more data you send to Splunk Enterprise, the more time Splunk needs to index it into results that you can search, report and generate alerts on.</p>
             <p id="input-data-description-daily-amount" class="description">Estimate the average daily amount of data to be ingested. The more data you send to Splunk Enterprise, the more time Splunk needs to index it into results that you can search, report and generate alerts on.</p>
             <div class="flow sliders">
-                <div id="events-per-second-div" title="The average number of events per second that Splunk will ingest.">
+                <div id="events-per-second" title="The average number of events per second that Splunk will ingest.">
                     <h3>Events per Second</h3>
                     <div id="events-per-second-slider"></div>
+                    <div><span class="slider-value"></span></div>
+                </div>
+                <div id="average-event-size" title="The average message size that Splunk will ingest.">
+                    <h3>Average event Size</h3>
+                    <div id="average-event-size-slider"></div>
                     <div><span class="slider-value"></span></div>
                 </div>
                 <div id="raw-volume-div" title="The average amount of uncompressed raw data that Splunk will ingest.">

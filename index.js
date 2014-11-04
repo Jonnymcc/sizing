@@ -27,6 +27,7 @@ $(function() {
     var sizeTypeDailyVolume = 'v';
     var sizeTypeDefaultValue = sizeTypeDailyVolume;
     var eventsPerSecondDefaultValue = 5000;
+    var averageEventSizeDefaultValue = 320;
     var dailyVolumeDefaultValue = 200;
     var compressionFactorDefaultValue = 0.15;
     var indexFactorDefaultValue = 0.35;
@@ -64,6 +65,7 @@ $(function() {
 
     var sizeTypeKey = 'st';
     var eventsPerSecondKey = 'eps';
+    var averageEventSizeKey = 'aes';
     var dailyVolumeKey = 'v';
     var compressionFactorKey = 'cf';
     var indexFactorKey = 'if';
@@ -99,6 +101,8 @@ $(function() {
     if($.isNumeric(dailyVolumeFromHash)) dailyVolumeDefaultValue = parseInt(dailyVolumeFromHash);
     var eventsPerSecondFromHash = $.bbq.getState(eventsPerSecondKey);
     if($.isNumeric(eventsPerSecondFromHash)) eventsPerSecondDefaultValue = parseInt(eventsPerSecondFromHash);
+    var averageEventSizeFromHash = $.bbq.getState(averageEventSizeKey);
+    if($.isNumeric(averageEventSizeFromHash)) averageEventSizeDefaultValue = parseInt(averageEventSizeFromHash);
     var compressionFactorFromHash = $.bbq.getState(compressionFactorKey);
     if($.isNumeric(compressionFactorFromHash)) compressionFactorDefaultValue = parseFloat(compressionFactorFromHash);
     var indexFactorFromHash = $.bbq.getState(indexFactorKey);
@@ -246,7 +250,9 @@ $(function() {
     var rawVolumeDiv = $('#raw-volume-div');
     var sizeByEventsPerSecCheckbox = $('#size-by-events-per-sec');
     var eventsPerSecondSlider = $('#events-per-second-slider');
-    var eventsPerSecondDiv = $('#events-per-second-div');
+    var averageEventSizeSlider = $('#average-event-size-slider');
+    var eventsPerSecondDiv = $('#events-per-second');
+    var averageEventSizeDiv = $('#average-event-size');
     var compressionFactorSlider = $('#compression-factor-slider');
     var indexFactorSlider = $('#index-factor-slider');
     var hotWarmRetentionSlider = $('#hotwarm-retention-slider');
@@ -363,9 +369,10 @@ $(function() {
     var getDataVolumePerDay=function(){
         var sizeByEventsPerSec = sizeByEventsPerSecCheckbox.is(":checked");
         if(sizeByEventsPerSec){
+            var averageMessageSizeBytes = averageEventSizeSlider('value');
             var eventsPerSecond = eventsPerSecondSlider('value');
             var eventsPerDay = eventsPerSecond*60*60*24;
-            var averageMessageSizeBytes = 320;
+            //var averageMessageSizeBytes = 320;
             var dailyBytes = eventsPerDay*averageMessageSizeBytes;
             return dailyBytes/gbtobytesFactor;
         }else{
@@ -1118,6 +1125,7 @@ $(function() {
     });
     if(sizeTypeDefaultValue==sizeTypeEventsPerSecond){
         eventsPerSecondDiv.show();
+        averageEventSizeDiv.show();
         rawVolumeDiv.hide();
         inputDataDescriptionEventsPerSecond.show();
         inputDataDescriptionDailyAmount.hide();
@@ -1125,6 +1133,7 @@ $(function() {
     }
     else if(sizeTypeDefaultValue==sizeTypeDailyVolume){
         eventsPerSecondDiv.hide();
+        averageEventSizeDiv.hide();
         rawVolumeDiv.show();
         inputDataDescriptionEventsPerSecond.hide();
         inputDataDescriptionDailyAmount.show();
@@ -1135,16 +1144,19 @@ $(function() {
         if(sizeByEventsPerSecCheckbox.is(':checked')){
             state[sizeTypeKey] = sizeTypeEventsPerSecond;
             eventsPerSecondDiv.show();
+            averageEventSizeDiv.show();
             rawVolumeDiv.hide();
             inputDataDescriptionEventsPerSecond.show();
             inputDataDescriptionDailyAmount.hide();
             eventsPerSecondSlider('trigger','change');
+            averageEventSizeSlider('trigger','change');
             if(indexersCalculatedAutomatically){
                 calculateNumberOfNodes();
             }
         }else{
             state[sizeTypeKey] = sizeTypeDailyVolume;
             eventsPerSecondDiv.hide();
+            averageEventSizeDiv.hide();
             rawVolumeDiv.show();
             inputDataDescriptionEventsPerSecond.hide();
             inputDataDescriptionDailyAmount.show();
@@ -1153,9 +1165,27 @@ $(function() {
                 calculateNumberOfNodes();
             }
         }
+        compressionFactorSlider('trigger','change');
+        indexFactorSlider('trigger','change');
         var hash = $.param.fragment(window.location.hash,state);
         history.replaceState(undefined, null, hash);
         calculate();
+    });
+    averageEventSizeSlider = averageEventSizeSlider.slideWithLabel({
+        'value': averageEventSizeDefaultValue,
+        'min': 20, 'max': 1000, 'step': 20,
+        'changed': function(){
+            calculate();
+        },
+        'change': function(){
+            var state = {};
+            state[averageEventSizeKey] = averageEventSizeSlider('value');
+            var hash = $.param.fragment(window.location.hash,state);
+            history.replaceState(undefined, null, hash);
+        },
+        'display': function(value){
+            return value+' bytes';
+        }
     });
     compressionFactorSlider = compressionFactorSlider.slideWithLabel({
         'value': compressionFactorDefaultValue,
