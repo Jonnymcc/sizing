@@ -1566,7 +1566,6 @@ $(function() {
         var state = {}; state[hotWarmDetailedVolumeKey] = hotWarmDetailedVolume;
         var hash = $.param.fragment(window.location.hash,state);
         history.replaceState(undefined, null, hash);
-        updateStorageTypeConfigurationDivs();
         calculate();
     });
     storageConfigurationColdVolume.val(coldDetailedVolumeDefaultValue);
@@ -1575,7 +1574,6 @@ $(function() {
         var state = {}; state[coldDetailedVolumeKey] = coldDetailedVolume;
         var hash = $.param.fragment(window.location.hash,state);
         history.replaceState(undefined, null, hash);
-        updateStorageTypeConfigurationDivs();
         calculate();
     });
     storageConfigurationArchivedVolume.val(archivedDetailedVolumeDefaultValue);
