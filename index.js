@@ -350,6 +350,7 @@ $(function() {
     var conffileIndexColdMaxDataSizeMB = $('#conffile-index-cold-maxDataSizeMB');
     var conffileIndexFrozenTimePeriodInSecs = $('#conffile-index-frozenTimePeriodInSecs');
     var conffileIndexMaxDataSize = $('#conffile-index-maxDataSize');
+    var conffileIndexColdToFrozenDir = $('#conffile-index-coldToFrozenDir');
     var retentionBarHomePart = $('.itunes > .bar-container > .bar > .home');
     var retentionBarColdPart = $('.itunes > .bar-container > .bar > .cold');
     var retentionBarFrozenPart = $('.itunes > .bar-container > .bar > .frozen');
@@ -660,11 +661,6 @@ $(function() {
             configFilesVolume1VolumeNameParts.push('cold');
             configFilesVolume1VolumeContainsCold=true;
         }
-        if(storageConfigurationArchived.val()==storageTypeDetailed &&
-            storageConfigurationArchivedVolume.val()==detailedVolume1)
-        {
-            configFilesVolume1VolumeNameParts.push('archived');
-        }
         var configFilesVolume1VolumeName=configFilesVolume1VolumeNameParts.join('_');
         var maxVolumeDataSizeMBVolume1=volume1PerIndexer.effectiveSpace*GBtoMBFactor;
         maxVolumeDataSizeMBVolume1-=parseInt(maxVolumeDataSizeMBVolume1*diskSpaceContingencyVolume3);
@@ -674,17 +670,23 @@ $(function() {
         if(configFilesVolume1VolumeContainsCold){
             configFilesColdVolumeName=configFilesVolume1VolumeName;
         }
+        var volume1Pathname;
+        if(configFilesVolume1VolumeContainsHotWarm){
+            volume1Pathname='fast_disk';
+        }else{
+            volume1Pathname='big_disk';
+        }
         if(configFilesVolume1VolumeNameParts.length>0){
             conffileVolume1.show();
             conffileVolume1Name.text(configFilesVolume1VolumeName);
-            if(configFilesVolume1VolumeContainsHotWarm){
-                conffileVolume1Pathname.text('fast_disk');
-            }else{
-                conffileVolume1Pathname.text('big_disk');
-            }
+            conffileVolume1Pathname.text(volume1Pathname);
             conffileVolume1MaxVolumeDataSizeMB.text(maxVolumeDataSizeMBVolume1);
         }else{
             conffileVolume1.hide();
+        }
+        if(storageConfigurationArchived.val()==storageTypeDetailed &&
+            storageConfigurationArchivedVolume.val()==detailedVolume1){
+            conffileIndexColdToFrozenDir.text(volume1Pathname);
         }
 
         var configFilesVolume2VolumeNameParts=[];
@@ -702,11 +704,6 @@ $(function() {
             configFilesVolume2VolumeNameParts.push('cold');
             configFilesVolume2VolumeContainsCold=true;
         }
-        if(storageConfigurationArchived.val()==storageTypeDetailed &&
-            storageConfigurationArchivedVolume.val()==detailedVolume2)
-        {
-            configFilesVolume2VolumeNameParts.push('archived');
-        }
         var configFilesVolume2VolumeName=configFilesVolume2VolumeNameParts.join('_');
         var maxVolumeDataSizeMBVolume2=volume2PerIndexer.effectiveSpace*GBtoMBFactor;
         maxVolumeDataSizeMBVolume2-=parseInt(maxVolumeDataSizeMBVolume2*diskSpaceContingencyVolume3);
@@ -716,17 +713,23 @@ $(function() {
         if(configFilesVolume2VolumeContainsCold){
             configFilesColdVolumeName=configFilesVolume2VolumeName;
         }
+        var volume2Pathname;
+        if(configFilesVolume2VolumeContainsHotWarm){
+            volume2Pathname='fast_disk';
+        }else{
+            volume2Pathname='big_disk';
+        }
         if(configFilesVolume2VolumeNameParts.length>0){
             conffileVolume2.show();
             conffileVolume2Name.text(configFilesVolume2VolumeName);
-            if(configFilesVolume2VolumeContainsHotWarm){
-                conffileVolume2Pathname.text('fast_disk');
-            }else{
-                conffileVolume2Pathname.text('big_disk');
-            }
+            conffileVolume2Pathname.text(volume2Pathname);
             conffileVolume2MaxVolumeDataSizeMB.text(maxVolumeDataSizeMBVolume2);
         }else{
             conffileVolume2.hide();
+        }
+        if(storageConfigurationArchived.val()==storageTypeDetailed &&
+            storageConfigurationArchivedVolume.val()==detailedVolume2){
+            conffileIndexColdToFrozenDir.text(volume2Pathname);
         }
 
         var configFilesVolume3VolumeNameParts=[];
@@ -742,25 +745,26 @@ $(function() {
         {
             configFilesVolume3VolumeNameParts.push('cold');
         }
-        if(storageConfigurationArchived.val()==storageTypeDetailed &&
-            storageConfigurationArchivedVolume.val()==detailedVolume3)
-        {
-            configFilesVolume3VolumeNameParts.push('archived');
-        }
         var configFilesVolume3VolumeName=configFilesVolume3VolumeNameParts.join('_');
         var maxVolumeDataSizeMBVolume3=volume3PerIndexer.effectiveSpace*GBtoMBFactor;
         maxVolumeDataSizeMBVolume3-=parseInt(maxVolumeDataSizeMBVolume3*diskSpaceContingencyVolume3);
+        var volume3Pathname;
+        if(configFilesVolume3VolumeContainsHotWarm){
+            volume3Pathname='fast_disk';
+        }else{
+            volume3Pathname='big_disk';
+        }
         if(configFilesVolume3VolumeNameParts.length>0){
             conffileVolume3.show();
             conffileVolume3Name.text(configFilesVolume3VolumeName);
-            if(configFilesVolume3VolumeContainsHotWarm){
-                conffileVolume3Pathname.text('fast_disk');
-            }else{
-                conffileVolume3Pathname.text('big_disk');
-            }
+            conffileVolume3Pathname.text(volume3Pathname);
             conffileVolume3MaxVolumeDataSizeMB.text(maxVolumeDataSizeMBVolume3);
         }else{
             conffileVolume3.hide();
+        }
+        if(storageConfigurationArchived.val()==storageTypeDetailed &&
+            storageConfigurationArchivedVolume.val()==detailedVolume3){
+            conffileIndexColdToFrozenDir.text(volume3Pathname);
         }
 
         var configFilesSummaryVolumeVolumeNameParts=[];
@@ -776,10 +780,6 @@ $(function() {
             configFilesSummaryVolumeVolumeNameParts.push('cold');
             configFilesSummaryVolumeVolumeContainsCold=true;
         }
-        if(storageConfigurationArchived.val()==storageTypeSummary)
-        {
-            configFilesSummaryVolumeVolumeNameParts.push('archived');
-        }
         var configFilesSummaryVolumeVolumeName=configFilesSummaryVolumeVolumeNameParts.join('_');
 
         if(configFilesSummaryVolumeVolumeContainsHotWarm){
@@ -788,16 +788,21 @@ $(function() {
         if(configFilesSummaryVolumeVolumeContainsCold){
             configFilesColdVolumeName=configFilesSummaryVolumeVolumeName;
         }
+        var summaryVolumePathname;
+        if(configFilesSummaryVolumeVolumeContainsHotWarm){
+            summaryVolumePathname='fast_storage';
+        }else{
+            summaryVolumePathname='big_storage';
+        }
         if(configFilesSummaryVolumeVolumeNameParts.length>0){
             conffileSummaryVolume.show();
             conffileSummaryVolumeName.text(configFilesSummaryVolumeVolumeName);
-            if(configFilesSummaryVolumeVolumeContainsHotWarm){
-                conffileSummaryVolumePathname.text('fast_storage');
-            }else{
-                conffileSummaryVolumePathname.text('big_storage');
-            }
+            conffileSummaryVolumePathname.text(summaryVolumePathname);
         }else{
             conffileSummaryVolume.hide();
+        }
+        if(storageConfigurationArchived.val()==storageTypeSummary){
+            conffileIndexColdToFrozenDir.text(summaryVolumePathname);
         }
 
         conffileIndexHotwarmVolumeName.text(configFilesHotWarmVolumeName);
