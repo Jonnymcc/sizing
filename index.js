@@ -312,6 +312,7 @@ $(function() {
     var storageConfigurationHotWarm = $('#storage-configuration-hotwarm');
     var storageConfigurationCold = $('#storage-configuration-cold');
     var storageConfigurationArchived = $('#storage-configuration-archived');
+    var storageConfigurationArchivedRow = $('#storage-configuration-archived-row');
     var storageConfigurationHotWarmVolume = $('#storage-configuration-hotwarm-volume');
     var storageConfigurationColdVolume = $('#storage-configuration-cold-volume');
     var storageConfigurationArchivedVolume = $('#storage-configuration-archived-volume');
@@ -350,6 +351,7 @@ $(function() {
     var conffileIndexColdMaxDataSizeMB = $('#conffile-index-cold-maxDataSizeMB');
     var conffileIndexFrozenTimePeriodInSecs = $('#conffile-index-frozenTimePeriodInSecs');
     var conffileIndexMaxDataSize = $('#conffile-index-maxDataSize');
+    var conffileIndexColdToFrozenDirSection = $('#conffile-index-coldToFrozenDir-section');
     var conffileIndexColdToFrozenDir = $('#conffile-index-coldToFrozenDir');
     var retentionBarHomePart = $('.itunes > .bar-container > .bar > .home');
     var retentionBarColdPart = $('.itunes > .bar-container > .bar > .cold');
@@ -803,6 +805,129 @@ $(function() {
         }
         if(storageConfigurationArchived.val()==storageTypeSummary){
             conffileIndexColdToFrozenDir.text(summaryVolumePathname);
+        }
+
+        var volume1BucketNames=[];
+        var volume1Count=0;
+        if(storageConfigurationHotWarm.val()==storageTypeDetailed &&
+            storageConfigurationHotWarmVolume.val()==detailedVolume1)
+        {
+            volume1Count++;
+            volume1BucketNames.push('Hot','Warm');
+        }
+        if(storageConfigurationCold.val()==storageTypeDetailed &&
+            storageConfigurationColdVolume.val()==detailedVolume1)
+        {
+            volume1Count++;
+            volume1BucketNames.push('Cold');
+        }
+        if(storageConfigurationArchived.val()==storageTypeDetailed &&
+            storageConfigurationArchivedVolume.val()==detailedVolume1 &&
+            frozenRetention>0)
+        {
+            volume1Count++;
+            volume1BucketNames.push('Archived');
+        }
+        if(volume1Count>0){
+            detailedStorageVolume1Buckets.text(volume1BucketNames.join(', '));
+            detailedStorageVolume1.show();
+        }else{
+            detailedStorageVolume1.hide();
+        }
+        var volume2BucketNames=[];
+        var volume2Count=0;
+        if(storageConfigurationHotWarm.val()==storageTypeDetailed &&
+            storageConfigurationHotWarmVolume.val()==detailedVolume2)
+        {
+            volume2Count++;
+            volume2BucketNames.push('Hot','Warm');
+        }
+        if(storageConfigurationCold.val()==storageTypeDetailed &&
+            storageConfigurationColdVolume.val()==detailedVolume2)
+        {
+            volume2Count++;
+            volume2BucketNames.push('Cold');
+        }
+        if(storageConfigurationArchived.val()==storageTypeDetailed &&
+            storageConfigurationArchivedVolume.val()==detailedVolume2 &&
+            frozenRetention>0)
+        {
+            volume2Count++;
+            volume2BucketNames.push('Archived');
+        }
+        if(volume2Count>0){
+            detailedStorageVolume2Buckets.text(volume2BucketNames.join(', '));
+            detailedStorageVolume2.show();
+        }else{
+            detailedStorageVolume2.hide();
+        }
+        var volume3BucketNames=[];
+        var volume3Count=0;
+        if(storageConfigurationHotWarm.val()==storageTypeDetailed &&
+            storageConfigurationHotWarmVolume.val()==detailedVolume3)
+        {
+            volume3Count++;
+            volume3BucketNames.push('Hot','Warm');
+        }
+        if(storageConfigurationCold.val()==storageTypeDetailed &&
+            storageConfigurationColdVolume.val()==detailedVolume3)
+        {
+            volume3Count++;
+            volume3BucketNames.push('Cold');
+        }
+        if(storageConfigurationArchived.val()==storageTypeDetailed &&
+            storageConfigurationArchivedVolume.val()==detailedVolume3 &&
+            frozenRetention>0)
+        {
+            volume3Count++;
+            volume3BucketNames.push('Archived');
+        }
+        if(volume3Count>0){
+            detailedStorageVolume3Buckets.text(volume3BucketNames.join(', '));
+            detailedStorageVolume3.show();
+        }else{
+            detailedStorageVolume3.hide();
+        }
+        var summaryBucketNames=[];
+        var summaryCount=0;
+        if(storageConfigurationHotWarm.val()==storageTypeSummary)
+        {
+            summaryCount++;
+            summaryBucketNames.push('Hot','Warm');
+            summaryStorageHotWarmRow.show();
+        }else{
+            summaryStorageHotWarmRow.hide();
+        }
+        if(storageConfigurationCold.val()==storageTypeSummary)
+        {
+            summaryCount++;
+            summaryBucketNames.push('Cold');
+            summaryStorageColdRow.show();
+        }else{
+            summaryStorageColdRow.hide();
+        }
+        if(storageConfigurationArchived.val()==storageTypeSummary &&
+            frozenRetention>0)
+        {
+            summaryCount++;
+            summaryBucketNames.push('Archived');
+            summaryStorageArchivedRow.show();
+        }else{
+            summaryStorageArchivedRow.hide();
+        }
+        if(summaryCount>0){
+            summaryStorageBuckets.text(summaryBucketNames.join(', '));
+            summaryStorage.show();
+        }else{
+            summaryStorage.hide();
+        }
+
+        if(frozenRetention==0){
+            conffileIndexColdToFrozenDirSection.hide();
+            storageConfigurationArchivedRow.hide();
+        }else{
+            conffileIndexColdToFrozenDirSection.show();
+            storageConfigurationArchivedRow.show();
         }
 
         conffileIndexHotwarmVolumeName.text(configFilesHotWarmVolumeName);
@@ -1459,7 +1584,6 @@ $(function() {
         var state = {}; state[archivedDetailedVolumeKey] = archivedDetailedVolume;
         var hash = $.param.fragment(window.location.hash,state);
         history.replaceState(undefined, null, hash);
-        updateStorageTypeConfigurationDivs();
         calculate();
     });
 
@@ -1470,7 +1594,6 @@ $(function() {
         }else{
             storageConfigurationHotWarmVolume.hide();
         }
-        updateStorageTypeConfigurationDivs();
     };
     var onColdStorageTypeChanged=function(){
         var coldStorageType = storageConfigurationCold.val();
@@ -1479,7 +1602,6 @@ $(function() {
         }else{
             storageConfigurationColdVolume.hide();
         }
-        updateStorageTypeConfigurationDivs();
     };
     var onArchivedStorageTypeChanged=function(){
         var archivedStorageType = storageConfigurationArchived.val();
@@ -1488,120 +1610,8 @@ $(function() {
         }else{
             storageConfigurationArchivedVolume.hide();
         }
-        updateStorageTypeConfigurationDivs();
     };
-    var updateStorageTypeConfigurationDivs=function(){
-        var volume1BucketNames=[];
-        var volume1Count=0;
-        if(storageConfigurationHotWarm.val()==storageTypeDetailed &&
-            storageConfigurationHotWarmVolume.val()==detailedVolume1)
-        {
-            volume1Count++;
-            volume1BucketNames.push('Hot','Warm');
-        }
-        if(storageConfigurationCold.val()==storageTypeDetailed &&
-            storageConfigurationColdVolume.val()==detailedVolume1)
-        {
-            volume1Count++;
-            volume1BucketNames.push('Cold');
-        }
-        if(storageConfigurationArchived.val()==storageTypeDetailed &&
-            storageConfigurationArchivedVolume.val()==detailedVolume1)
-        {
-            volume1Count++;
-            volume1BucketNames.push('Archived');
-        }
-        if(volume1Count>0){
-            detailedStorageVolume1Buckets.text(volume1BucketNames.join(', '));
-            detailedStorageVolume1.show();
-        }else{
-            detailedStorageVolume1.hide();
-        }
-        var volume2BucketNames=[];
-        var volume2Count=0;
-        if(storageConfigurationHotWarm.val()==storageTypeDetailed &&
-            storageConfigurationHotWarmVolume.val()==detailedVolume2)
-        {
-            volume2Count++;
-            volume2BucketNames.push('Hot','Warm');
-        }
-        if(storageConfigurationCold.val()==storageTypeDetailed &&
-            storageConfigurationColdVolume.val()==detailedVolume2)
-        {
-            volume2Count++;
-            volume2BucketNames.push('Cold');
-        }
-        if(storageConfigurationArchived.val()==storageTypeDetailed &&
-            storageConfigurationArchivedVolume.val()==detailedVolume2)
-        {
-            volume2Count++;
-            volume2BucketNames.push('Archived');
-        }
-        if(volume2Count>0){
-            detailedStorageVolume2Buckets.text(volume2BucketNames.join(', '));
-            detailedStorageVolume2.show();
-        }else{
-            detailedStorageVolume2.hide();
-        }
-        var volume3BucketNames=[];
-        var volume3Count=0;
-        if(storageConfigurationHotWarm.val()==storageTypeDetailed &&
-            storageConfigurationHotWarmVolume.val()==detailedVolume3)
-        {
-            volume3Count++;
-            volume3BucketNames.push('Hot','Warm');
-        }
-        if(storageConfigurationCold.val()==storageTypeDetailed &&
-            storageConfigurationColdVolume.val()==detailedVolume3)
-        {
-            volume3Count++;
-            volume3BucketNames.push('Cold');
-        }
-        if(storageConfigurationArchived.val()==storageTypeDetailed &&
-            storageConfigurationArchivedVolume.val()==detailedVolume3)
-        {
-            volume3Count++;
-            volume3BucketNames.push('Archived');
-        }
-        if(volume3Count>0){
-            detailedStorageVolume3Buckets.text(volume3BucketNames.join(', '));
-            detailedStorageVolume3.show();
-        }else{
-            detailedStorageVolume3.hide();
-        }
-        var summaryBucketNames=[];
-        var summaryCount=0;
-        if(storageConfigurationHotWarm.val()==storageTypeSummary)
-        {
-            summaryCount++;
-            summaryBucketNames.push('Hot','Warm');
-            summaryStorageHotWarmRow.show();
-        }else{
-            summaryStorageHotWarmRow.hide();
-        }
-        if(storageConfigurationCold.val()==storageTypeSummary)
-        {
-            summaryCount++;
-            summaryBucketNames.push('Cold');
-            summaryStorageColdRow.show();
-        }else{
-            summaryStorageColdRow.hide();
-        }
-        if(storageConfigurationArchived.val()==storageTypeSummary)
-        {
-            summaryCount++;
-            summaryBucketNames.push('Archived');
-            summaryStorageArchivedRow.show();
-        }else{
-            summaryStorageArchivedRow.hide();
-        }
-        if(summaryCount>0){
-            summaryStorageBuckets.text(summaryBucketNames.join(', '));
-            summaryStorage.show();
-        }else{
-            summaryStorage.hide();
-        }
-    };
+
     onHotWarmStorageTypeChanged();
     onColdStorageTypeChanged();
     onArchivedStorageTypeChanged();
