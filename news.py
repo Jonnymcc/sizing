@@ -1,6 +1,7 @@
 import webapp2
 from google.appengine.api import mail
 from google.appengine.ext import ndb
+from google.appengine.api import users
 import uuid
 import datetime
 from google.appengine.api import modules
@@ -18,6 +19,10 @@ class Subscription(ndb.Model):
     @classmethod
     def get_by_confirm_id(cls, confirm_id):
         return cls.query(Subscription.confirm_id == confirm_id).get()
+
+    @classmethod
+    def query_confirmed(cls):
+        return cls.query()#Subscription.confirmed == True)
 
 
 class SubscribeHandler(webapp2.RequestHandler):
@@ -60,10 +65,26 @@ class ConfirmHandler(webapp2.RequestHandler):
         self.response.write('Email address confirmed')
 
 
+class ListHandler(webapp2.RequestHandler):
+    def get(self):
+        if users.get_current_user() is None:
+            login_url = users.create_login_url()
+            self.redirect(login_url)
+            return
+        if not users.is_current_user_admin():
+            self.response.write('Only admins can do this')
+            return
+        confirmed_subscriptions = Subscription.query_confirmed()
+        for subscription in confirmed_subscriptions:
+            self.response.write(subscription.key.string_id()+', ')
+
+
+
 app = webapp2.WSGIApplication(
     [
         ("/news/subscribe", SubscribeHandler),
-        ("/news/confirm", ConfirmHandler)
+        ("/news/confirm", ConfirmHandler),
+        ("/news/list", ListHandler)
     ],
     debug=True
 )
