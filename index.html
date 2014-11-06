@@ -14,6 +14,7 @@
         <script src="index.js"></script>
         <script src="jquery.ba-bbq.min.js"></script>
         <script src="numeral.min.js"></script>
+        <script src="d3.min.js"></script>
     </head>
     <body>
         <div class="head">
@@ -128,7 +129,86 @@
                     <div><span class="slider-value"></span></div>
                 </div>
             </div>
-            <p style="display: none;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <div id="input-data-viz">
+                <style>
+                    #input-data-viz svg .original rect {
+                        fill: rgb(167, 169, 168);
+                    }
+
+                    #input-data-viz svg .original circle.bottom {
+                        fill: rgb(167, 169, 168);
+                    }
+
+                    #input-data-viz svg .original circle.top {
+                        fill: rgb(194, 196, 195);
+                    }
+
+                    #input-data-viz svg .stored .metadata circle.top {
+                        fill: #acd8f6;
+                    }
+
+                    #input-data-viz svg .stored .metadata rect {
+                        fill: #9ec6e2;
+                    }
+
+                    #input-data-viz svg .stored .metadata circle.bottom {
+                        fill: #9ec6e2;
+                    }
+
+                    #input-data-viz svg .stored .compressed rect {
+                        fill: #00b400;
+                    }
+
+                    #input-data-viz svg .stored .compressed circle.bottom {
+                        fill: #00b400;
+                    }
+
+                </style>
+                <svg width="300" height="100">
+                    <g transform="translate(0,0)" class="original">
+                        <g transform="scale(1,1.325)">
+                            <g transform="scale(1,0.25)">
+                                <circle cx="50" cy="250" r="50" class="bottom" ></circle>
+                            </g>
+                            <rect y="12.5" width="100" height="50"></rect>
+                            <g transform="scale(1,0.25)">
+                                <circle cx="50" cy="50" r="50" class="top" ></circle>
+                            </g>
+                        </g>
+                    </g>
+                    <g transform="translate(200,100)" class="stored">
+                        <g transform="scale(0.5)" class="compressed">
+                            <g transform="translate(0,-100)" >
+                                <g transform="scale(1.0)">
+                                    <g transform="scale(1,1.325)">
+                                        <g transform="scale(1,0.25)">
+                                            <circle cx="50" cy="250" r="50" class="bottom" ></circle>
+                                        </g>
+                                        <rect y="12.5" width="100" height="50"></rect>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                        <g transform="scale(0.5)" class="metadata">
+                            <g transform="translate(0,-150)" >
+                                <g transform="scale(1.0)">
+                                    <g transform="scale(1,1.325)">
+                                        <g transform="scale(1,0.25)">
+                                            <circle cx="50" cy="250" r="50" class="bottom" ></circle>
+                                        </g>
+                                        <rect y="12.5" width="100" height="50"></rect>
+                                        <g transform="scale(1,0.25)">
+                                            <circle cx="50" cy="50" r="50" class="top" ></circle>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <script>
+                </script>
+            </div>
           </div>
           <div class="flow group">
                 <h2>Data Retention</h2>

@@ -171,6 +171,12 @@ body > div.config-files div.file > pre .important-conf-value{
 
 /* retention bar */
 
+#input-data-viz{
+    padding-left: 1em;
+}
+
+/* retention bar */
+
 .itunes{
     padding-left: 1em;
 }
