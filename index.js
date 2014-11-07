@@ -293,6 +293,10 @@ $(function() {
     var effectiveDiskSpaceTotalVolume1Div = $('#effective-space-total-volume1');
     var diskSpaceContingencyVolume1Slider = $('#disk-space-contingency-slider-volume1');
     var diskSpaceContingencyVolume1Div = $('#disk-space-contingency-volume1');
+    var detailedStorageVolume1VolumeMaxReadIOPS = $('#detailed-storage-volume1-volumeMaxReadIOPS');
+    var detailedStorageVolume1VolumeMaxWriteIOPS = $('#detailed-storage-volume1-volumeMaxWriteIOPS');
+    var detailedStorageVolume1DiskVolumes = $('#detailed-storage-volume1-diskVolumes');
+    var detailedStorageVolume1DisksPerVolume = $('#detailed-storage-volume1-disksPerVolume');
     var raidLevelVolume2Select = $('#raid-level-volume2');
     var physicalStorageVolume2RaidParityWarning = $('#physical-storage-volume2-raid-parity-warning');
     var diskSizeVolume2Select = $('#disk-size-volume2');
@@ -304,6 +308,10 @@ $(function() {
     var effectiveDiskSpaceTotalVolume2Div = $('#effective-space-total-volume2');
     var diskSpaceContingencyVolume2Slider = $('#disk-space-contingency-slider-volume2');
     var diskSpaceContingencyVolume2Div = $('#disk-space-contingency-volume2');
+    var detailedStorageVolume2VolumeMaxReadIOPS = $('#detailed-storage-volume2-volumeMaxReadIOPS');
+    var detailedStorageVolume2VolumeMaxWriteIOPS = $('#detailed-storage-volume2-volumeMaxWriteIOPS');
+    var detailedStorageVolume2DiskVolumes = $('#detailed-storage-volume2-diskVolumes');
+    var detailedStorageVolume2DisksPerVolume = $('#detailed-storage-volume2-disksPerVolume');
     var raidLevelVolume3Select = $('#raid-level-volume3');
     var physicalStorageVolume3RaidParityWarning = $('#physical-storage-volume3-raid-parity-warning');
     var diskSizeVolume3Select = $('#disk-size-volume3');
@@ -315,6 +323,10 @@ $(function() {
     var effectiveDiskSpaceTotalVolume3Div = $('#effective-space-total-volume3');
     var diskSpaceContingencyVolume3Slider = $('#disk-space-contingency-slider-volume3');
     var diskSpaceContingencyVolume3Div = $('#disk-space-contingency-volume3');
+    var detailedStorageVolume3VolumeMaxReadIOPS = $('#detailed-storage-volume3-volumeMaxReadIOPS');
+    var detailedStorageVolume3VolumeMaxWriteIOPS = $('#detailed-storage-volume3-volumeMaxWriteIOPS');
+    var detailedStorageVolume3DiskVolumes = $('#detailed-storage-volume3-diskVolumes');
+    var detailedStorageVolume3DisksPerVolume = $('#detailed-storage-volume3-disksPerVolume');
     var storageConfigurationHotWarm = $('#storage-configuration-hotwarm');
     var storageConfigurationCold = $('#storage-configuration-cold');
     var storageConfigurationArchived = $('#storage-configuration-archived');
@@ -669,6 +681,10 @@ $(function() {
         physicalDiskSpaceTotalVolume1Div.text(numeral(physicalDiskSpaceVolume1Total*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpacePerIndexerVolume1Div.text(numeral(volume1PerIndexer.effectiveSpace*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpaceTotalVolume1Div.text(numeral(effectiveDiskSpaceVolume1Total*gbtobytesFactor).format('0.0 b'));
+        detailedStorageVolume1VolumeMaxReadIOPS.text(volume1PerIndexer.volumeMaxReadIOPS);
+        detailedStorageVolume1VolumeMaxWriteIOPS.text(volume1PerIndexer.volumeMaxWriteIOPS);
+        detailedStorageVolume1DiskVolumes.text(volume1PerIndexer.diskVolumes);
+        detailedStorageVolume1DisksPerVolume.text(volume1PerIndexer.disksPerVolume);
 
         var volume2PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
             storageVolume2PerIndexer + (storageVolume2PerIndexer*diskSpaceContingencyVolume2),
@@ -690,7 +706,11 @@ $(function() {
         physicalDiskSpaceTotalVolume2Div.text(numeral(physicalDiskSpaceVolume2Total*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpacePerIndexerVolume2Div.text(numeral(volume2PerIndexer.effectiveSpace*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpaceTotalVolume2Div.text(numeral(effectiveDiskSpaceVolume2Total*gbtobytesFactor).format('0.0 b'));
-        
+        detailedStorageVolume2VolumeMaxReadIOPS.text(volume2PerIndexer.volumeMaxReadIOPS);
+        detailedStorageVolume2VolumeMaxWriteIOPS.text(volume2PerIndexer.volumeMaxWriteIOPS);
+        detailedStorageVolume2DiskVolumes.text(volume2PerIndexer.diskVolumes);
+        detailedStorageVolume2DisksPerVolume.text(volume2PerIndexer.disksPerVolume);
+
         var volume3PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
             storageVolume3PerIndexer + (storageVolume3PerIndexer*diskSpaceContingencyVolume3),
             raidLevelVolume3,
@@ -711,6 +731,10 @@ $(function() {
         physicalDiskSpaceTotalVolume3Div.text(numeral(physicalDiskSpaceVolume3Total*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpacePerIndexerVolume3Div.text(numeral(volume3PerIndexer.effectiveSpace*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpaceTotalVolume3Div.text(numeral(effectiveDiskSpaceVolume3Total*gbtobytesFactor).format('0.0 b'));
+        detailedStorageVolume3VolumeMaxReadIOPS.text(volume3PerIndexer.volumeMaxReadIOPS);
+        detailedStorageVolume3VolumeMaxWriteIOPS.text(volume3PerIndexer.volumeMaxWriteIOPS);
+        detailedStorageVolume3DiskVolumes.text(volume3PerIndexer.diskVolumes);
+        detailedStorageVolume3DisksPerVolume.text(volume3PerIndexer.disksPerVolume);
 
         var configFilesHotWarmVolumeName;
         var configFilesColdVolumeName;
