@@ -561,23 +561,55 @@ $(function() {
         var calculateDiskCountAndEffectiveSpacePerIndexer=function(storage,raidLevel,diskSizeGB){
             var diskCount;
             var effectiveSpace;
+            var diskIOPS = 200;
+            var volumeMaxWriteIOPS;
+            var volumeMaxReadIOPS;
+            var diskVolumes;
+            var disksPerVolume;
             if(raidLevel=='0'){
                 diskCount = Math.ceil(storage/diskSizeGB);
                 effectiveSpace = diskCount * diskSizeGB;
-            } else if(raidLevel=='10'){
+                volumeMaxWriteIOPS = diskIOPS*diskCount;
+                volumeMaxReadIOPS = diskIOPS*diskCount;
+                diskVolumes=1;
+                disksPerVolume=diskCount;
+            } else if(raidLevel=='10' || raidLevel=='0+1'){
                 diskCount = Math.max(Math.ceil(storage/diskSizeGB)*2, 4);
                 effectiveSpace = diskCount / 2;
-            } else if(raidLevel=='0+1'){
-                diskCount = Math.max(Math.ceil(storage/diskSizeGB)*2, 3);
-                effectiveSpace = Math.floor(diskCount / 2);
+                volumeMaxWriteIOPS = diskIOPS*diskCount/2;
+                volumeMaxReadIOPS = diskIOPS*diskCount;
+                diskVolumes=2;
+                disksPerVolume=diskCount/2;
             } else if(raidLevel=='50'){
-                diskCount = 50;
-                effectiveSpace = 50;
+                diskCount = 4;
+                diskVolumes = 2;
+                disksPerVolume = 8;
+                effectiveSpace = diskVolumes * disksPerVolume;
+                while(true){
+                    effectiveSpace = (diskCount-1) * diskSizeGB;
+                    if(effectiveSpace>=storage){
+                        break;
+                    }
+                    diskCount++;
+                }
+                volumeMaxWriteIOPS = diskIOPS*diskCount/4;
+                volumeMaxReadIOPS = diskIOPS* (diskCount-2);
             } else if(raidLevel=='60'){
-                diskCount = 60;
-                effectiveSpace = 60;
+                diskCount = 5;
+                diskVolumes = 2;
+                disksPerVolume = 8;
+                effectiveSpace = diskVolumes * disksPerVolume;
+                while(true){
+                    effectiveSpace = (diskCount-2)*diskSizeGB;
+                    if(effectiveSpace>=storage){
+                        break;
+                    }
+                    diskCount++;
+                }
+                volumeMaxWriteIOPS = diskIOPS*diskCount/6;
+                volumeMaxReadIOPS = diskIOPS*(diskCount-4);
             } else if(raidLevel=='5'){
-                diskCount = 3;
+                diskCount = 4;
                 while(true){
                   effectiveSpace = (diskCount-1)*diskSizeGB;
                   if(effectiveSpace>=storage){
@@ -585,13 +617,35 @@ $(function() {
                   }
                   diskCount++;
                 }
-            } else{
+                volumeMaxWriteIOPS = diskIOPS*diskCount/4;
+                volumeMaxReadIOPS = diskIOPS* (diskCount-1);
+                diskVolumes = 1;
+                disksPerVolume = diskCount;
+            } else if(raidLevel=='6'){
+                diskCount = 5;
+                while(true){
+                    effectiveSpace = (diskCount-2)*diskSizeGB;
+                    if(effectiveSpace>=storage){
+                        break;
+                    }
+                    diskCount++;
+                }
+                volumeMaxWriteIOPS = diskIOPS * diskCount/6;
+                volumeMaxReadIOPS = diskIOPS * (diskCount-2);
+                diskVolumes = 1;
+                disksPerVolume = diskCount;
+            }
+            else{
                 diskCount = 0;
                 effectiveSpace = 0;
             }
             return {
                 diskCount: diskCount,
-                effectiveSpace: effectiveSpace
+                effectiveSpace: effectiveSpace,
+                volumeMaxWriteIOPS: volumeMaxWriteIOPS,
+                volumeMaxReadIOPS: volumeMaxReadIOPS,
+                diskVolumes: diskVolumes,
+                disksPerVolume: disksPerVolume
             };
         };
 
