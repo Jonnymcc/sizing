@@ -1,4 +1,18 @@
 $(function() {
+
+    var sendToGoogleAnalytics=function(){
+        var page = window.location.pathname + window.location.search  + window.location.hash;
+        ga('send', 'pageview', {
+            'page': page
+        });
+    };
+    var replaceState = function(){
+        history.replaceState.apply(history,arguments);
+        sendToGoogleAnalytics();
+    };
+    ga('create', 'UA-55129940-1', 'auto');
+    sendToGoogleAnalytics();
+
     $("button").css('outline','none').button();
     $('input:text').textfield();
 
@@ -146,7 +160,7 @@ $(function() {
                 var state = {};
                 state[diskSizeVolume1Key] = diskSizeVolume1DefaultValue;
                 var hash = $.param.fragment(window.location.hash,state);
-                history.replaceState(undefined, null, hash);
+                replaceState(undefined, null, hash);
             })();
         }
     }
@@ -166,7 +180,7 @@ $(function() {
                 var state = {};
                 state[diskSizeVolume2Key] = diskSizeVolume2DefaultValue;
                 var hash = $.param.fragment(window.location.hash,state);
-                history.replaceState(undefined, null, hash);
+                replaceState(undefined, null, hash);
             })();
         }
     }
@@ -186,7 +200,7 @@ $(function() {
                 var state = {};
                 state[diskSizeVolume3Key] = diskSizeVolume3DefaultValue;
                 var hash = $.param.fragment(window.location.hash,state);
-                history.replaceState(undefined, null, hash);
+                replaceState(undefined, null, hash);
             })();
         }
     }
@@ -1011,7 +1025,7 @@ $(function() {
             var state = {};
             state[dailyVolumeKey] = rawVolumeSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         },
         'toSlider': function(value){
             var result;
@@ -1078,7 +1092,7 @@ $(function() {
             var state = {};
             state[eventsPerSecondKey] = eventsPerSecondSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         },
         'toSlider': function(value){
             value/=50;
@@ -1168,7 +1182,7 @@ $(function() {
         compressionFactorSlider('trigger','change');
         indexFactorSlider('trigger','change');
         var hash = $.param.fragment(window.location.hash,state);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         calculate();
     });
     averageEventSizeSlider = averageEventSizeSlider.slideWithLabel({
@@ -1181,7 +1195,7 @@ $(function() {
             var state = {};
             state[averageEventSizeKey] = averageEventSizeSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         },
         'display': function(value){
             return value+' bytes';
@@ -1197,7 +1211,7 @@ $(function() {
             var state = {};
             state[compressionFactorKey] = compressionFactorSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         }
     });
     indexFactorSlider = indexFactorSlider.slideWithLabel({
@@ -1210,7 +1224,7 @@ $(function() {
             var state = {};
             state[indexFactorKey] = indexFactorSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         }
     });
     hotWarmRetentionSlider = hotWarmRetentionSlider.slideWithLabel({
@@ -1223,7 +1237,7 @@ $(function() {
             var state = {};
             state[hotWarmRetensionKey] = hotWarmRetentionSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         },
         'toSlider': retensionSliderConvertFromDays,
         'fromSlider': retensionSliderConvertToDays,
@@ -1239,7 +1253,7 @@ $(function() {
             var state = {};
             state[coldRetensionKey] = coldRetentionSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         },
         'toSlider': retensionSliderConvertFromDays,
         'fromSlider': retensionSliderConvertToDays,
@@ -1255,7 +1269,7 @@ $(function() {
             var state = {};
             state[frozenRetensionKey] = frozenRetentionSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         },
         'toSlider': retensionSliderConvertFromDays,
         'fromSlider': retensionSliderConvertToDays,
@@ -1286,7 +1300,7 @@ $(function() {
                     var state = {};
                     state[indexersKey] = indexersSlider('value');
                     var hash = $.param.fragment(window.location.hash,state);
-                    history.replaceState(undefined, null, hash);
+                    replaceState(undefined, null, hash);
                     calculate();
                 }else{
                     calculateNumberCheckbox.prop('checked', false);
@@ -1326,7 +1340,7 @@ $(function() {
             state[indexersKey] = indexersSlider('value');
         }
         var hash = $.param.fragment(window.location.hash,state,2);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         if(indexersCalculatedAutomatically){
             calculateNumberOfNodes();
         }
@@ -1352,7 +1366,7 @@ $(function() {
             var state = {};
             state[searchFactorKey] = searchFactorSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         }
     });
     var updateSearchFactorMaxMessage=function(){
@@ -1386,7 +1400,7 @@ $(function() {
             var state = {};
             state[replicationFactorKey] = replicationFactorSlider('value');
             var hash = $.param.fragment(window.location.hash,state);
-            history.replaceState(undefined, null, hash);
+            replaceState(undefined, null, hash);
         }
     });
     updateReplicationFactorMaxMessage();
@@ -1411,28 +1425,28 @@ $(function() {
         var state = {};
         state[clusterReplicationKey] = checked?1:0;
         var hash = $.param.fragment(window.location.hash,state);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         calculate();
     });
     hotWarmPriceGBInput.val(hotWarmPriceDefaultValue).change(function(){
       var state = {};
       state[hotWarmPriceKey] = hotWarmPriceGBInput.val();
       var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
+      replaceState(undefined, null, hash);
       calculate();
     });
     coldPriceGBInput.val(coldPriceDefaultValue).change(function(){
       var state = {};
       state[coldPriceKey] = coldPriceGBInput.val();
       var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
+      replaceState(undefined, null, hash);
       calculate();
     });
     frozenPriceGBInput.val(frozenPriceDefaultValue).change(function(){
       var state = {};
       state[frozenPriceKey] = frozenPriceGBInput.val();
       var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
+      replaceState(undefined, null, hash);
       calculate();
     });
 
@@ -1448,7 +1462,7 @@ $(function() {
           var state = {};
           state[diskSpaceContingencyVolume1Key] = diskSpaceContingencyVolume1Slider('value');
           var hash = $.param.fragment(window.location.hash,state);
-          history.replaceState(undefined, null, hash);
+          replaceState(undefined, null, hash);
         }
     });
     diskSpaceContingencyVolume1Div.text(parseInt(diskSpaceContingencyVolume1DefaultValue*100)+' %');
@@ -1466,7 +1480,7 @@ $(function() {
       var raidLevel = raidLevelVolume1Select.val();
       var state = {}; state[raidLevelVolume1Key] = raidLevel;
       var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
+      replaceState(undefined, null, hash);
       calculate();
     });
     diskSizeVolume1Select.val(diskSizeVolume1DefaultValue);
@@ -1474,7 +1488,7 @@ $(function() {
       var diskSize = diskSizeVolume1Select.val();
       var state = {}; state[diskSizeVolume1Key] = diskSize;
       var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
+      replaceState(undefined, null, hash);
       calculate();
     });
 
@@ -1490,7 +1504,7 @@ $(function() {
           var state = {};
           state[diskSpaceContingencyVolume2Key] = diskSpaceContingencyVolume2Slider('value');
           var hash = $.param.fragment(window.location.hash,state);
-          history.replaceState(undefined, null, hash);
+          replaceState(undefined, null, hash);
         }
     });
     diskSpaceContingencyVolume2Div.text(parseInt(diskSpaceContingencyVolume2DefaultValue*100)+' %');
@@ -1508,7 +1522,7 @@ $(function() {
       var raidLevel = raidLevelVolume2Select.val();
       var state = {}; state[raidLevelVolume2Key] = raidLevel;
       var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
+      replaceState(undefined, null, hash);
       calculate();
     });
     diskSizeVolume2Select.val(diskSizeVolume2DefaultValue);
@@ -1516,7 +1530,7 @@ $(function() {
       var diskSize = diskSizeVolume2Select.val();
       var state = {}; state[diskSizeVolume2Key] = diskSize;
       var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
+      replaceState(undefined, null, hash);
       calculate();
     });
 
@@ -1532,7 +1546,7 @@ $(function() {
           var state = {};
           state[diskSpaceContingencyVolume3Key] = diskSpaceContingencyVolume3Slider('value');
           var hash = $.param.fragment(window.location.hash,state);
-          history.replaceState(undefined, null, hash);
+          replaceState(undefined, null, hash);
         }
     });
     diskSpaceContingencyVolume3Div.text(parseInt(diskSpaceContingencyVolume3DefaultValue*100)+' %');
@@ -1550,7 +1564,7 @@ $(function() {
         var raidLevel = raidLevelVolume3Select.val();
         var state = {}; state[raidLevelVolume3Key] = raidLevel;
         var hash = $.param.fragment(window.location.hash,state);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         calculate();
     });
     diskSizeVolume3Select.val(diskSizeVolume3DefaultValue);
@@ -1558,7 +1572,7 @@ $(function() {
         var diskSize = diskSizeVolume3Select.val();
         var state = {}; state[diskSizeVolume3Key] = diskSize;
         var hash = $.param.fragment(window.location.hash,state);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         calculate();
     });
     
@@ -1567,7 +1581,7 @@ $(function() {
       var hotWarmStorageType = storageConfigurationHotWarm.val();
       var state = {}; state[hotWarmStorageTypeKey] = hotWarmStorageType;
       var hash = $.param.fragment(window.location.hash,state);
-      history.replaceState(undefined, null, hash);
+      replaceState(undefined, null, hash);
       onHotWarmStorageTypeChanged();
       calculate();
     });
@@ -1576,7 +1590,7 @@ $(function() {
         var coldStorageType = storageConfigurationCold.val();
         var state = {}; state[coldStorageTypeKey] = coldStorageType;
         var hash = $.param.fragment(window.location.hash,state);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         onColdStorageTypeChanged();
         calculate();
     });
@@ -1585,7 +1599,7 @@ $(function() {
         var archivedStorageType = storageConfigurationArchived.val();
         var state = {}; state[archivedStorageTypeKey] = archivedStorageType;
         var hash = $.param.fragment(window.location.hash,state);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         calculate();
         onArchivedStorageTypeChanged();
     });
@@ -1595,7 +1609,7 @@ $(function() {
         var hotWarmDetailedVolume = storageConfigurationHotWarmVolume.val();
         var state = {}; state[hotWarmDetailedVolumeKey] = hotWarmDetailedVolume;
         var hash = $.param.fragment(window.location.hash,state);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         calculate();
     });
     storageConfigurationColdVolume.val(coldDetailedVolumeDefaultValue);
@@ -1603,7 +1617,7 @@ $(function() {
         var coldDetailedVolume = storageConfigurationColdVolume.val();
         var state = {}; state[coldDetailedVolumeKey] = coldDetailedVolume;
         var hash = $.param.fragment(window.location.hash,state);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         calculate();
     });
     storageConfigurationArchivedVolume.val(archivedDetailedVolumeDefaultValue);
@@ -1611,7 +1625,7 @@ $(function() {
         var archivedDetailedVolume = storageConfigurationArchivedVolume.val();
         var state = {}; state[archivedDetailedVolumeKey] = archivedDetailedVolume;
         var hash = $.param.fragment(window.location.hash,state);
-        history.replaceState(undefined, null, hash);
+        replaceState(undefined, null, hash);
         calculate();
     });
 
