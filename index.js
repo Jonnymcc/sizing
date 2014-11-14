@@ -580,10 +580,10 @@ $(function() {
                 effectiveSpace = diskCount * diskSizeGB;
             } else if(raidLevel=='10'){
                 diskCount = Math.max(Math.ceil(storage/diskSizeGB)*2, 4);
-                effectiveSpace = diskCount / 2;
+                effectiveSpace = (diskCount / 2) * diskSizeGB;
             } else if(raidLevel=='0+1'){
                 diskCount = Math.max(Math.ceil(storage/diskSizeGB)*2, 3);
-                effectiveSpace = Math.floor(diskCount / 2);
+                effectiveSpace = Math.floor(diskCount / 2) * diskSizeGB;
             } else if(raidLevel=='5'){
                 diskCount = 3;
                 while(true){
