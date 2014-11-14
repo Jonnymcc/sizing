@@ -587,7 +587,7 @@ $(function() {
                 disksPerVolume=diskCount;
             } else if(raidLevel=='10' || raidLevel=='0+1'){
                 diskCount = Math.max(Math.ceil(storage/diskSizeGB)*2, 4);
-                effectiveSpace = diskCount / 2;
+                effectiveSpace = (diskCount / 2) * diskSizeGB;
                 volumeMaxWriteIOPS = diskIOPS*diskCount/2;
                 volumeMaxReadIOPS = diskIOPS*diskCount;
                 diskVolumes=2;
@@ -596,7 +596,6 @@ $(function() {
                 diskCount = 4;
                 diskVolumes = 2;
                 disksPerVolume = 8;
-                effectiveSpace = diskVolumes * disksPerVolume;
                 while(true){
                     effectiveSpace = (diskCount-1) * diskSizeGB;
                     if(effectiveSpace>=storage){
@@ -610,7 +609,6 @@ $(function() {
                 diskCount = 5;
                 diskVolumes = 2;
                 disksPerVolume = 8;
-                effectiveSpace = diskVolumes * disksPerVolume;
                 while(true){
                     effectiveSpace = (diskCount-2)*diskSizeGB;
                     if(effectiveSpace>=storage){
