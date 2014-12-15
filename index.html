@@ -311,9 +311,11 @@
                     <label for="raid-level-volume1">RAID Level:</label>
                     <select id="raid-level-volume1">
                         <option value="0">RAID 0</option>
-                        <option value="10">RAID 10</option>
-                        <option value="0+1">RAID 0+1</option>
                         <option value="5">RAID 5</option>
+                        <option value="6">RAID 6</option>
+                        <option value="10,01">RAID 10 or 01</option>
+                        <option value="50">RAID 50</option>
+                        <option value="60">RAID 60</option>
                     </select>
                 </div>
                 <div>
@@ -348,6 +350,17 @@
                     <div style="vertical-align: sub;" id="disk-space-contingency-volume1">???</div>
                 </div>
             </div>
+            <p class="description">
+                The selected storage configuration would typically be expected to achieve about
+                <span id="detailed-storage-volume1-volumeMaxReadIOPS" class="highlight"></span>
+                IOPS when doing 100% read operation, and about
+                <span id="detailed-storage-volume1-volumeMaxWriteIOPS" class="highlight"></span>
+                IOPS for 100% write operation.
+                These numbers assume that array is dedicated to Splunk and consists of
+                <span id="detailed-storage-volume1-diskVolumes" class="highlight"></span>
+                with <span id="detailed-storage-volume1-disksPerVolume" class="highlight"></span>
+                disk(s) (typically 200 IOPS per disk).
+            </p>
             <table style="width: 100%;">
                 <thead>
                     <tr class="message">
@@ -383,9 +396,11 @@
                     <label for="raid-level-volume2">RAID Level:</label>
                     <select id="raid-level-volume2">
                         <option value="0">RAID 0</option>
-                        <option value="10">RAID 10</option>
-                        <option value="0+1">RAID 0+1</option>
                         <option value="5">RAID 5</option>
+                        <option value="6">RAID 6</option>
+                        <option value="10,01">RAID 10 or 01</option>
+                        <option value="50">RAID 50</option>
+                        <option value="60">RAID 60</option>
                     </select>
                 </div>
                 <div>
@@ -419,6 +434,17 @@
                     <div style="vertical-align: sub;" id="disk-space-contingency-volume2">???</div>
                 </div>
             </div>
+            <p class="description">
+                The selected storage configuration would typically be expected to achieve about
+                <span id="detailed-storage-volume2-volumeMaxReadIOPS" class="highlight"></span>
+                IOPS when doing 100% read operation, and about
+                <span id="detailed-storage-volume2-volumeMaxWriteIOPS" class="highlight"></span>
+                IOPS for 100% write operation.
+                These numbers assume that array is dedicated to Splunk and consists of
+                <span id="detailed-storage-volume2-diskVolumes" class="highlight"></span>
+                with <span id="detailed-storage-volume2-disksPerVolume" class="highlight"></span>
+                disk(s) (typically 200 IOPS per disk).
+            </p>
             <table style="width: 100%;">
                 <thead>
                     <tr class="message">
@@ -454,9 +480,11 @@
                     <label for="raid-level-volume3">RAID Level:</label>
                     <select id="raid-level-volume3">
                         <option value="0">RAID 0</option>
-                        <option value="10">RAID 10</option>
-                        <option value="0+1">RAID 0+1</option>
                         <option value="5">RAID 5</option>
+                        <option value="6">RAID 6</option>
+                        <option value="10,01">RAID 10 or 01</option>
+                        <option value="50">RAID 50</option>
+                        <option value="60">RAID 60</option>
                     </select>
                 </div>
                 <div>
@@ -490,6 +518,17 @@
                     <div style="vertical-align: sub;" id="disk-space-contingency-volume3">???</div>
                 </div>
             </div>
+            <p class="description">
+                The selected storage configuration would typically be expected to achieve about
+                <span id="detailed-storage-volume3-volumeMaxReadIOPS" class="highlight"></span>
+                IOPS when doing 100% read operation, and about
+                <span id="detailed-storage-volume3-volumeMaxWriteIOPS" class="highlight"></span>
+                IOPS for 100% write operation.
+                These numbers assume that array is dedicated to Splunk and consists of
+                <span id="detailed-storage-volume3-diskVolumes" class="highlight"></span>
+                with <span id="detailed-storage-volume3-disksPerVolume" class="highlight"></span>
+                disk(s) (typically 200 IOPS per disk).
+            </p>
             <table style="width: 100%;">
                 <thead>
                     <tr class="message">

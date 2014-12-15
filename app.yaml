@@ -1,5 +1,5 @@
 application: splunk-sizing
-version: master
+version: raid
 runtime: python27
 api_version: 1
 threadsafe: yes

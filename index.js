@@ -56,13 +56,19 @@ $(function() {
     var hotWarmPriceDefaultValue = '0.1';
     var coldPriceDefaultValue = '0.05';
     var frozenPriceDefaultValue = '0.01';
-    var raidLevelVolume1DefaultValue = '0';
+    var raidLevel0 = '0';
+    var raidLevel5 = '5';
+    var raidLevel6 = '6';
+    var raidLevel10or01 = '10,01';
+    var raidLevel50 = '50';
+    var raidLevel60 = '60';
+    var raidLevelVolume1DefaultValue = raidLevel0;
     var diskSizeVolume1DefaultValue = '1024';
     var diskSpaceContingencyVolume1DefaultValue = 0.05;
-    var raidLevelVolume2DefaultValue = '0';
+    var raidLevelVolume2DefaultValue = raidLevel0;
     var diskSizeVolume2DefaultValue = '1024';
     var diskSpaceContingencyVolume2DefaultValue = 0.05;
-    var raidLevelVolume3DefaultValue = '0';
+    var raidLevelVolume3DefaultValue = raidLevel0;
     var diskSizeVolume3DefaultValue = '1024';
     var diskSpaceContingencyVolume3DefaultValue = 0.05;
     var storageTypeDetailed = 'detailed';
@@ -148,7 +154,22 @@ $(function() {
     if($.isNumeric(frozenPriceFromHash)) frozenPriceDefaultValue = parseFloat(frozenPriceFromHash);
 
     var raidLevelVolume1FromHash = $.bbq.getState(raidLevelVolume1Key);
-    if(Object.prototype.toString.call(raidLevelVolume1FromHash)=='[object String]') raidLevelVolume1DefaultValue = raidLevelVolume1FromHash;
+    if(Object.prototype.toString.call(raidLevelVolume1FromHash)=='[object String]')
+    {
+        if( raidLevelVolume1FromHash=='10' ||
+            raidLevelVolume1FromHash=='01' ||
+            raidLevelVolume1FromHash=='1+0' ||
+            raidLevelVolume1FromHash=='0+1' ){
+            raidLevelVolume1FromHash=raidLevel10or01;
+            (function(){
+                var state = {};
+                state[raidLevelVolume1Key] = raidLevelVolume1FromHash;
+                var hash = $.param.fragment(window.location.hash,state);
+                history.replaceState(undefined, null, hash);
+            })();
+        }
+        raidLevelVolume1DefaultValue = raidLevelVolume1FromHash;
+    }
     var diskSizeVolume1FromHash = $.bbq.getState(diskSizeVolume1Key);
     if(Object.prototype.toString.call(diskSizeVolume1FromHash)=='[object String]') {
         diskSizeVolume1DefaultValue = diskSizeVolume1FromHash;
@@ -168,7 +189,22 @@ $(function() {
     if($.isNumeric(diskSpaceContingencyVolume1FromHash)) diskSpaceContingencyVolume1DefaultValue = parseFloat(diskSpaceContingencyVolume1FromHash);
 
     var raidLevelVolume2FromHash = $.bbq.getState(raidLevelVolume2Key);
-    if(Object.prototype.toString.call(raidLevelVolume2FromHash)=='[object String]') raidLevelVolume2DefaultValue = raidLevelVolume2FromHash;
+    if(Object.prototype.toString.call(raidLevelVolume2FromHash)=='[object String]')
+    {
+        if( raidLevelVolume2FromHash=='10' ||
+            raidLevelVolume2FromHash=='01' ||
+            raidLevelVolume2FromHash=='1+0' ||
+            raidLevelVolume2FromHash=='0+1' ){
+            raidLevelVolume2FromHash=raidLevel10or01;
+            (function(){
+                var state = {};
+                state[raidLevelVolume2Key] = raidLevelVolume2FromHash;
+                var hash = $.param.fragment(window.location.hash,state);
+                history.replaceState(undefined, null, hash);
+            })();
+        }
+        raidLevelVolume2DefaultValue = raidLevelVolume2FromHash;
+    }
     var diskSizeVolume2FromHash = $.bbq.getState(diskSizeVolume2Key);
     if(Object.prototype.toString.call(diskSizeVolume2FromHash)=='[object String]') {
         diskSizeVolume2DefaultValue = diskSizeVolume2FromHash;
@@ -188,7 +224,22 @@ $(function() {
     if($.isNumeric(diskSpaceContingencyVolume2FromHash)) diskSpaceContingencyVolume2DefaultValue = parseFloat(diskSpaceContingencyVolume2FromHash);
 
     var raidLevelVolume3FromHash = $.bbq.getState(raidLevelVolume3Key);
-    if(Object.prototype.toString.call(raidLevelVolume3FromHash)=='[object String]') raidLevelVolume3DefaultValue = raidLevelVolume3FromHash;
+    if(Object.prototype.toString.call(raidLevelVolume3FromHash)=='[object String]')
+    {
+        if( raidLevelVolume3FromHash=='10' ||
+            raidLevelVolume3FromHash=='01' ||
+            raidLevelVolume3FromHash=='1+0' ||
+            raidLevelVolume3FromHash=='0+1' ){
+            raidLevelVolume3FromHash=raidLevel10or01;
+            (function(){
+                var state = {};
+                state[raidLevelVolume3Key] = raidLevelVolume3FromHash;
+                var hash = $.param.fragment(window.location.hash,state);
+                history.replaceState(undefined, null, hash);
+            })();
+        }
+        raidLevelVolume3DefaultValue = raidLevelVolume3FromHash;
+    }
     var diskSizeVolume3FromHash = $.bbq.getState(diskSizeVolume3Key);
     if(Object.prototype.toString.call(diskSizeVolume3FromHash)=='[object String]') {
         diskSizeVolume3DefaultValue = diskSizeVolume3FromHash;
@@ -307,6 +358,10 @@ $(function() {
     var effectiveDiskSpaceTotalVolume1Div = $('#effective-space-total-volume1');
     var diskSpaceContingencyVolume1Slider = $('#disk-space-contingency-slider-volume1');
     var diskSpaceContingencyVolume1Div = $('#disk-space-contingency-volume1');
+    var detailedStorageVolume1VolumeMaxReadIOPS = $('#detailed-storage-volume1-volumeMaxReadIOPS');
+    var detailedStorageVolume1VolumeMaxWriteIOPS = $('#detailed-storage-volume1-volumeMaxWriteIOPS');
+    var detailedStorageVolume1DiskVolumes = $('#detailed-storage-volume1-diskVolumes');
+    var detailedStorageVolume1DisksPerVolume = $('#detailed-storage-volume1-disksPerVolume');
     var raidLevelVolume2Select = $('#raid-level-volume2');
     var physicalStorageVolume2RaidParityWarning = $('#physical-storage-volume2-raid-parity-warning');
     var diskSizeVolume2Select = $('#disk-size-volume2');
@@ -318,6 +373,10 @@ $(function() {
     var effectiveDiskSpaceTotalVolume2Div = $('#effective-space-total-volume2');
     var diskSpaceContingencyVolume2Slider = $('#disk-space-contingency-slider-volume2');
     var diskSpaceContingencyVolume2Div = $('#disk-space-contingency-volume2');
+    var detailedStorageVolume2VolumeMaxReadIOPS = $('#detailed-storage-volume2-volumeMaxReadIOPS');
+    var detailedStorageVolume2VolumeMaxWriteIOPS = $('#detailed-storage-volume2-volumeMaxWriteIOPS');
+    var detailedStorageVolume2DiskVolumes = $('#detailed-storage-volume2-diskVolumes');
+    var detailedStorageVolume2DisksPerVolume = $('#detailed-storage-volume2-disksPerVolume');
     var raidLevelVolume3Select = $('#raid-level-volume3');
     var physicalStorageVolume3RaidParityWarning = $('#physical-storage-volume3-raid-parity-warning');
     var diskSizeVolume3Select = $('#disk-size-volume3');
@@ -329,6 +388,10 @@ $(function() {
     var effectiveDiskSpaceTotalVolume3Div = $('#effective-space-total-volume3');
     var diskSpaceContingencyVolume3Slider = $('#disk-space-contingency-slider-volume3');
     var diskSpaceContingencyVolume3Div = $('#disk-space-contingency-volume3');
+    var detailedStorageVolume3VolumeMaxReadIOPS = $('#detailed-storage-volume3-volumeMaxReadIOPS');
+    var detailedStorageVolume3VolumeMaxWriteIOPS = $('#detailed-storage-volume3-volumeMaxWriteIOPS');
+    var detailedStorageVolume3DiskVolumes = $('#detailed-storage-volume3-diskVolumes');
+    var detailedStorageVolume3DisksPerVolume = $('#detailed-storage-volume3-disksPerVolume');
     var storageConfigurationHotWarm = $('#storage-configuration-hotwarm');
     var storageConfigurationCold = $('#storage-configuration-cold');
     var storageConfigurationArchived = $('#storage-configuration-archived');
@@ -575,17 +638,53 @@ $(function() {
         var calculateDiskCountAndEffectiveSpacePerIndexer=function(storage,raidLevel,diskSizeGB){
             var diskCount;
             var effectiveSpace;
-            if(raidLevel=='0'){
+            var diskIOPS = 200;
+            var volumeMaxWriteIOPS;
+            var volumeMaxReadIOPS;
+            var diskVolumes;
+            var disksPerVolume;
+            if(raidLevel==raidLevel0){
                 diskCount = Math.ceil(storage/diskSizeGB);
                 effectiveSpace = diskCount * diskSizeGB;
-            } else if(raidLevel=='10'){
+                volumeMaxWriteIOPS = Math.round(diskIOPS*diskCount);
+                volumeMaxReadIOPS = Math.round(diskIOPS*diskCount);
+                diskVolumes=1;
+                disksPerVolume=diskCount;
+            } else if(raidLevel==raidLevel10or01){
                 diskCount = Math.max(Math.ceil(storage/diskSizeGB)*2, 4);
                 effectiveSpace = (diskCount / 2) * diskSizeGB;
-            } else if(raidLevel=='0+1'){
-                diskCount = Math.max(Math.ceil(storage/diskSizeGB)*2, 3);
-                effectiveSpace = Math.floor(diskCount / 2) * diskSizeGB;
-            } else if(raidLevel=='5'){
-                diskCount = 3;
+                volumeMaxWriteIOPS = Math.round(diskIOPS*diskCount/2);
+                volumeMaxReadIOPS = Math.round(diskIOPS*diskCount);
+                diskVolumes=2;
+                disksPerVolume=diskCount/2;
+            } else if(raidLevel==raidLevel50){
+                disksPerVolume = 4;
+                diskVolumes = 2;
+                while(true){
+                    effectiveSpace = (disksPerVolume-1) * diskVolumes * diskSizeGB;
+                    if(effectiveSpace>=storage){
+                        break;
+                    }
+                    disksPerVolume++;
+                }
+                diskCount = disksPerVolume*diskVolumes;
+                volumeMaxWriteIOPS = Math.round(diskIOPS*diskCount/4);
+                volumeMaxReadIOPS = Math.round(diskIOPS* (diskCount-2));
+            } else if(raidLevel==raidLevel60){
+                disksPerVolume = 5;
+                diskVolumes = 2;
+                while(true){
+                    effectiveSpace = (disksPerVolume-2) * diskVolumes * diskSizeGB;
+                    if(effectiveSpace>=storage){
+                        break;
+                    }
+                    disksPerVolume++;
+                }
+                diskCount = disksPerVolume*diskVolumes;
+                volumeMaxWriteIOPS = Math.round(diskIOPS*diskCount/6);
+                volumeMaxReadIOPS = Math.round(diskIOPS* (diskCount-4));
+            } else if(raidLevel==raidLevel5){
+                diskCount = 4;
                 while(true){
                   effectiveSpace = (diskCount-1)*diskSizeGB;
                   if(effectiveSpace>=storage){
@@ -593,13 +692,35 @@ $(function() {
                   }
                   diskCount++;
                 }
-            } else{
+                volumeMaxWriteIOPS = Math.round(diskIOPS*diskCount/4);
+                volumeMaxReadIOPS = Math.round(diskIOPS* (diskCount-1));
+                diskVolumes = 1;
+                disksPerVolume = diskCount;
+            } else if(raidLevel==raidLevel6){
+                diskCount = 5;
+                while(true){
+                    effectiveSpace = (diskCount-2)*diskSizeGB;
+                    if(effectiveSpace>=storage){
+                        break;
+                    }
+                    diskCount++;
+                }
+                volumeMaxWriteIOPS = Math.round(diskIOPS * diskCount/6);
+                volumeMaxReadIOPS = Math.round(diskIOPS * (diskCount-2));
+                diskVolumes = 1;
+                disksPerVolume = diskCount;
+            }
+            else{
                 diskCount = 0;
                 effectiveSpace = 0;
             }
             return {
                 diskCount: diskCount,
-                effectiveSpace: effectiveSpace
+                effectiveSpace: effectiveSpace,
+                volumeMaxWriteIOPS: volumeMaxWriteIOPS,
+                volumeMaxReadIOPS: volumeMaxReadIOPS,
+                diskVolumes: diskVolumes,
+                disksPerVolume: disksPerVolume
             };
         };
 
@@ -616,6 +737,8 @@ $(function() {
         console.debug('physicalDiskSpaceVolume1Total: '+physicalDiskSpaceVolume1Total);
         var effectiveDiskSpaceVolume1Total = volume1PerIndexer.effectiveSpace * indexers;
         console.debug('effectiveDiskSpaceVolume1Total: '+effectiveDiskSpaceVolume1Total);
+        console.debug('diskVolumesVolume1Total: '+volume1PerIndexer.diskVolumes);
+        console.debug('disksPerVolumeVolume1Total: '+volume1PerIndexer.disksPerVolume);
 
         diskCountPerIndexerVolume1Div.text(volume1PerIndexer.diskCount);
         diskCountTotalVolume1Div.text(diskCountVolume1Total);
@@ -623,6 +746,14 @@ $(function() {
         physicalDiskSpaceTotalVolume1Div.text(numeral(physicalDiskSpaceVolume1Total*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpacePerIndexerVolume1Div.text(numeral(volume1PerIndexer.effectiveSpace*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpaceTotalVolume1Div.text(numeral(effectiveDiskSpaceVolume1Total*gbtobytesFactor).format('0.0 b'));
+        detailedStorageVolume1VolumeMaxReadIOPS.text(numeral(volume1PerIndexer.volumeMaxReadIOPS).format('0,0'));
+        detailedStorageVolume1VolumeMaxWriteIOPS.text(numeral(volume1PerIndexer.volumeMaxWriteIOPS).format('0,0'));
+        if(volume1PerIndexer.diskVolumes==1){
+            detailedStorageVolume1DiskVolumes.text('a single volume');
+        }else{
+            detailedStorageVolume1DiskVolumes.text(volume1PerIndexer.diskVolumes+' volumes');
+        }
+        detailedStorageVolume1DisksPerVolume.text(volume1PerIndexer.disksPerVolume);
 
         var volume2PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
             storageVolume2PerIndexer + (storageVolume2PerIndexer*diskSpaceContingencyVolume2),
@@ -644,7 +775,15 @@ $(function() {
         physicalDiskSpaceTotalVolume2Div.text(numeral(physicalDiskSpaceVolume2Total*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpacePerIndexerVolume2Div.text(numeral(volume2PerIndexer.effectiveSpace*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpaceTotalVolume2Div.text(numeral(effectiveDiskSpaceVolume2Total*gbtobytesFactor).format('0.0 b'));
-        
+        detailedStorageVolume2VolumeMaxReadIOPS.text(numeral(volume2PerIndexer.volumeMaxReadIOPS).format('0,0'));
+        detailedStorageVolume2VolumeMaxWriteIOPS.text(numeral(volume2PerIndexer.volumeMaxWriteIOPS).format('0,0'));
+        if(volume2PerIndexer.diskVolumes==1){
+            detailedStorageVolume2DiskVolumes.text('a single volume');
+        }else{
+            detailedStorageVolume2DiskVolumes.text(volume2PerIndexer.diskVolumes+' volumes');
+        }
+        detailedStorageVolume2DisksPerVolume.text(volume2PerIndexer.disksPerVolume);
+
         var volume3PerIndexer=calculateDiskCountAndEffectiveSpacePerIndexer(
             storageVolume3PerIndexer + (storageVolume3PerIndexer*diskSpaceContingencyVolume3),
             raidLevelVolume3,
@@ -665,6 +804,14 @@ $(function() {
         physicalDiskSpaceTotalVolume3Div.text(numeral(physicalDiskSpaceVolume3Total*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpacePerIndexerVolume3Div.text(numeral(volume3PerIndexer.effectiveSpace*gbtobytesFactor).format('0.0 b'));
         effectiveDiskSpaceTotalVolume3Div.text(numeral(effectiveDiskSpaceVolume3Total*gbtobytesFactor).format('0.0 b'));
+        detailedStorageVolume3VolumeMaxReadIOPS.text(numeral(volume3PerIndexer.volumeMaxReadIOPS).format('0,0'));
+        detailedStorageVolume3VolumeMaxWriteIOPS.text(numeral(volume3PerIndexer.volumeMaxWriteIOPS).format('0,0'));
+        if(volume3PerIndexer.diskVolumes==1){
+            detailedStorageVolume3DiskVolumes.text('a single volume');
+        }else{
+            detailedStorageVolume3DiskVolumes.text(volume3PerIndexer.diskVolumes+' volumes');
+        }
+        detailedStorageVolume3DisksPerVolume.text(volume3PerIndexer.disksPerVolume);
 
         var configFilesHotWarmVolumeName;
         var configFilesColdVolumeName;
