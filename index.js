@@ -644,31 +644,31 @@ $(function() {
                 diskVolumes=2;
                 disksPerVolume=diskCount/2;
             } else if(raidLevel==raidLevel50){
-                diskCount = 4;
+                disksPerVolume = 4;
                 diskVolumes = 2;
-                disksPerVolume = 8;
                 while(true){
-                    effectiveSpace = (diskCount-1) * diskSizeGB;
+                    effectiveSpace = (disksPerVolume-1) * diskVolumes * diskSizeGB;
                     if(effectiveSpace>=storage){
                         break;
                     }
-                    diskCount++;
+                    disksPerVolume++;
                 }
+                diskCount = disksPerVolume*diskVolumes;
                 volumeMaxWriteIOPS = Math.round(diskIOPS*diskCount/4);
                 volumeMaxReadIOPS = Math.round(diskIOPS* (diskCount-2));
             } else if(raidLevel==raidLevel60){
-                diskCount = 5;
+                disksPerVolume = 5;
                 diskVolumes = 2;
-                disksPerVolume = 8;
                 while(true){
-                    effectiveSpace = (diskCount-2)*diskSizeGB;
+                    effectiveSpace = (disksPerVolume-2) * diskVolumes * diskSizeGB;
                     if(effectiveSpace>=storage){
                         break;
                     }
-                    diskCount++;
+                    disksPerVolume++;
                 }
+                diskCount = disksPerVolume*diskVolumes;
                 volumeMaxWriteIOPS = Math.round(diskIOPS*diskCount/6);
-                volumeMaxReadIOPS = Math.round(diskIOPS*(diskCount-4));
+                volumeMaxReadIOPS = Math.round(diskIOPS* (diskCount-4));
             } else if(raidLevel==raidLevel5){
                 diskCount = 4;
                 while(true){
@@ -723,6 +723,8 @@ $(function() {
         console.debug('physicalDiskSpaceVolume1Total: '+physicalDiskSpaceVolume1Total);
         var effectiveDiskSpaceVolume1Total = volume1PerIndexer.effectiveSpace * indexers;
         console.debug('effectiveDiskSpaceVolume1Total: '+effectiveDiskSpaceVolume1Total);
+        console.debug('diskVolumesVolume1Total: '+volume1PerIndexer.diskVolumes);
+        console.debug('disksPerVolumeVolume1Total: '+volume1PerIndexer.disksPerVolume);
 
         diskCountPerIndexerVolume1Div.text(volume1PerIndexer.diskCount);
         diskCountTotalVolume1Div.text(diskCountVolume1Total);
