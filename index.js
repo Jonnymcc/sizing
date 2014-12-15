@@ -62,13 +62,13 @@ $(function() {
     var raidLevel10or01 = '10,01';
     var raidLevel50 = '50';
     var raidLevel60 = '60';
-    var raidLevelVolume1DefaultValue = raidLevel0;
+    var raidLevelVolume1DefaultValue = raidLevel10or01;
     var diskSizeVolume1DefaultValue = '1024';
     var diskSpaceContingencyVolume1DefaultValue = 0.05;
-    var raidLevelVolume2DefaultValue = raidLevel0;
+    var raidLevelVolume2DefaultValue = raidLevel10or01;
     var diskSizeVolume2DefaultValue = '1024';
     var diskSpaceContingencyVolume2DefaultValue = 0.05;
-    var raidLevelVolume3DefaultValue = raidLevel0;
+    var raidLevelVolume3DefaultValue = raidLevel10or01;
     var diskSizeVolume3DefaultValue = '1024';
     var diskSpaceContingencyVolume3DefaultValue = 0.05;
     var storageTypeDetailed = 'detailed';
@@ -635,28 +635,31 @@ $(function() {
         coldSummaryStorageSize.text(numeral(storageColdTotal*gbtobytesFactor).format('0.0 b'));
         archivedSummaryStorageSize.text(numeral(storageFrozenTotal*gbtobytesFactor).format('0.0 b'));
 
-        var calculateDiskCountAndEffectiveSpacePerIndexer=function(storage,raidLevel,diskSizeGB){
+        var calculateDiskCountAndEffectiveSpacePerIndexer=function(storage,raidLevel,diskSizeGB,disksPerVolume){
             var diskCount;
             var effectiveSpace;
             var diskIOPS = 200;
             var volumeMaxWriteIOPS;
             var volumeMaxReadIOPS;
             var diskVolumes;
-            var disksPerVolume;
             if(raidLevel==raidLevel0){
-                diskCount = Math.ceil(storage/diskSizeGB);
+                diskVolumes = 1;
+                if(disksPerVolume==undefined){
+                    disksPerVolume = Math.ceil(storage/diskSizeGB);
+                }
+                diskCount = disksPerVolume * diskVolumes;
                 effectiveSpace = diskCount * diskSizeGB;
-                volumeMaxWriteIOPS = Math.round(diskIOPS*diskCount);
-                volumeMaxReadIOPS = Math.round(diskIOPS*diskCount);
-                diskVolumes=1;
-                disksPerVolume=diskCount;
+                volumeMaxWriteIOPS = Math.round(diskIOPS*disksPerVolume);
+                volumeMaxReadIOPS = Math.round(diskIOPS*disksPerVolume);
             } else if(raidLevel==raidLevel10or01){
-                diskCount = Math.max(Math.ceil(storage/diskSizeGB)*2, 4);
+                diskVolumes = 2;
+                if(disksPerVolume==undefined){
+                    disksPerVolume = Math.max(Math.ceil(storage/diskSizeGB)*2, 4);
+                }
+                diskCount = disksPerVolume * diskVolumes;
                 effectiveSpace = (diskCount / 2) * diskSizeGB;
-                volumeMaxWriteIOPS = Math.round(diskIOPS*diskCount/2);
-                volumeMaxReadIOPS = Math.round(diskIOPS*diskCount);
-                diskVolumes=2;
-                disksPerVolume=diskCount/2;
+                volumeMaxWriteIOPS = Math.round(diskIOPS*disksPerVolume);
+                volumeMaxReadIOPS = Math.round(diskIOPS*disksPerVolume*2);
             } else if(raidLevel==raidLevel50){
                 disksPerVolume = 4;
                 diskVolumes = 2;
