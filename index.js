@@ -530,7 +530,7 @@ $(function() {
         console.debug("storageHotWarmTotal: "+storageHotWarmTotal+" GB");
         var storageColdTotal = storageColdRaw + storageColdIndex;
         console.debug("storageColdTotal: "+storageColdTotal+" GB");
-        var storageFrozenTotal = storageFrozenRaw + 0;
+        var storageFrozenTotal = storageFrozenRaw;
         console.debug("storageFrozenTotal: "+storageFrozenTotal+" GB");
 
         var storageHotWarmPerIndexer = storageHotWarmTotal / indexers;
@@ -1134,7 +1134,7 @@ $(function() {
     var retensionSliderConvertToDays = function(percent){
         var result;
         if(percent<0.60)
-            result = 0+percent*50;
+            result = percent*50;
         else if(percent<0.68)
             result = 30+(percent-0.60)*500;
         else if(percent<0.88)
