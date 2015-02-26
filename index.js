@@ -1510,14 +1510,6 @@ $(function() {
         }
         calculate();
     });
-    /*if(clusterReplicationDefaultValue){
-        if(searchFactorDefaultValue>indexersDefaultValue){
-            searchFactorDefaultValue=indexersDefaultValue;
-        }
-        if(replicationFactorDefaultValue>indexersDefaultValue){
-            replicationFactorDefaultValue=indexersDefaultValue;
-        }
-    }*/
     var updateReplicationFactorMaxMessage=function(){
         var max = replicationFactorSlider('option','max');
         var value = replicationFactorSlider('value');
