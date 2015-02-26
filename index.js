@@ -52,7 +52,7 @@ $(function() {
     var indexersCalculatedAutomatically = true;
     var clusterReplicationDefaultValue = false;
     var searchFactorDefaultValue = 2;
-    var replicationFactorDefaultValue = 2;
+    var replicationFactorDefaultValue = 3;
     var hotWarmPriceDefaultValue = '0.1';
     var coldPriceDefaultValue = '0.05';
     var frozenPriceDefaultValue = '0.01';
@@ -1422,23 +1422,40 @@ $(function() {
         'fromSlider': retensionSliderConvertToDays,
         'display': retensionSliderDisplayDays
     });
-    indexersSlider = indexersSlider.slideWithLabel({
-        'value': indexersDefaultValue,
-        'min': 1, 'max': 100, 'step': 1,
-        'changed': function(){
-            var value = indexersSlider('value');
-            var searchFactor = searchFactorSlider('value');
-            searchFactorSlider('option', 'max', value);
-            replicationFactorSlider('option', 'max', value);
-            if(searchFactor>value){
-                searchFactorSlider('value', value);
-            }
-            var replicationFactor = replicationFactorSlider('value');
-            if(replicationFactor>value){
-                replicationFactorSlider('value', value);
-            }
+    enableClusterReplicationCheckBox.prop('checked', clusterReplicationDefaultValue);
+    enableClusterReplicationCheckBox.change(function(){
+        var checked = $(this).is(':checked');
+        if(checked){
+            replicationFactorRetentionDiv.show();
+            searchFactorRetentionDiv.show();
             searchFactorSlider('trigger','change');
             replicationFactorSlider('trigger','change');
+        }else{
+            replicationFactorRetentionDiv.hide();
+            searchFactorRetentionDiv.hide();
+        }
+        updateMinimumNumberOfIndexers();
+        var state = {};
+        state[clusterReplicationKey] = checked?1:0;
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        calculate();
+    });
+    var calculateMinimumNumberOfIndexers = function(){
+        var isCluster = enableClusterReplicationCheckBox.is(":checked");
+        return isCluster ? 2 : 1;
+    };
+    var updateMinimumNumberOfIndexers = function(){
+        indexersSlider('option', 'min', calculateMinimumNumberOfIndexers());
+        updateMaximumReplicationFactor();
+    };
+    indexersSlider = indexersSlider.slideWithLabel({
+        'value': indexersDefaultValue,
+        'min': calculateMinimumNumberOfIndexers(),
+        'max': 100,
+        'step': 1,
+        'changed': function(){
+            updateMaximumReplicationFactor();
             calculate();
         },
         'change': function(){
@@ -1493,18 +1510,60 @@ $(function() {
         }
         calculate();
     });
-    if(clusterReplicationDefaultValue){
+    /*if(clusterReplicationDefaultValue){
         if(searchFactorDefaultValue>indexersDefaultValue){
             searchFactorDefaultValue=indexersDefaultValue;
         }
         if(replicationFactorDefaultValue>indexersDefaultValue){
             replicationFactorDefaultValue=indexersDefaultValue;
         }
-    }
+    }*/
+    var updateReplicationFactorMaxMessage=function(){
+        var max = replicationFactorSlider('option','max');
+        var value = replicationFactorSlider('value');
+        if(value==max){
+            replicationFactorMaxMessage.show();
+        }else{
+            replicationFactorMaxMessage.hide();
+        }
+    };
+    var calculateMaximumReplicationFactor = function(){
+        return Math.min(indexersSlider('value'),10);
+    };
+    var updateMaximumReplicationFactor = function(){
+        if(!enableClusterReplicationCheckBox.is(":checked")) return;
+        replicationFactorSlider('option', 'max', calculateMaximumReplicationFactor());
+        updateReplicationFactorMaxMessage();
+        updateSearchFactorMaxMessage();
+    };
+    replicationFactorSlider = replicationFactorSlider.slideWithLabel({
+        'value': replicationFactorDefaultValue,
+        'min': 1, 'step': 1,
+        'max': calculateMaximumReplicationFactor(),
+        'changed': function(){
+            calculate();
+            updateReplicationFactorMaxMessage();
+            updateMaximumSearchFactor();
+        },
+        'change': function(){
+            var state = {};
+            state[replicationFactorKey] = replicationFactorSlider('value');
+            var hash = $.param.fragment(window.location.hash,state);
+            replaceState(undefined, null, hash);
+        }
+    });
+    updateReplicationFactorMaxMessage();
+    var calculateMaximumSearchFactor = function(){
+        return replicationFactorSlider('value');
+    };
+    var updateMaximumSearchFactor = function(){
+        searchFactorSlider('option', 'max', calculateMaximumSearchFactor());
+        updateSearchFactorMaxMessage();
+    };
     searchFactorSlider = searchFactorSlider.slideWithLabel({
         'value': searchFactorDefaultValue,
         'min': 1, 'step': 1,
-        'max': Math.max(2,indexersDefaultValue),
+        'max': calculateMaximumSearchFactor(),
         'changed': function(){
             calculate();
             updateSearchFactorMaxMessage();
@@ -1526,55 +1585,12 @@ $(function() {
         }
     };
     updateSearchFactorMaxMessage();
-    var updateReplicationFactorMaxMessage=function(){
-        var max = replicationFactorSlider('option','max');
-        var value = replicationFactorSlider('value');
-        if(value==max){
-            replicationFactorMaxMessage.show();
-        }else{
-            replicationFactorMaxMessage.hide();
-        }
-    };
-    replicationFactorSlider = replicationFactorSlider.slideWithLabel({
-        'value': replicationFactorDefaultValue,
-        'min': 1, 'step': 1,
-        'max': Math.max(2,indexersDefaultValue),
-        'changed': function(){
-            calculate();
-            updateReplicationFactorMaxMessage();
-        },
-        'change': function(){
-            var state = {};
-            state[replicationFactorKey] = replicationFactorSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            replaceState(undefined, null, hash);
-        }
-    });
-    updateReplicationFactorMaxMessage();
-    enableClusterReplicationCheckBox.prop('checked', clusterReplicationDefaultValue);
     if(clusterReplicationDefaultValue){
         replicationFactorRetentionDiv.show();
         searchFactorRetentionDiv.show();
         searchFactorSlider('trigger','change');
         replicationFactorSlider('trigger','change');
     }
-    enableClusterReplicationCheckBox.change(function(){
-        var checked = $(this).is(':checked');
-        if(checked){
-            replicationFactorRetentionDiv.show();
-            searchFactorRetentionDiv.show();
-            searchFactorSlider('trigger','change');
-            replicationFactorSlider('trigger','change');
-        }else{
-            replicationFactorRetentionDiv.hide();
-            searchFactorRetentionDiv.hide();
-        }
-        var state = {};
-        state[clusterReplicationKey] = checked?1:0;
-        var hash = $.param.fragment(window.location.hash,state);
-        replaceState(undefined, null, hash);
-        calculate();
-    });
     hotWarmPriceGBInput.val(hotWarmPriceDefaultValue).change(function(){
       var state = {};
       state[hotWarmPriceKey] = hotWarmPriceGBInput.val();

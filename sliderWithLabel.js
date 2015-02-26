@@ -88,9 +88,11 @@ $.fn.slideWithLabel = function(options) {
 
     return function(){
       if(arguments.length==2 && arguments[0]=='value'){
-        var fromValue=arguments[1];
-        var toValue=convertToSliderValue(fromValue);
-        return slider['slider']('value',toValue);
+            var fromValue=arguments[1];
+            var toValue=convertToSliderValue(fromValue);
+            var ret=slider['slider']('value',toValue);
+            slider.trigger('change');
+            return ret;
       }
       if(arguments.length==1 && arguments[0]=='object'){
         return self;
@@ -102,6 +104,33 @@ $.fn.slideWithLabel = function(options) {
         if(arguments[0]=='trigger'){
           slider.trigger(arguments[1]);
           return;
+        }
+      }
+      if(arguments.length==3){
+        if(arguments[0]=='option'){
+            var value,newValue;
+            if(arguments[1]=='min'){
+                var newMin=arguments[2];
+                value=getValue();
+                if(newMin>value){
+                    newValue=convertToSliderValue(newMin);
+                    slider['slider']('value',newValue);
+                }
+                slider['slider']('option', 'min', newMin);
+                slider.trigger('change');
+                return;
+            }
+            if(arguments[1]=='max'){
+                var newMax=arguments[2];
+                value=getValue();
+                if(newMax<value){
+                    newValue=convertToSliderValue(newMax);
+                    slider['slider']('value',newValue);
+                }
+                slider['slider']('option', 'max', newMax);
+                slider.trigger('change');
+                return;
+            }
         }
       }
       return slider['slider'].apply(slider,arguments);
