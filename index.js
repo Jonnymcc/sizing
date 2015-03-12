@@ -1350,7 +1350,7 @@ $(function() {
     });
     compressionFactorSlider = compressionFactorSlider.slideWithLabel({
         'value': compressionFactorDefaultValue,
-        'min': 0.01, 'max': 0.4, 'step': 0.01,
+        'min': 0.01, 'max': 0.8, 'step': 0.01,
         'changed': function(){
             calculate();
         },
@@ -1363,7 +1363,7 @@ $(function() {
     });
     indexFactorSlider = indexFactorSlider.slideWithLabel({
         'value': indexFactorDefaultValue,
-        'min': 0.1, 'max': 0.7, 'step': 0.01,
+        'min': 0.1, 'max': 1.5, 'step': 0.01,
         'changed': function(){
             calculate();
         },
