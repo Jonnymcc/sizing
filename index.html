@@ -22,6 +22,7 @@
               What's New
               <div class="dialog" title="What's New" style="display: none;">
                 <ul style="font-size: smaller;">
+                  <li>13th January 2016: Show formula when calculating based on events per seconds</li>
                   <li>12th March 2015: Increased maxiumum Compression and Metadata Size Factors</li>
                   <li>9th March 2015: Changed index path name "main" to "defaultdb"</li>
                   <li>27th Februrary 2015: Improved cluster configuration</li>
@@ -134,6 +135,12 @@
                     <div><span class="slider-value"></span></div>
                 </div>
             </div>
+            <p id="input-data-calculation-events-per-second" class="description">
+                Daily Data Volume: <span id="input-data-eps-calculation-result"></span>
+                (<span id="input-data-eps-calculation-eps"></span> events/s *
+                <span id="input-data-eps-calculation-avg-size"></span> bytes avg. event size *
+                3600 seconds/hour * 24 hours/day)
+            </p>
             <p style="display: none;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
           </div>
           <div class="flow group">

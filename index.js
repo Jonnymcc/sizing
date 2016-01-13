@@ -442,6 +442,10 @@ $(function() {
     var retentionBarTotal = $('#total-rentention');
     var inputDataDescriptionEventsPerSecond = $('#input-data-description-events-per-second');
     var inputDataDescriptionDailyAmount = $('#input-data-description-daily-amount');
+    var inputDataEpsCalculationEventsPerSecondDescription = $('#input-data-calculation-events-per-second');
+    var inputDataEpsCalculationResult = $('#input-data-eps-calculation-result');
+    var inputDataEpsCalculationEps = $('#input-data-eps-calculation-eps');
+    var inputDataEpsCalculationAvgSize = $('#input-data-eps-calculation-avg-size');
 
     var getDataVolumePerDay=function(){
         var sizeByEventsPerSec = sizeByEventsPerSecCheckbox.is(":checked");
@@ -619,6 +623,9 @@ $(function() {
         }
         var totalPrice = hotWarmPrice+coldPrice+frozenPrice;
 
+        inputDataEpsCalculationResult.text(numeral(rawVolume*gbtobytesFactor).format('0.0 b'));
+        inputDataEpsCalculationEps.text(eventsPerSecondSlider('value'));
+        inputDataEpsCalculationAvgSize.text(averageEventSizeSlider('value'));
         totalStorage.text(numeral(storageTotal*gbtobytesFactor).format('0.0 b'));
         hotWarmStorage.text(numeral(storageHotWarmTotal*gbtobytesFactor).format('0.0 b'));
         coldStorage.text(numeral(storageColdTotal*gbtobytesFactor).format('0.0 b'));
@@ -1286,6 +1293,7 @@ $(function() {
     });
     if(sizeTypeDefaultValue==sizeTypeEventsPerSecond){
         eventsPerSecondDiv.show();
+        inputDataEpsCalculationEventsPerSecondDescription.show();
         averageEventSizeDiv.show();
         rawVolumeDiv.hide();
         inputDataDescriptionEventsPerSecond.show();
@@ -1294,6 +1302,7 @@ $(function() {
     }
     else if(sizeTypeDefaultValue==sizeTypeDailyVolume){
         eventsPerSecondDiv.hide();
+        inputDataEpsCalculationEventsPerSecondDescription.hide();
         averageEventSizeDiv.hide();
         rawVolumeDiv.show();
         inputDataDescriptionEventsPerSecond.hide();
@@ -1305,6 +1314,7 @@ $(function() {
         if(sizeByEventsPerSecCheckbox.is(':checked')){
             state[sizeTypeKey] = sizeTypeEventsPerSecond;
             eventsPerSecondDiv.show();
+            inputDataEpsCalculationEventsPerSecondDescription.show();
             averageEventSizeDiv.show();
             rawVolumeDiv.hide();
             inputDataDescriptionEventsPerSecond.show();
@@ -1317,6 +1327,7 @@ $(function() {
         }else{
             state[sizeTypeKey] = sizeTypeDailyVolume;
             eventsPerSecondDiv.hide();
+            inputDataEpsCalculationEventsPerSecondDescription.hide();
             averageEventSizeDiv.hide();
             rawVolumeDiv.show();
             inputDataDescriptionEventsPerSecond.hide();
