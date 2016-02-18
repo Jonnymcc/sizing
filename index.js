@@ -48,6 +48,15 @@ $(function() {
     var hotWarmRetensionDefaultValue = 5;
     var coldRetensionDefaultValue = 25;
     var frozenRetensionDefaultValue = 60;
+    var otherAppGBPerIndexer = 300;
+    var esAppGBPerIndexer = 100;
+    var vmwareAppGBPerIndexer = 250;
+    var itsiAppGBPerIndexer = 200;
+    var otherAppName = "other";
+    var esAppName = "es";
+    var itsiAppName = "itsi";
+    var vmwareAppName = "vmware";
+    var appDefaultValue = otherAppName;
     var indexersDefaultValue = 2;
     var indexersCalculatedAutomatically = true;
     var clusterReplicationDefaultValue = false;
@@ -92,6 +101,8 @@ $(function() {
     var hotWarmRetensionKey = 'hwr';
     var coldRetensionKey = 'cr';
     var frozenRetensionKey = 'ar';
+    var appKey = 'app';
+    var gbPerIndexerKey = 'gbi';
     var indexersKey = 'i';
     var clusterReplicationKey = 'c';
     var searchFactorKey = 'sf';
@@ -134,6 +145,9 @@ $(function() {
     if($.isNumeric(coldRetensionFromHash)) coldRetensionDefaultValue = parseInt(coldRetensionFromHash);
     var frozenRetensionFromHash = $.bbq.getState(frozenRetensionKey);
     if($.isNumeric(frozenRetensionFromHash)) frozenRetensionDefaultValue = parseInt(frozenRetensionFromHash);
+    var gbPerIndexerFromHash = $.bbq.getState(gbPerIndexerKey);
+    var appFromHash = $.bbq.getState(appKey);
+    if(Object.prototype.toString.call(appFromHash)=='[object String]') appDefaultValue = appFromHash;
     var indexersFromHash = $.bbq.getState(indexersKey);
     if($.isNumeric(indexersFromHash)) {
         indexersDefaultValue = parseInt(indexersFromHash);
@@ -325,6 +339,13 @@ $(function() {
     var frozenRetentionSlider = $('#frozen-retention-slider');
     var searchFactorSlider = $('#search-factor-retention-slider');
     var replicationFactorSlider = $('#replication-factor-retention-slider');
+    var otherAppRatio = $('#apps-other');
+    var esAppRatio = $('#apps-es');
+    var itsiAppRatio = $('#apps-itsi');
+    var vmwareAppRatio = $('#apps-vmware');
+    var gbPerIndexer = $('#gb-per-indexer');
+    var gbPerIndexerSlider = $('#gb-per-indexer-slider');
+    var apps = $('#apps');
     var searchFactorMaxMessage = $('#search-factor-max-message');
     var replicationFactorMaxMessage = $('#replication-factor-max-message');
     var indexersSlider = $('#indexers-retention-slider');
@@ -1433,6 +1454,103 @@ $(function() {
         'fromSlider': retensionSliderConvertToDays,
         'display': retensionSliderDisplayDays
     });
+    var ignoreOtherAppRatioChangeEvent = false;
+    if(appDefaultValue==otherAppName){
+        otherAppRatio.prop("checked", true);
+    }
+    else if(appDefaultValue==esAppName){
+        esAppRatio.prop("checked", true);
+    }
+    else if(appDefaultValue==itsiAppName){
+        itsiAppRatio.prop("checked", true);
+    }
+    else if(appDefaultValue==vmwareAppName){
+        vmwareAppRatio.prop("checked", true);
+    }
+    otherAppRatio.change(function(){
+        state = $.deparam.fragment(window.location.hash);
+        state[appKey] = '';
+        delete state[appKey];
+        replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
+        if(!ignoreOtherAppRatioChangeEvent){
+            updateGbPerIndexerSlider();
+        }
+    });
+    esAppRatio.change(function(){
+        state={};
+        state[appKey] = esAppName;
+        replaceState(undefined, null, $.param.fragment(window.location.hash,state));
+        updateGbPerIndexerSlider();
+    });
+    itsiAppRatio.change(function(){
+        state={};
+        state[appKey] = itsiAppName;
+        replaceState(undefined, null, $.param.fragment(window.location.hash,state));
+        updateGbPerIndexerSlider();
+    });
+    vmwareAppRatio.change(function(){
+        state={};
+        state[appKey] = vmwareAppName;
+        replaceState(undefined, null, $.param.fragment(window.location.hash,state));
+        updateGbPerIndexerSlider();
+    });
+    var calculateGBPerIndexer=function(){
+        if(esAppRatio.is(":checked")){
+            return esAppGBPerIndexer;
+        }
+        if(itsiAppRatio.is(":checked")){
+            return itsiAppGBPerIndexer;
+        }
+        if(vmwareAppRatio.is(":checked")){
+            return vmwareAppGBPerIndexer;
+        }
+        if(gbPerIndexerFromHash!=undefined){
+            var value=gbPerIndexerFromHash;
+            gbPerIndexerFromHash=undefined;
+            return value;
+        }
+        return otherAppGBPerIndexer;
+    };
+    var updateGbPerIndexerSlider=function(){
+        dontChangeRatioBasedOnGBPerIndexerSliderChange=true;
+        (function(){
+            gbPerIndexerSlider('value', calculateGBPerIndexer());
+            dontChangeRatioBasedOnGBPerIndexerSliderChange=false;
+        })();
+    };
+    var dontChangeRatioBasedOnGBPerIndexerSliderChange = false;
+    gbPerIndexerSlider = gbPerIndexerSlider.slideWithLabel({
+        'value': calculateGBPerIndexer(),
+        'step': 20,
+        'min': 20,
+        'max': 600,
+        'changed': function(){
+            calculateNumberOfNodes();
+            calculate();
+        },
+        'change': function(){
+            var state;
+            if(!dontChangeRatioBasedOnGBPerIndexerSliderChange){
+                ignoreOtherAppRatioChangeEvent = true;
+                (function(){
+                    otherAppRatio.prop("checked", true);
+                    ignoreOtherAppRatioChangeEvent = false;
+                })();
+                state = $.deparam.fragment(window.location.hash);
+                state[appKey] = '';
+                delete state[appKey];
+                state[gbPerIndexerKey] = gbPerIndexerSlider('value');
+                replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
+            }else{
+                state = $.deparam.fragment(window.location.hash);
+                state[gbPerIndexerKey] = 0;
+                delete state[gbPerIndexerKey];
+                replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
+            }
+            calculateNumberOfNodes();
+            calculate();
+        }
+    });
     enableClusterReplicationCheckBox.prop('checked', clusterReplicationDefaultValue);
     enableClusterReplicationCheckBox.change(function(){
         var checked = $(this).is(':checked');
@@ -1489,24 +1607,32 @@ $(function() {
         calculatingNumberOfNodes=true;
         if(calculatingNumberOfNodes){
             var rawVolume = getDataVolumePerDay();
-            var numberOfNodes = Math.ceil(rawVolume/220);
+            var gbPerIndexerValue = gbPerIndexerSlider('value');
+            var numberOfNodes = Math.ceil(rawVolume/gbPerIndexerValue);
             indexersSlider('value',parseInt(numberOfNodes));
             indexersSlider('trigger','change');
             calculatingNumberOfNodes=false;
         }
     };
-    var updateIndexerCountOpacity=function(){
+    var updateUIBasedOnCalculateNumberCheckbox=function(){
         indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
         if(indexersCalculatedAutomatically){
             indexersSlider('object').css('opacity',0.5);
+            apps.show();
+            gbPerIndexer.show();
         }else{
             indexersSlider('object').css('opacity',1);
+            apps.hide();
+            gbPerIndexer.hide();
         }
+        indexersSlider('updateLabel');
+        searchFactorSlider('updateLabel');
+        replicationFactorSlider('updateLabel');
+        gbPerIndexerSlider('updateLabel');
     };
     calculateNumberCheckbox.prop('checked', indexersCalculatedAutomatically);
-    updateIndexerCountOpacity();
     calculateNumberCheckbox.change(function(){
-        updateIndexerCountOpacity();
+        updateUIBasedOnCalculateNumberCheckbox();
         indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
         var state = $.deparam.fragment(window.location.hash);
         if(indexersCalculatedAutomatically){
@@ -1820,6 +1946,7 @@ $(function() {
         }
     };
 
+    updateUIBasedOnCalculateNumberCheckbox();
     onHotWarmStorageTypeChanged();
     onColdStorageTypeChanged();
     onArchivedStorageTypeChanged();

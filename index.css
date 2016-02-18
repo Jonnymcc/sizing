@@ -65,6 +65,14 @@ div.sliders > div{
     padding: 1em;
 }
 
+div.sliders > table{
+    padding: 1em;
+}
+
+div.sliders > table h3{
+    color: #000;
+    font-weight: normal;
+}
 div.sliders > div h3{
     color: #000;
     font-weight: normal;

@@ -22,6 +22,7 @@
               What's New
               <div class="dialog" title="What's New" style="display: none;">
                 <ul style="font-size: smaller;">
+                  <li>19th Feburary 2016: Allow specifying maximum volume of data handled by one indexer</li>
                   <li>13th January 2016: Show formula when calculating based on events per seconds</li>
                   <li>12th March 2015: Increased maxiumum Compression and Metadata Size Factors</li>
                   <li>9th March 2015: Changed index path name "main" to "defaultdb"</li>
@@ -187,26 +188,6 @@
           </div>
           <div class="flow group">
             <h2>
-                Apps
-            </h2>
-            <p class="description">If applicable, specify which apps you are planning to use. Some apps have increased resource requirements.</p>
-            <div class="flow">
-                <span style="display: inline-block; font-size: small; margin-left: 2em;">
-                    <input type="checkbox" id="apps-es">
-                    <label for="apps-es">Splunk Enterprise Security</label>
-                </span>
-                <span style="display: inline-block; font-size: small; margin-left: 2em;">
-                    <input type="checkbox" id="apps-vmware">
-                    <label for="apps-vmware">Splunk App for VMware</label>
-                </span>
-                <span style="display: inline-block; font-size: small; margin-left: 2em;">
-                    <input type="checkbox" id="apps-itsi">
-                    <label for="apps-itsi">Splunk IT Service Intelligence</label>
-                </span>
-            </div>
-        </div>
-          <div class="flow group">
-            <h2>
                 Architecture
                 <span style="display: inline-block; font-size: small; margin-left: 2em;">
                     <input type="checkbox" id="enable-cluster-replication">
@@ -219,6 +200,46 @@
             </h2>
             <p class="description">Specify the number of nodes required. The more data to ingest, the greater the number of nodes required. Adding more nodes will improve indexing throughput and search performance.</p>
             <div class="flow sliders">
+                <table id="apps" style="display: inline-block; font-size: small; margin-left: 2em;" title="If applicable, specify which app you are planning to use. Some apps have increased resource requirements.">
+                    <thead>
+                        <tr>
+                            <td>
+                                <h3>Use Case / App</h3>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="radio" name="apps" id="apps-es">
+                                <label for="apps-es">Splunk Enterprise Security</label><br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" name="apps" id="apps-vmware">
+                                <label for="apps-vmware">Splunk App for VMware</label><br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" name="apps" id="apps-itsi">
+                                <label for="apps-itsi">Splunk IT Service Intelligence</label><br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" name="apps" id="apps-other">
+                                <label for="apps-other">Other</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="gb-per-indexer">
+                    <h3>Max. Volume per Indexer</h3>
+                    <div id="gb-per-indexer-slider"></div>
+                    <div><span class="slider-value"></span></div>
+                </div>
                 <div title="The number of indexers needed to meet the requirements.">
                     <h3>Number of Nodes</h3>
                     <div id="indexers-retention-slider"></div>
