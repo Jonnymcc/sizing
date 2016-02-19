@@ -1360,6 +1360,12 @@ $(function() {
         }
         compressionFactorSlider('trigger','change');
         indexFactorSlider('trigger','change');
+        hotWarmRetentionSlider('updateLabel');
+        coldRetentionSlider('updateLabel');
+        frozenRetentionSlider('updateLabel');
+        gbPerIndexerSlider('updateLabel');
+        searchFactorSlider('updateLabel');
+        replicationFactorSlider('updateLabel');
         var hash = $.param.fragment(window.location.hash,state);
         replaceState(undefined, null, hash);
         calculate();
