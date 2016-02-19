@@ -1555,6 +1555,9 @@ $(function() {
             }
             calculateNumberOfNodes();
             calculate();
+        },
+        'display': function(value){
+            return value+' GB';
         }
     });
     enableClusterReplicationCheckBox.prop('checked', clusterReplicationDefaultValue);
