@@ -1,5 +1,3 @@
-application: splunk-sizing
-version: apps
 runtime: python27
 api_version: 1
 threadsafe: yes

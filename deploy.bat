@@ -1,0 +1,1 @@
+gcloud app deploy --version=logging --promote --project=splunk-sizing
