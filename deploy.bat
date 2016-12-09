@@ -1,1 +1,1 @@
-gcloud app deploy --version=logging --promote --project=splunk-sizing
+gcloud app deploy --version=main --promote --project=splunk-sizing
