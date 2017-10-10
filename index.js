@@ -341,7 +341,8 @@ $(function() {
     var hotWarmRetentionInput = $('#hotwarm-retention-slider-value')[0];
     var coldRetentionSlider = $('#cold-retention-slider')[0];
     var coldRetentionInput = $('#cold-retention-slider-value')[0];
-    var frozenRetentionSlider = $('#frozen-retention-slider');
+    var frozenRetentionSlider = $('#frozen-retention-slider')[0];
+    var frozenRetentionInput = $('#frozen-retention-slider-value')[0];
     var searchFactorSlider = $('#search-factor-retention-slider');
     var replicationFactorSlider = $('#replication-factor-retention-slider');
     var otherAppRatio = $('#apps-other');
@@ -494,7 +495,7 @@ $(function() {
         var indexFactor = indexFactorSlider.noUiSlider.get();
         var hotWarmRetention = hotWarmRetentionSlider.noUiSlider.get();
         var coldRetention = coldRetentionSlider.noUiSlider.get();
-        var frozenRetention = frozenRetentionSlider('value');
+        var frozenRetention = frozenRetentionSlider.noUiSlider.get();
         var searchFactor = searchFactorSlider('value');
         var replicationFactor = replicationFactorSlider('value');
         var indexers = indexersSlider('value');
@@ -1396,22 +1397,24 @@ $(function() {
         }
     });
 
-    frozenRetentionSlider = frozenRetentionSlider.slideWithLabel({
-        'value': frozenRetensionDefaultValue,
-        'step': 0.02,
-        'changed': function(){
-            calculate();
+    noUiSlider.create(frozenRetentionSlider, {
+        start: frozenRetensionDefaultValue,
+        range: {
+            'min': [ 1, 1 ],
+            '30%': [ 31, 1 ],
+            '90%': [ 365, 1 ],
+            'max': [ 2560 ]
         },
-        'change': function(){
-            var state = {};
-            state[frozenRetensionKey] = frozenRetentionSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            replaceState(undefined, null, hash);
-        },
-        'toSlider': retensionSliderConvertFromDays,
-        'fromSlider': retensionSliderConvertToDays,
-        'display': retensionSliderDisplayDays
+        format: {
+            to: function ( value ) {
+                return Math.round(value);
+            },
+            from: function ( value ) {
+                return value;
+            }
+        }
     });
+
     var ignoreOtherAppRatioChangeEvent = false;
     if(appDefaultValue==otherAppName){
         otherAppRatio.prop("checked", true);
@@ -2117,6 +2120,25 @@ $(function() {
         coldRetentionInputTimeout = setTimeout(function(){
             coldRetentionSlider.noUiSlider.set(val);
             coldRetentionInput.select()
+        },500);
+    });
+
+    frozenRetentionSlider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[frozenRetensionKey] = frozenRetentionSlider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        calculate();
+        frozenRetentionInput.value = values[handle];
+    });
+
+    var frozenRetentionInputTimeout = null;
+    frozenRetentionInput.addEventListener('keyup', function(){
+        var val = this.value
+        clearTimeout(frozenRetentionInputTimeout);
+        frozenRetentionInputTimeout = setTimeout(function(){
+            frozenRetentionSlider.noUiSlider.set(val);
+            frozenRetentionInput.select()
         },500);
     });
 });
