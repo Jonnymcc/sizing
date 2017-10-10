@@ -333,7 +333,8 @@ $(function() {
     var averageEventSizeSlider = $('#average-event-size-slider');
     var eventsPerSecondDiv = $('#events-per-second');
     var averageEventSizeDiv = $('#average-event-size');
-    var compressionFactorSlider = $('#compression-factor-slider');
+    var compressionFactorSlider = $('#compression-factor-slider')[0];
+    var compressionFactorInput = $('#compression-factor-slider-value')[0];
     var indexFactorSlider = $('#index-factor-slider');
     var hotWarmRetentionSlider = $('#hotwarm-retention-slider');
     var coldRetentionSlider = $('#cold-retention-slider');
@@ -486,7 +487,7 @@ $(function() {
     var calculate = function(){
         console.debug("calculating...");
         var rawVolume = getDataVolumePerDay();
-        var compressionFactor = compressionFactorSlider('value');
+        var compressionFactor = compressionFactorSlider.noUiSlider.get();
         var indexFactor = indexFactorSlider('value');
         var hotWarmRetention = hotWarmRetentionSlider('value');
         var coldRetention = coldRetentionSlider('value');
@@ -1339,19 +1340,15 @@ $(function() {
             return value+' bytes';
         }
     });
-    compressionFactorSlider = compressionFactorSlider.slideWithLabel({
-        'value': compressionFactorDefaultValue,
-        'min': 0.01, 'max': 0.8, 'step': 0.01,
-        'changed': function(){
-            calculate();
+
+    noUiSlider.create(compressionFactorSlider, {
+        start: compressionFactorDefaultValue,
+        range: {
+            'min': [ 0.01, 0.01 ],
+            'max': [ 0.8 ]
         },
-        'change': function(){
-            var state = {};
-            state[compressionFactorKey] = compressionFactorSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            replaceState(undefined, null, hash);
-        }
     });
+
     indexFactorSlider = indexFactorSlider.slideWithLabel({
         'value': indexFactorDefaultValue,
         'min': 0.1, 'max': 1.5, 'step': 0.01,
@@ -2042,6 +2039,25 @@ $(function() {
         rawVolumeInputTimeout = setTimeout(function(){
             rawVolumeSlider.noUiSlider.set(val);
             rawVolumeInput.select()
+        },500);
+    });
+
+    compressionFactorSlider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[compressionFactorKey] = compressionFactorSlider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        calculate();
+        compressionFactorInput.value = values[handle];
+    });
+
+    var compressionFactorInputTimeout = null;
+    compressionFactorInput.addEventListener('keyup', function(){
+        var val = this.value
+        clearTimeout(compressionFactorInputTimeout);
+        compressionFactorInputTimeout = setTimeout(function(){
+            compressionFactorSlider.noUiSlider.set(val);
+            compressionFactorInput.select()
         },500);
     });
 });
