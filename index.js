@@ -337,7 +337,8 @@ $(function() {
     var compressionFactorInput = $('#compression-factor-slider-value')[0];
     var indexFactorSlider = $('#index-factor-slider')[0];
     var indexFactorInput = $('#index-factor-slider-value')[0];
-    var hotWarmRetentionSlider = $('#hotwarm-retention-slider');
+    var hotWarmRetentionSlider = $('#hotwarm-retention-slider')[0];
+    var hotWarmRetentionInput = $('#hotwarm-retention-slider-value')[0];
     var coldRetentionSlider = $('#cold-retention-slider');
     var frozenRetentionSlider = $('#frozen-retention-slider');
     var searchFactorSlider = $('#search-factor-retention-slider');
@@ -490,7 +491,7 @@ $(function() {
         var rawVolume = getDataVolumePerDay();
         var compressionFactor = compressionFactorSlider.noUiSlider.get();
         var indexFactor = indexFactorSlider.noUiSlider.get();
-        var hotWarmRetention = hotWarmRetentionSlider('value');
+        var hotWarmRetention = hotWarmRetentionSlider.noUiSlider.get();
         var coldRetention = coldRetentionSlider('value');
         var frozenRetention = frozenRetentionSlider('value');
         var searchFactor = searchFactorSlider('value');
@@ -1133,7 +1134,7 @@ $(function() {
         conffileIndexColdVolumeName.text(configFilesColdVolumeName);
         conffileIndexHotwarmMaxDataSizeMB.text(parseInt(storageHotWarmPerIndexer*GBtoMBFactor));
         conffileIndexColdMaxDataSizeMB.text(parseInt(storageColdPerIndexer*GBtoMBFactor));
-        var hotWarmRetentionSeconds = hotWarmRetentionSlider('value')*24*60*60;
+        var hotWarmRetentionSeconds = hotWarmRetentionSlider.noUiSlider.get()*24*60*60;
         var coldRetentionSeconds = coldRetentionSlider('value')*24*60*60;
         conffileIndexFrozenTimePeriodInSecs.text(hotWarmRetentionSeconds+coldRetentionSeconds);
         if((rawVolume/indexers)>10){
@@ -1358,22 +1359,24 @@ $(function() {
         },
     });
 
-    hotWarmRetentionSlider = hotWarmRetentionSlider.slideWithLabel({
-        'value': hotWarmRetensionDefaultValue,
-        'step': 0.02,
-        'changed': function(){
-            calculate();
+    noUiSlider.create(hotWarmRetentionSlider, {
+        start: hotWarmRetensionDefaultValue,
+        range: {
+            'min': [ 1, 1 ],
+            '30%': [ 31, 1 ],
+            '90%': [ 365, 1 ],
+            'max': [ 2560 ]
         },
-        'change': function(){
-            var state = {};
-            state[hotWarmRetensionKey] = hotWarmRetentionSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            replaceState(undefined, null, hash);
-        },
-        'toSlider': retensionSliderConvertFromDays,
-        'fromSlider': retensionSliderConvertToDays,
-        'display': retensionSliderDisplayDays
+        format: {
+            to: function ( value ) {
+                return Math.round(value);
+            },
+            from: function ( value ) {
+                return value;
+            }
+        }
     });
+
     coldRetentionSlider = coldRetentionSlider.slideWithLabel({
         'value': coldRetensionDefaultValue,
         'step': 0.02,
@@ -2073,6 +2076,25 @@ $(function() {
         indexFactorInputTimeout = setTimeout(function(){
             indexFactorSlider.noUiSlider.set(val);
             indexFactorInput.select()
+        },500);
+    });
+
+    hotWarmRetentionSlider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[hotWarmRetensionKey] = hotWarmRetentionSlider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        calculate();
+        hotWarmRetentionInput.value = values[handle];
+    });
+
+    var hotWarmRetentionInputTimeout = null;
+    hotWarmRetentionInput.addEventListener('keyup', function(){
+        var val = this.value
+        clearTimeout(hotWarmRetentionInputTimeout);
+        hotWarmRetentionInputTimeout = setTimeout(function(){
+            hotWarmRetentionSlider.noUiSlider.set(val);
+            hotWarmRetentionInput.select()
         },500);
     });
 });
