@@ -335,7 +335,8 @@ $(function() {
     var averageEventSizeDiv = $('#average-event-size');
     var compressionFactorSlider = $('#compression-factor-slider')[0];
     var compressionFactorInput = $('#compression-factor-slider-value')[0];
-    var indexFactorSlider = $('#index-factor-slider');
+    var indexFactorSlider = $('#index-factor-slider')[0];
+    var indexFactorInput = $('#index-factor-slider-value')[0];
     var hotWarmRetentionSlider = $('#hotwarm-retention-slider');
     var coldRetentionSlider = $('#cold-retention-slider');
     var frozenRetentionSlider = $('#frozen-retention-slider');
@@ -488,7 +489,7 @@ $(function() {
         console.debug("calculating...");
         var rawVolume = getDataVolumePerDay();
         var compressionFactor = compressionFactorSlider.noUiSlider.get();
-        var indexFactor = indexFactorSlider('value');
+        var indexFactor = indexFactorSlider.noUiSlider.get();
         var hotWarmRetention = hotWarmRetentionSlider('value');
         var coldRetention = coldRetentionSlider('value');
         var frozenRetention = frozenRetentionSlider('value');
@@ -1349,19 +1350,14 @@ $(function() {
         },
     });
 
-    indexFactorSlider = indexFactorSlider.slideWithLabel({
-        'value': indexFactorDefaultValue,
-        'min': 0.1, 'max': 1.5, 'step': 0.01,
-        'changed': function(){
-            calculate();
+    noUiSlider.create(indexFactorSlider, {
+        start: indexFactorDefaultValue,
+        range: {
+            'min': [ 0.01, 0.01 ],
+            'max': [ 1.5 ]
         },
-        'change': function(){
-            var state = {};
-            state[indexFactorKey] = indexFactorSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            replaceState(undefined, null, hash);
-        }
     });
+
     hotWarmRetentionSlider = hotWarmRetentionSlider.slideWithLabel({
         'value': hotWarmRetensionDefaultValue,
         'step': 0.02,
@@ -2058,6 +2054,25 @@ $(function() {
         compressionFactorInputTimeout = setTimeout(function(){
             compressionFactorSlider.noUiSlider.set(val);
             compressionFactorInput.select()
+        },500);
+    });
+
+    indexFactorSlider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[indexFactorKey] = indexFactorSlider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        calculate();
+        indexFactorInput.value = values[handle];
+    });
+
+    var indexFactorInputTimeout = null;
+    indexFactorInput.addEventListener('keyup', function(){
+        var val = this.value
+        clearTimeout(indexFactorInputTimeout);
+        indexFactorInputTimeout = setTimeout(function(){
+            indexFactorSlider.noUiSlider.set(val);
+            indexFactorInput.select()
         },500);
     });
 });
