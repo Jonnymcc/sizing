@@ -7,13 +7,15 @@
         <link rel="stylesheet" href="jquery-ui.css" />
         <link rel="stylesheet" href="ui-textfield.css" />
         <link rel="stylesheet" href="index.css" />
-        <script src="jquery.min.js"></script>
+        <link rel="stylesheet" href="nouislider.css"/>
+        <script src="jquery.js"></script>
         <script src="jquery-ui.min.js"></script>
         <script src="ui-textfield.js"></script>
         <script src="sliderWithLabel.js"></script>
         <script src="index.js"></script>
         <script src="jquery.ba-bbq.min.js"></script>
         <script src="numeral.min.js"></script>
+        <script src="nouislider.js"></script>
     </head>
     <body>
         <div class="head">
@@ -123,7 +125,7 @@
                 <div id="raw-volume-div" title="The average amount of uncompressed raw data that Splunk will ingest.">
                     <h3>Daily Data Volume</h3>
                     <div id="raw-volume-slider"></div>
-                    <div><span class="slider-value"></span></div>
+                    <div><input id="raw-volume-slider-value"></input> GB</div>
                 </div>
                 <div title="Typically, the compressed rawdata file is 15% the size of the incoming, pre-indexed raw data. The number of unique terms in the data affect this value.">
                     <h3>Raw Compression Factor</h3>

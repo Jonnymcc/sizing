@@ -325,7 +325,8 @@ $(function() {
             console.warn('invalid archived detailed volume in hash: '+archivedDetailedVolumeFromHash);
     }
 
-    var rawVolumeSlider = $('#raw-volume-slider');
+    var rawVolumeSlider = $('#raw-volume-slider')[0];
+    var rawVolumeInput = $('#raw-volume-slider-value')[0]
     var rawVolumeDiv = $('#raw-volume-div');
     var sizeByEventsPerSecCheckbox = $('#size-by-events-per-sec');
     var eventsPerSecondSlider = $('#events-per-second-slider');
@@ -478,7 +479,7 @@ $(function() {
             var dailyBytes = eventsPerDay*averageMessageSizeBytes;
             return dailyBytes/gbtobytesFactor;
         }else{
-            return rawVolumeSlider('value');
+            return rawVolumeSlider.noUiSlider.get();
         }
     };
 
@@ -1187,73 +1188,25 @@ $(function() {
         return (value/30)+' months'
     };
 
-    rawVolumeSlider = rawVolumeSlider.slideWithLabel({
-        'value': dailyVolumeDefaultValue,
-        'step': 0.02,
-        'changed': function(){
-            if(indexersCalculatedAutomatically){
-                calculateNumberOfNodes();
+    noUiSlider.create(rawVolumeSlider, {
+        start: dailyVolumeDefaultValue,
+        range: {
+            'min': [ 1, 1 ],
+            '30%': [ 1000, 100 ],
+            '80%': [ 10000, 1000 ],
+            'max': [ 100000 ]
+        },
+        format: {
+            to: function ( value ) {
+                return Math.round(value);
+            },
+            from: function ( value ) {
+                return value;
             }
-            calculate();
-        },
-        'change': function(){
-            var state = {};
-            state[dailyVolumeKey] = rawVolumeSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            replaceState(undefined, null, hash);
-        },
-        'toSlider': function(value){
-            var result;
-          if(value<10) { // 0.00 - 0.16
-            result = (value-1)/50;
-          } else if(value<100) { // 0.18 - 0.34
-            result = 0.18+(value-10)/500;
-          } else if(value<1000) { // 0.36 - 0.52
-            result = 0.36+(value-100)/5000;
-          } else if(value<20000) { // 0.54 - 0.90
-            result = 0.54+(value-1000)/50000;
-          } else if(value<100000) { // 0.92 - 0.98
-            result = 0.92+(value-20000)/500000;
-          } else { // 1.00
-            result = 1.0;
-          }
-          result = Math.round(result*100)/100;
-          //console.log('toSlider('+value+') -> '+result);
-          return result;
-        },
-        'fromSlider': function(percent){
-            var result;
-          if(percent<0.18)
-            result = 1+percent*50;
-          else if(percent<0.36)
-            result = 10+(percent-0.18)*500;
-          else if(percent<0.54)
-            result = 100+(percent-0.36)*5000;
-          else if(percent<0.92)
-            result = 1000+(percent-0.54)*50000;
-          else if(percent<1.00)
-            result = 20000+(percent-0.92)*500000;
-          else
-            result = 100000;
-          result = Math.round(result);
-          //console.log('fromSlider('+percent+') -> '+result);
-          return result;
-        },
-        'display': function(value){
-          var cnt=0;
-          while(value>1000) {
-            cnt++;
-            value=value/1000;
-          }
-          while(cnt>0){
-            cnt--;
-            value=value*1024;
-          }
-          /*var result =*/ return numeral(value*1024*1024*1024).format('0 b');
-          //console.log('display('+value+') -> '+result);
-          //return result;
         }
     });
+
+
     eventsPerSecondSlider = eventsPerSecondSlider.slideWithLabel({
         'value': eventsPerSecondDefaultValue,
         'step': 0.02,
@@ -2068,5 +2021,27 @@ $(function() {
         var p = templateItemContainer.parent();
         templateItemContainer.remove();
         p.append('<p><i>Unable to load list</i></p>');
+    });
+
+    rawVolumeSlider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[dailyVolumeKey] = rawVolumeSlider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        if(indexersCalculatedAutomatically){
+                calculateNumberOfNodes();
+            }
+            calculate();
+        rawVolumeInput.value = values[handle];
+    });
+
+    var rawVolumeInputTimeout = null;
+    rawVolumeInput.addEventListener('keyup', function(){
+        var val = this.value
+        clearTimeout(rawVolumeInputTimeout);
+        rawVolumeInputTimeout = setTimeout(function(){
+            rawVolumeSlider.noUiSlider.set(val);
+            rawVolumeInput.select()
+        },500);
     });
 });
