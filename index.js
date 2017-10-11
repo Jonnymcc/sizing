@@ -331,7 +331,8 @@ $(function() {
     var sizeByEventsPerSecCheckbox = $('#size-by-events-per-sec');
     var eventsPerSecondSlider = $('#events-per-second-slider')[0];
     var eventsPerSecondInput = $('#events-per-second-slider-value')[0];
-    var averageEventSizeSlider = $('#average-event-size-slider');
+    var averageEventSizeSlider = $('#average-event-size-slider')[0];
+    var averageEventSizeInput = $('#average-event-size-slider-value')[0];
     var eventsPerSecondDiv = $('#events-per-second');
     var averageEventSizeDiv = $('#average-event-size');
     var compressionFactorSlider = $('#compression-factor-slider')[0];
@@ -482,7 +483,7 @@ $(function() {
     var getDataVolumePerDay=function(){
         var sizeByEventsPerSec = sizeByEventsPerSecCheckbox.is(":checked");
         if(sizeByEventsPerSec){
-            var averageMessageSizeBytes = averageEventSizeSlider('value');
+            var averageMessageSizeBytes = averageEventSizeSlider.noUiSlider.get();
             var eventsPerSecond = eventsPerSecondSlider.noUiSlider.get();
             var eventsPerDay = eventsPerSecond*60*60*24;
             //var averageMessageSizeBytes = 320;
@@ -657,7 +658,7 @@ $(function() {
 
         inputDataEpsCalculationResult.text(numeral(rawVolume*gbtobytesFactor).format('0.0 b'));
         inputDataEpsCalculationEps.text(eventsPerSecondSlider.noUiSlider.get());
-        inputDataEpsCalculationAvgSize.text(averageEventSizeSlider('value'));
+        inputDataEpsCalculationAvgSize.text(averageEventSizeSlider.noUiSlider.get());
         totalStorage.text(numeral(storageTotal*gbtobytesFactor).format('0.0 b'));
         hotWarmStorage.text(numeral(storageHotWarmTotal*gbtobytesFactor).format('0.0 b'));
         coldStorage.text(numeral(storageColdTotal*gbtobytesFactor).format('0.0 b'));
@@ -1262,8 +1263,6 @@ $(function() {
             rawVolumeDiv.hide();
             inputDataDescriptionEventsPerSecond.show();
             inputDataDescriptionDailyAmount.hide();
-            // eventsPerSecondSlider('trigger','change');
-            averageEventSizeSlider('trigger','change');
             if(indexersCalculatedAutomatically){
                 calculateNumberOfNodes();
             }
@@ -1275,7 +1274,7 @@ $(function() {
             rawVolumeDiv.show();
             inputDataDescriptionEventsPerSecond.hide();
             inputDataDescriptionDailyAmount.show();
-            rawVolumeSlider('trigger','change');
+            // rawVolumeSlider('trigger','change');
             if(indexersCalculatedAutomatically){
                 calculateNumberOfNodes();
             }
@@ -1284,20 +1283,21 @@ $(function() {
         replaceState(undefined, null, hash);
         calculate();
     });
-    averageEventSizeSlider = averageEventSizeSlider.slideWithLabel({
-        'value': averageEventSizeDefaultValue,
-        'min': 20, 'max': 1000, 'step': 20,
-        'changed': function(){
-            calculate();
+
+    noUiSlider.create(averageEventSizeSlider, {
+        start: averageEventSizeDefaultValue,
+        step: 20,
+        range: {
+            'min': [ 20 ],
+            'max': [ 5000 ]
         },
-        'change': function(){
-            var state = {};
-            state[averageEventSizeKey] = averageEventSizeSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            replaceState(undefined, null, hash);
-        },
-        'display': function(value){
-            return value+' bytes';
+        format: {
+            to: function ( value ) {
+                return Math.round(value);
+            },
+            from: function ( value ) {
+                return value;
+            }
         }
     });
 
@@ -2074,6 +2074,24 @@ $(function() {
         },500);
     });
 
+    averageEventSizeSlider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[averageEventSizeKey] = averageEventSizeSlider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        calculate();
+        averageEventSizeInput.value = values[handle];
+    });
+
+    var averageEventSizeInputTimeout = null;
+    averageEventSizeInput.addEventListener('keyup', function(){
+        var val = this.value
+        clearTimeout(averageEventSizeInputTimeout);
+        averageEventSizeInputTimeout = setTimeout(function(){
+            averageEventSizeSlider.noUiSlider.set(val);
+            averageEventSizeInput.select()
+        },500);
+    });
 
     compressionFactorSlider.noUiSlider.on('update', function( values, handle ) {
         var state = {};
