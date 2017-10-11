@@ -1152,53 +1152,6 @@ $(function() {
         }
     };
 
-    var retensionSliderConvertFromDays = function(value){
-        var result;
-        if(value<30) { // 0.00 - 0.58
-            result = (value)/50;
-        } else if(value<90) { // 0.60 - 0.66
-            result = 0.60+(value-30)/500;
-        } else if(value<18*30) { // 0.68 - 0.86
-            result = 0.68+(value-90)/1500;
-        } else if(value<36*30) { // 0.88 - 0.90
-            result = 0.88+(value-18*30)/30/6*0.02;
-        } else if(value<7*12*30) { // 0.92 - 0.98
-            result = 0.92+(value-36*30)/30/12*0.02;
-        } else { // 1.00
-            result = 1.0;
-        }
-        result = Math.round(result*100)/100;
-        //console.log('toSlider('+value+') -> '+result);
-        return result;
-    };
-    var retensionSliderConvertToDays = function(percent){
-        var result;
-        if(percent<0.60)
-            result = percent*50;
-        else if(percent<0.68)
-            result = 30+(percent-0.60)*500;
-        else if(percent<0.88)
-            result = 90+(percent-0.68)*1500;
-        else if(percent<0.92)
-            result = 18*30+(percent-0.88)*(30*6/0.02);
-        else if(percent<1.00)
-            result = 36*30+(percent-0.92)*(30*12/0.02);
-        else
-            result = 30*12*7;
-        result = Math.round(result);
-        //console.log('fromSlider('+percent+') -> '+result);
-        return result;
-    };
-    var retensionSliderDisplayDays = function(value){
-        if(value==1)
-            return '1 day';
-        if(value<90)
-            return value+' days';
-        if(value>36*30)
-            return (value/30/12)+' years';
-        return (value/30)+' months'
-    };
-
     noUiSlider.create(rawVolumeSlider, {
         start: dailyVolumeDefaultValue,
         range: {
@@ -1274,7 +1227,6 @@ $(function() {
             rawVolumeDiv.show();
             inputDataDescriptionEventsPerSecond.hide();
             inputDataDescriptionDailyAmount.show();
-            // rawVolumeSlider('trigger','change');
             if(indexersCalculatedAutomatically){
                 calculateNumberOfNodes();
             }
@@ -1453,49 +1405,13 @@ $(function() {
             }
         }
     });
-    // gbPerIndexerSlider = gbPerIndexerSlider.slideWithLabel({
-    //     'value': calculateGBPerIndexer(),
-    //     'step': 20,
-    //     'min': 20,
-    //     'max': 600,
-    //     'changed': function(){
-    //         calculateNumberOfNodes();
-    //         calculate();
-    //     },
-    //     'change': function(){
-    //         var state;
-    //         if(!dontChangeRatioBasedOnGBPerIndexerSliderChange){
-    //             ignoreOtherAppRatioChangeEvent = true;
-    //             (function(){
-    //                 otherAppRatio.prop("checked", true);
-    //                 ignoreOtherAppRatioChangeEvent = false;
-    //             })();
-    //             state = $.deparam.fragment(window.location.hash);
-    //             state[appKey] = '';
-    //             delete state[appKey];
-    //             state[gbPerIndexerKey] = gbPerIndexerSlider('value');
-    //             replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
-    //         }else{
-    //             state = $.deparam.fragment(window.location.hash);
-    //             state[gbPerIndexerKey] = 0;
-    //             delete state[gbPerIndexerKey];
-    //             replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
-    //         }
-    //         calculateNumberOfNodes();
-    //         calculate();
-    //     },
-    //     'display': function(value){
-    //         return value+' GB';
-    //     }
-    // });
+
     enableClusterReplicationCheckBox.prop('checked', clusterReplicationDefaultValue);
     enableClusterReplicationCheckBox.change(function(){
         var checked = $(this).is(':checked');
         if(checked){
             replicationFactorRetentionDiv.show();
             searchFactorRetentionDiv.show();
-            // searchFactorSlider('trigger','change');
-            // replicationFactorSlider('trigger','change');
         }else{
             replicationFactorRetentionDiv.hide();
             searchFactorRetentionDiv.hide();
@@ -1542,7 +1458,6 @@ $(function() {
             var gbPerIndexerValue = gbPerIndexerSlider.noUiSlider.get();
             var numberOfNodes = Math.ceil(rawVolume/gbPerIndexerValue);
             indexersSlider.noUiSlider.set(parseInt(numberOfNodes));
-            // indexersSlider('trigger','change');
             calculatingNumberOfNodes=false;
         }
     };
@@ -1558,10 +1473,6 @@ $(function() {
             apps.hide();
             gbPerIndexer.hide();
         }
-        // indexersSlider('updateLabel');
-        // searchFactorSlider('updateLabel');
-        // replicationFactorSlider('updateLabel');
-        // gbPerIndexerSlider('updateLabel');
     };
     calculateNumberCheckbox.prop('checked', indexersCalculatedAutomatically);
     calculateNumberCheckbox.change(function(){
@@ -1601,8 +1512,6 @@ $(function() {
         if (new_max < value){
             value = new_max
         }
-        // console.log('updating max to ' + new_max)
-        // console.log('new start ' + new_start)
         replicationFactorSlider.noUiSlider.updateOptions({
             start: value,
             range: { 
@@ -1642,8 +1551,6 @@ $(function() {
         if (new_max < value){
             value = new_max
         }
-        console.log('maxSearch value ' + value)
-        console.log('maxSearch max ' + new_max)
         searchFactorSlider.noUiSlider.updateOptions({
             start: value,
             range: { 
@@ -1672,7 +1579,6 @@ $(function() {
     });
 
     var updateSearchFactorMaxMessage=function(){
-        console.log(searchFactorSlider.noUiSlider.options.range.max[0])
         var max = searchFactorSlider.noUiSlider.options.range.max[0];
         var value = searchFactorSlider.noUiSlider.get();
         if(value==max){
@@ -1685,8 +1591,6 @@ $(function() {
     if(clusterReplicationDefaultValue){
         replicationFactorRetentionDiv.show();
         searchFactorRetentionDiv.show();
-        // searchFactorSlider('trigger','change');
-        // replicationFactorSlider('trigger','change');
     }
     hotWarmPriceGBInput.val(hotWarmPriceDefaultValue).change(function(){
       var state = {};
