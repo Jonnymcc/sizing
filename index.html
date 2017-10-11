@@ -245,19 +245,19 @@
                 <div title="The number of indexers needed to meet the requirements.">
                     <h3>Number of Nodes</h3>
                     <div id="indexers-retention-slider"></div>
-                    <div><span class="slider-value"></span> node(s)</div>
+                    <div><input id="indexers-retention-slider-value"></input> node(s)</div>
                 </div>
                 <div id="search-factor-retention" style="display: none;" title="The number of searchable copies of the data to be retained across the cluster. This must be the same or less than the Replication Factor">
                     <h3>Searchability Factor</h3>
                     <div id="search-factor-retention-slider"></div>
-                    <div><span class="slider-value"></span></div>
+                    <div><input id="search-factor-retention-slider-value"></input></div>
                     <p style="display: none; text-align: center;" id="search-factor-max-message" class="message">
                         (reached replication factor limit)</p>
                 </div>
                 <div id="replication-factor-retention" style="display: none;" title="The total number of searchable and non-searchable copies of the data to be retained across the cluster. This must be the same or greater than the Searchability Factor.">
                     <h3>Replication Factor</h3>
                     <div id="replication-factor-retention-slider"></div>
-                    <div><span class="slider-value"></span></div>
+                    <div><input id="replication-factor-retention-slider-value"></input></div>
                     <p style="display: none; text-align: center;" id="replication-factor-max-message" class="message">
                         (reached number of nodes limit)</p>
                 </div>
