@@ -4,7 +4,17 @@
     text-align: inherit;
     outline: none;
     cursor: text;
-    width: 3em;
+    width: 4em;
     background: #fff none;
     padding: .2em .5em !important;
+    margin: .5em auto;
+    display: inline-block;
+}
+
+.textfield + label {
+    margin-left: .3em;
+}
+
+.textfielddiv {
+    text-align: center;
 }
