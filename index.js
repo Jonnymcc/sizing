@@ -329,7 +329,8 @@ $(function() {
     var rawVolumeInput = $('#raw-volume-slider-value')[0]
     var rawVolumeDiv = $('#raw-volume-div');
     var sizeByEventsPerSecCheckbox = $('#size-by-events-per-sec');
-    var eventsPerSecondSlider = $('#events-per-second-slider');
+    var eventsPerSecondSlider = $('#events-per-second-slider')[0];
+    var eventsPerSecondInput = $('#events-per-second-slider-value')[0];
     var averageEventSizeSlider = $('#average-event-size-slider');
     var eventsPerSecondDiv = $('#events-per-second');
     var averageEventSizeDiv = $('#average-event-size');
@@ -482,7 +483,7 @@ $(function() {
         var sizeByEventsPerSec = sizeByEventsPerSecCheckbox.is(":checked");
         if(sizeByEventsPerSec){
             var averageMessageSizeBytes = averageEventSizeSlider('value');
-            var eventsPerSecond = eventsPerSecondSlider('value');
+            var eventsPerSecond = eventsPerSecondSlider.noUiSlider.get();
             var eventsPerDay = eventsPerSecond*60*60*24;
             //var averageMessageSizeBytes = 320;
             var dailyBytes = eventsPerDay*averageMessageSizeBytes;
@@ -655,7 +656,7 @@ $(function() {
         var totalPrice = hotWarmPrice+coldPrice+frozenPrice;
 
         inputDataEpsCalculationResult.text(numeral(rawVolume*gbtobytesFactor).format('0.0 b'));
-        inputDataEpsCalculationEps.text(eventsPerSecondSlider('value'));
+        inputDataEpsCalculationEps.text(eventsPerSecondSlider.noUiSlider.get());
         inputDataEpsCalculationAvgSize.text(averageEventSizeSlider('value'));
         totalStorage.text(numeral(storageTotal*gbtobytesFactor).format('0.0 b'));
         hotWarmStorage.text(numeral(storageHotWarmTotal*gbtobytesFactor).format('0.0 b'));
@@ -1215,65 +1216,24 @@ $(function() {
         }
     });
 
-
-    eventsPerSecondSlider = eventsPerSecondSlider.slideWithLabel({
-        'value': eventsPerSecondDefaultValue,
-        'step': 0.02,
-        'changed': function(){
-            if(indexersCalculatedAutomatically){
-                calculateNumberOfNodes();
+    noUiSlider.create(eventsPerSecondSlider, {
+        start: eventsPerSecondDefaultValue,
+        range: {
+            'min': [ 1, 1 ],
+            '30%': [ 1000, 100 ],
+            '80%': [ 100000, 1000 ],
+            'max': [ 1000000 ]
+        },
+        format: {
+            to: function ( value ) {
+                return Math.round(value);
+            },
+            from: function ( value ) {
+                return value;
             }
-            calculate();
-        },
-        'change': function(){
-            var state = {};
-            state[eventsPerSecondKey] = eventsPerSecondSlider('value');
-            var hash = $.param.fragment(window.location.hash,state);
-            replaceState(undefined, null, hash);
-        },
-        'toSlider': function(value){
-            value/=50;
-            var result;
-            if(value<10) { // 0.00 - 0.16
-                result = (value-1)/50;
-            } else if(value<100) { // 0.18 - 0.34
-                result = 0.18+(value-10)/500;
-            } else if(value<1000) { // 0.36 - 0.52
-                result = 0.36+(value-100)/5000;
-            } else if(value<20000) { // 0.54 - 0.90
-                result = 0.54+(value-1000)/50000;
-            } else if(value<100000) { // 0.92 - 0.98
-                result = 0.92+(value-20000)/500000;
-            } else { // 1.00
-                result = 1.0;
-            }
-            result = Math.round(result*100)/100;
-            //console.log('toSlider('+value+') -> '+result);
-            return result;
-        },
-        'fromSlider': function(percent){
-            var result;
-            if(percent<0.18)
-                result = 1+percent*50;
-            else if(percent<0.36)
-                result = 10+(percent-0.18)*500;
-            else if(percent<0.54)
-                result = 100+(percent-0.36)*5000;
-            else if(percent<0.92)
-                result = 1000+(percent-0.54)*50000;
-            else if(percent<1.00)
-                result = 20000+(percent-0.92)*500000;
-            else
-                result = 100000;
-            result = Math.round(result);
-            //console.log('fromSlider('+percent+') -> '+result);
-            result*=50;
-            return result;
-        },
-        'display': function(value){
-            return numeral(value).format('0a');
         }
     });
+
     if(sizeTypeDefaultValue==sizeTypeEventsPerSecond){
         eventsPerSecondDiv.show();
         inputDataEpsCalculationEventsPerSecondDescription.show();
@@ -1302,7 +1262,7 @@ $(function() {
             rawVolumeDiv.hide();
             inputDataDescriptionEventsPerSecond.show();
             inputDataDescriptionDailyAmount.hide();
-            eventsPerSecondSlider('trigger','change');
+            // eventsPerSecondSlider('trigger','change');
             averageEventSizeSlider('trigger','change');
             if(indexersCalculatedAutomatically){
                 calculateNumberOfNodes();
@@ -1320,14 +1280,6 @@ $(function() {
                 calculateNumberOfNodes();
             }
         }
-        compressionFactorSlider('trigger','change');
-        indexFactorSlider('trigger','change');
-        hotWarmRetentionSlider('updateLabel');
-        coldRetentionSlider('updateLabel');
-        frozenRetentionSlider('updateLabel');
-        // gbPerIndexerSlider('updateLabel');
-        // searchFactorSlider('updateLabel');
-        replicationFactorSlider('updateLabel');
         var hash = $.param.fragment(window.location.hash,state);
         replaceState(undefined, null, hash);
         calculate();
@@ -2083,9 +2035,9 @@ $(function() {
         var hash = $.param.fragment(window.location.hash,state);
         replaceState(undefined, null, hash);
         if(indexersCalculatedAutomatically){
-                calculateNumberOfNodes();
-            }
-            calculate();
+            calculateNumberOfNodes();
+        }
+        calculate();
         rawVolumeInput.value = values[handle];
     });
 
@@ -2098,6 +2050,30 @@ $(function() {
             rawVolumeInput.select()
         },500);
     });
+
+
+    eventsPerSecondSlider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[eventsPerSecondKey] = eventsPerSecondSlider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        if(indexersCalculatedAutomatically){
+            calculateNumberOfNodes();
+        }
+        calculate();
+        eventsPerSecondInput.value = values[handle];
+    });
+
+    var eventsPerSecondInputTimeout = null;
+    eventsPerSecondInput.addEventListener('keyup', function(){
+        var val = this.value
+        clearTimeout(eventsPerSecondInputTimeout);
+        eventsPerSecondInputTimeout = setTimeout(function(){
+            eventsPerSecondSlider.noUiSlider.set(val);
+            eventsPerSecondInput.select()
+        },500);
+    });
+
 
     compressionFactorSlider.noUiSlider.on('update', function( values, handle ) {
         var state = {};
