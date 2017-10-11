@@ -352,7 +352,8 @@ $(function() {
     var itsiAppRatio = $('#apps-itsi');
     var vmwareAppRatio = $('#apps-vmware');
     var gbPerIndexer = $('#gb-per-indexer');
-    var gbPerIndexerSlider = $('#gb-per-indexer-slider');
+    var gbPerIndexerSlider = $('#gb-per-indexer-slider')[0];
+    var gbPerIndexerInput = $('#gb-per-indexer-slider-value')[0];
     var apps = $('#apps');
     var searchFactorMaxMessage = $('#search-factor-max-message');
     var replicationFactorMaxMessage = $('#replication-factor-max-message');
@@ -1324,8 +1325,8 @@ $(function() {
         hotWarmRetentionSlider('updateLabel');
         coldRetentionSlider('updateLabel');
         frozenRetentionSlider('updateLabel');
-        gbPerIndexerSlider('updateLabel');
-        searchFactorSlider('updateLabel');
+        // gbPerIndexerSlider('updateLabel');
+        // searchFactorSlider('updateLabel');
         replicationFactorSlider('updateLabel');
         var hash = $.param.fragment(window.location.hash,state);
         replaceState(undefined, null, hash);
@@ -1478,46 +1479,63 @@ $(function() {
     var updateGbPerIndexerSlider=function(){
         dontChangeRatioBasedOnGBPerIndexerSliderChange=true;
         (function(){
-            gbPerIndexerSlider('value', calculateGBPerIndexer());
+            gbPerIndexerSlider.noUiSlider.set(calculateGBPerIndexer());
             dontChangeRatioBasedOnGBPerIndexerSliderChange=false;
         })();
     };
     var dontChangeRatioBasedOnGBPerIndexerSliderChange = false;
-    gbPerIndexerSlider = gbPerIndexerSlider.slideWithLabel({
-        'value': calculateGBPerIndexer(),
-        'step': 20,
-        'min': 20,
-        'max': 600,
-        'changed': function(){
-            calculateNumberOfNodes();
-            calculate();
+
+    noUiSlider.create(gbPerIndexerSlider, {
+        start: calculateGBPerIndexer(),
+        step: 20,
+        range: {
+            'min': [ 1, ],
+            'max': [ 1000 ]
         },
-        'change': function(){
-            var state;
-            if(!dontChangeRatioBasedOnGBPerIndexerSliderChange){
-                ignoreOtherAppRatioChangeEvent = true;
-                (function(){
-                    otherAppRatio.prop("checked", true);
-                    ignoreOtherAppRatioChangeEvent = false;
-                })();
-                state = $.deparam.fragment(window.location.hash);
-                state[appKey] = '';
-                delete state[appKey];
-                state[gbPerIndexerKey] = gbPerIndexerSlider('value');
-                replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
-            }else{
-                state = $.deparam.fragment(window.location.hash);
-                state[gbPerIndexerKey] = 0;
-                delete state[gbPerIndexerKey];
-                replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
+        format: {
+            to: function ( value ) {
+                return Math.round(value);
+            },
+            from: function ( value ) {
+                return value;
             }
-            calculateNumberOfNodes();
-            calculate();
-        },
-        'display': function(value){
-            return value+' GB';
         }
     });
+    // gbPerIndexerSlider = gbPerIndexerSlider.slideWithLabel({
+    //     'value': calculateGBPerIndexer(),
+    //     'step': 20,
+    //     'min': 20,
+    //     'max': 600,
+    //     'changed': function(){
+    //         calculateNumberOfNodes();
+    //         calculate();
+    //     },
+    //     'change': function(){
+    //         var state;
+    //         if(!dontChangeRatioBasedOnGBPerIndexerSliderChange){
+    //             ignoreOtherAppRatioChangeEvent = true;
+    //             (function(){
+    //                 otherAppRatio.prop("checked", true);
+    //                 ignoreOtherAppRatioChangeEvent = false;
+    //             })();
+    //             state = $.deparam.fragment(window.location.hash);
+    //             state[appKey] = '';
+    //             delete state[appKey];
+    //             state[gbPerIndexerKey] = gbPerIndexerSlider('value');
+    //             replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
+    //         }else{
+    //             state = $.deparam.fragment(window.location.hash);
+    //             state[gbPerIndexerKey] = 0;
+    //             delete state[gbPerIndexerKey];
+    //             replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
+    //         }
+    //         calculateNumberOfNodes();
+    //         calculate();
+    //     },
+    //     'display': function(value){
+    //         return value+' GB';
+    //     }
+    // });
     enableClusterReplicationCheckBox.prop('checked', clusterReplicationDefaultValue);
     enableClusterReplicationCheckBox.change(function(){
         var checked = $(this).is(':checked');
@@ -1563,47 +1581,19 @@ $(function() {
             }
         }
     });
-    // indexersSlider = indexersSlider.slideWithLabel({
-    //     'value': indexersDefaultValue,
-    //     'min': calculateMinimumNumberOfIndexers(),
-    //     'max': 100,
-    //     'step': 1,
-    //     'changed': function(){
-    //         updateMaximumReplicationFactor();
-    //         calculate();
-    //     },
-    //     'change': function(){
-    //         if(!calculatingNumberOfNodes){
-    //             if(!indexersCalculatedAutomatically){
-    //                 var state = {};
-    //                 state[indexersKey] = indexersSlider('value');
-    //                 var hash = $.param.fragment(window.location.hash,state);
-    //                 replaceState(undefined, null, hash);
-    //                 calculate();
-    //             }else{
-    //                 calculateNumberCheckbox.prop('checked', false);
-    //                 calculateNumberCheckbox.change();
-    //             }
-    //         }
-    //     }
-    // });
+
     var calculatingNumberOfNodes = false;
     var calculateNumberOfNodes=function(){
         calculatingNumberOfNodes=true;
         if(calculatingNumberOfNodes){
             var rawVolume = getDataVolumePerDay();
-            var gbPerIndexerValue = gbPerIndexerSlider('value');
+            var gbPerIndexerValue = gbPerIndexerSlider.noUiSlider.get();
             var numberOfNodes = Math.ceil(rawVolume/gbPerIndexerValue);
             indexersSlider.noUiSlider.set(parseInt(numberOfNodes));
             // indexersSlider('trigger','change');
             calculatingNumberOfNodes=false;
         }
     };
-
-//     slider.setAttribute('disabled', true);
-
-// // To re-enable
-// slider.removeAttribute('disabled');
 
     var updateUIBasedOnCalculateNumberCheckbox=function(){
         indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
@@ -1619,7 +1609,7 @@ $(function() {
         // indexersSlider('updateLabel');
         // searchFactorSlider('updateLabel');
         // replicationFactorSlider('updateLabel');
-        gbPerIndexerSlider('updateLabel');
+        // gbPerIndexerSlider('updateLabel');
     };
     calculateNumberCheckbox.prop('checked', indexersCalculatedAutomatically);
     calculateNumberCheckbox.change(function(){
@@ -2201,6 +2191,40 @@ $(function() {
         frozenRetentionInputTimeout = setTimeout(function(){
             frozenRetentionSlider.noUiSlider.set(val);
             frozenRetentionInput.select()
+        },500);
+    });
+
+    gbPerIndexerSlider.noUiSlider.on('update', function( values, handle ) {
+        var state;
+        if(!dontChangeRatioBasedOnGBPerIndexerSliderChange){
+            ignoreOtherAppRatioChangeEvent = true;
+            (function(){
+                otherAppRatio.prop("checked", true);
+                ignoreOtherAppRatioChangeEvent = false;
+            })();
+            state = $.deparam.fragment(window.location.hash);
+            state[appKey] = '';
+            delete state[appKey];
+            state[gbPerIndexerKey] = gbPerIndexerSlider.noUiSlider.get();
+            replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
+        }else{
+            state = $.deparam.fragment(window.location.hash);
+            state[gbPerIndexerKey] = 0;
+            delete state[gbPerIndexerKey];
+            replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
+        }
+        calculateNumberOfNodes();
+        calculate();
+        gbPerIndexerInput.value = values[handle];
+    });
+
+    var gbPerIndexerInputTimeout = null;
+    gbPerIndexerInput.addEventListener('keyup', function(){
+        var val = this.value
+        clearTimeout(gbPerIndexerInputTimeout);
+        gbPerIndexerInputTimeout = setTimeout(function(){
+            gbPerIndexerSlider.noUiSlider.set(val);
+            gbPerIndexerInput.select()
         },500);
     });
 
