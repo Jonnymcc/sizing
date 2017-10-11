@@ -389,7 +389,7 @@ $(function() {
     var physicalDiskSpaceTotalVolume1Div = $('#physical-space-total-volume1');
     var effectiveDiskSpacePerIndexerVolume1Div = $('#effective-space-per-indexer-volume1');
     var effectiveDiskSpaceTotalVolume1Div = $('#effective-space-total-volume1');
-    var diskSpaceContingencyVolume1Slider = $('#disk-space-contingency-slider-volume1');
+    var diskSpaceContingencyVolume1Slider = $('#disk-space-contingency-slider-volume1')[0];
     var diskSpaceContingencyVolume1Div = $('#disk-space-contingency-volume1');
     var detailedStorageVolume1VolumeMaxReadIOPS = $('#detailed-storage-volume1-volumeMaxReadIOPS');
     var detailedStorageVolume1VolumeMaxWriteIOPS = $('#detailed-storage-volume1-volumeMaxWriteIOPS');
@@ -404,7 +404,7 @@ $(function() {
     var physicalDiskSpaceTotalVolume2Div = $('#physical-space-total-volume2');
     var effectiveDiskSpacePerIndexerVolume2Div = $('#effective-space-per-indexer-volume2');
     var effectiveDiskSpaceTotalVolume2Div = $('#effective-space-total-volume2');
-    var diskSpaceContingencyVolume2Slider = $('#disk-space-contingency-slider-volume2');
+    var diskSpaceContingencyVolume2Slider = $('#disk-space-contingency-slider-volume2')[0];
     var diskSpaceContingencyVolume2Div = $('#disk-space-contingency-volume2');
     var detailedStorageVolume2VolumeMaxReadIOPS = $('#detailed-storage-volume2-volumeMaxReadIOPS');
     var detailedStorageVolume2VolumeMaxWriteIOPS = $('#detailed-storage-volume2-volumeMaxWriteIOPS');
@@ -419,7 +419,7 @@ $(function() {
     var physicalDiskSpaceTotalVolume3Div = $('#physical-space-total-volume3');
     var effectiveDiskSpacePerIndexerVolume3Div = $('#effective-space-per-indexer-volume3');
     var effectiveDiskSpaceTotalVolume3Div = $('#effective-space-total-volume3');
-    var diskSpaceContingencyVolume3Slider = $('#disk-space-contingency-slider-volume3');
+    var diskSpaceContingencyVolume3Slider = $('#disk-space-contingency-slider-volume3')[0];
     var diskSpaceContingencyVolume3Div = $('#disk-space-contingency-volume3');
     var detailedStorageVolume3VolumeMaxReadIOPS = $('#detailed-storage-volume3-volumeMaxReadIOPS');
     var detailedStorageVolume3VolumeMaxWriteIOPS = $('#detailed-storage-volume3-volumeMaxWriteIOPS');
@@ -511,13 +511,13 @@ $(function() {
         var frozenPriceGB = parseFloat(frozenPriceGBInput.val());
         var raidLevelVolume1 = raidLevelVolume1Select.val();
         var diskSizeGBVolume1 = parseInt(diskSizeVolume1Select.val());
-        var diskSpaceContingencyVolume1 = parseFloat(diskSpaceContingencyVolume1Slider('value'));
+        var diskSpaceContingencyVolume1 = parseFloat(diskSpaceContingencyVolume1Slider.noUiSlider.get());
         var raidLevelVolume2 = raidLevelVolume2Select.val();
         var diskSizeGBVolume2 = parseInt(diskSizeVolume2Select.val());
-        var diskSpaceContingencyVolume2 = parseFloat(diskSpaceContingencyVolume2Slider('value'));
+        var diskSpaceContingencyVolume2 = parseFloat(diskSpaceContingencyVolume2Slider.noUiSlider.get());
         var raidLevelVolume3 = raidLevelVolume3Select.val();
         var diskSizeGBVolume3 = parseInt(diskSizeVolume3Select.val());
-        var diskSpaceContingencyVolume3 = parseFloat(diskSpaceContingencyVolume3Slider('value'));
+        var diskSpaceContingencyVolume3 = parseFloat(diskSpaceContingencyVolume3Slider.noUiSlider.get());
 
         if(!isCluster){
           searchFactor = 1;
@@ -1710,21 +1710,15 @@ $(function() {
       calculate();
     });
 
-    diskSpaceContingencyVolume1Slider = diskSpaceContingencyVolume1Slider.slideWithLabel({
-        'value': diskSpaceContingencyVolume1DefaultValue,
-        'min': 0, 'step': 0.01,
-        'max': 0.3,
-        'changed': function(){
-          diskSpaceContingencyVolume1Div.text(parseInt(diskSpaceContingencyVolume1Slider('value')*100)+' %');
-          calculate();
+    noUiSlider.create(diskSpaceContingencyVolume1Slider, {
+        start: diskSpaceContingencyVolume1DefaultValue,
+        step: 0.01,
+        range: {
+            'min': [ 0 ],
+            'max': [ 0.3 ]
         },
-        'change': function(){
-          var state = {};
-          state[diskSpaceContingencyVolume1Key] = diskSpaceContingencyVolume1Slider('value');
-          var hash = $.param.fragment(window.location.hash,state);
-          replaceState(undefined, null, hash);
-        }
     });
+
     diskSpaceContingencyVolume1Div.text(parseInt(diskSpaceContingencyVolume1DefaultValue*100)+' %');
     var updatePhysicalStorageVolume1RaidParityWarningVisibility = function(){
         if(raidLevelVolume1Select.val()=='5'){
@@ -1752,21 +1746,15 @@ $(function() {
       calculate();
     });
 
-    diskSpaceContingencyVolume2Slider = diskSpaceContingencyVolume2Slider.slideWithLabel({
-        'value': diskSpaceContingencyVolume2DefaultValue,
-        'min': 0, 'step': 0.01,
-        'max': 0.3,
-        'changed': function(){
-          diskSpaceContingencyVolume2Div.text(parseInt(diskSpaceContingencyVolume2Slider('value')*100)+' %');
-          calculate();
+    noUiSlider.create(diskSpaceContingencyVolume2Slider, {
+        start: diskSpaceContingencyVolume2DefaultValue,
+        step: 0.01,
+        range: {
+            'min': [ 0 ],
+            'max': [ 0.3 ]
         },
-        'change': function(){
-          var state = {};
-          state[diskSpaceContingencyVolume2Key] = diskSpaceContingencyVolume2Slider('value');
-          var hash = $.param.fragment(window.location.hash,state);
-          replaceState(undefined, null, hash);
-        }
     });
+
     diskSpaceContingencyVolume2Div.text(parseInt(diskSpaceContingencyVolume2DefaultValue*100)+' %');
     var updatePhysicalStorageVolume2RaidParityWarningVisibility = function(){
         if(raidLevelVolume2Select.val()=='5'){
@@ -1794,21 +1782,15 @@ $(function() {
       calculate();
     });
 
-    diskSpaceContingencyVolume3Slider = diskSpaceContingencyVolume3Slider.slideWithLabel({
-        'value': diskSpaceContingencyVolume3DefaultValue,
-        'min': 0, 'step': 0.01,
-        'max': 0.3,
-        'changed': function(){
-          diskSpaceContingencyVolume3Div.text(parseInt(diskSpaceContingencyVolume3Slider('value')*100)+' %');
-          calculate();
+    noUiSlider.create(diskSpaceContingencyVolume3Slider, {
+        start: diskSpaceContingencyVolume3DefaultValue,
+        step: 0.01,
+        range: {
+            'min': [ 0 ],
+            'max': [ 0.3 ]
         },
-        'change': function(){
-          var state = {};
-          state[diskSpaceContingencyVolume3Key] = diskSpaceContingencyVolume3Slider('value');
-          var hash = $.param.fragment(window.location.hash,state);
-          replaceState(undefined, null, hash);
-        }
     });
+       
     diskSpaceContingencyVolume3Div.text(parseInt(diskSpaceContingencyVolume3DefaultValue*100)+' %');
     var updatePhysicalStorageVolume3RaidParityWarningVisibility = function(){
         if(raidLevelVolume3Select.val()=='5'){
@@ -2289,5 +2271,32 @@ $(function() {
             replicationFactorSlider.noUiSlider.set(val);
             replicationFactorInput.select()
         },500);
+    });
+
+    diskSpaceContingencyVolume1Slider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[diskSpaceContingencyVolume1Key] = diskSpaceContingencyVolume1Slider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        diskSpaceContingencyVolume1Div.text(values[handle] +' %');
+        calculate();
+    });
+
+    diskSpaceContingencyVolume2Slider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[diskSpaceContingencyVolume2Key] = diskSpaceContingencyVolume2Slider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        diskSpaceContingencyVolume2Div.text(values[handle]+' %');
+        calculate();
+    });
+
+    diskSpaceContingencyVolume3Slider.noUiSlider.on('update', function( values, handle ) {
+        var state = {};
+        state[diskSpaceContingencyVolume3Key] = diskSpaceContingencyVolume3Slider.noUiSlider.get();
+        var hash = $.param.fragment(window.location.hash,state);
+        replaceState(undefined, null, hash);
+        diskSpaceContingencyVolume3Div.text(values[handle]+' %');
+        calculate();
     });
 });
