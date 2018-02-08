@@ -1451,8 +1451,19 @@ $(function() {
     };
     var updateMinimumNumberOfIndexers = function(){
         var min = indexersSlider.noUiSlider.options.range.min[0];
-        var new_min = Math.min(min, calculateMinimumNumberOfIndexers());
+        var new_min = Math.max(1, calculateMinimumNumberOfIndexers());
+        var value = indexersSlider.noUiSlider.get();
+        var new_value = Math.max(value, new_min);
+        indexersSlider.noUiSlider.updateOptions({
+            start: new_value,
+            range: {
+                'min': [new_min],
+                'max': [ 100 ]
+            }
+        })
+        indexersInput.value = new_value;
         updateMaximumReplicationFactor();
+        updateMaximumSearchFactor();
     };
 
     noUiSlider.create(indexersSlider, {
@@ -1481,6 +1492,7 @@ $(function() {
             var numberOfNodes = Math.ceil(rawVolume/gbPerIndexerValue);
             indexersSlider.noUiSlider.set(parseInt(numberOfNodes));
             indexersInput.value = parseInt(numberOfNodes);
+            updateMinimumNumberOfIndexers();
             calculatingNumberOfNodes=false;
         }
     };
