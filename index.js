@@ -1155,10 +1155,10 @@ $(function() {
     noUiSlider.create(rawVolumeSlider, {
         start: dailyVolumeDefaultValue,
         range: {
-            'min': [ 1, 1 ],
+            'min': 1,
             '30%': [ 1000, 100 ],
             '80%': [ 10000, 1000 ],
-            'max': [ 100000 ]
+            'max': 100000
         },
         format: {
             to: function ( value ) {
@@ -1173,10 +1173,10 @@ $(function() {
     noUiSlider.create(eventsPerSecondSlider, {
         start: eventsPerSecondDefaultValue,
         range: {
-            'min': [ 1, 1 ],
+            'min': 1,
             '30%': [ 1000, 100 ],
             '80%': [ 100000, 1000 ],
-            'max': [ 1000000 ]
+            'max': 1000000
         },
         format: {
             to: function ( value ) {
@@ -1240,8 +1240,8 @@ $(function() {
         start: averageEventSizeDefaultValue,
         step: 20,
         range: {
-            'min': [ 20 ],
-            'max': [ 5000 ]
+            'min': 20,
+            'max': 5000
         },
         format: {
             to: function ( value ) {
@@ -1256,26 +1256,26 @@ $(function() {
     noUiSlider.create(compressionFactorSlider, {
         start: compressionFactorDefaultValue,
         range: {
-            'min': [ 0.01, 0.01 ],
-            'max': [ 0.8 ]
+            'min': 0.01,
+            'max': 0.8
         },
     });
 
     noUiSlider.create(indexFactorSlider, {
         start: indexFactorDefaultValue,
         range: {
-            'min': [ 0.01, 0.01 ],
-            'max': [ 1.5 ]
+            'min': 0.01,
+            'max': 1.5
         },
     });
 
     noUiSlider.create(hotWarmRetentionSlider, {
         start: hotWarmRetentionDefaultValue,
         range: {
-            'min': [ 0, 1 ],
+            'min': 0,
             '30%': [ 31, 1 ],
             '80%': [ 365, 1 ],
-            'max': [ 2560 ]
+            'max': 2560
         },
         format: {
             to: function ( value ) {
@@ -1290,10 +1290,10 @@ $(function() {
     noUiSlider.create(coldRetentionSlider, {
         start: coldRetentionDefaultValue,
         range: {
-            'min': [ 0, 1 ],
+            'min': 0,
             '30%': [ 31, 1 ],
             '80%': [ 365, 1 ],
-            'max': [ 2560 ]
+            'max': 2560
         },
         format: {
             to: function ( value ) {
@@ -1308,10 +1308,10 @@ $(function() {
     noUiSlider.create(frozenRetentionSlider, {
         start: frozenRetentionDefaultValue,
         range: {
-            'min': [ 0, 1 ],
+            'min': 0,
             '30%': [ 31, 1 ],
             '80%': [ 365, 1 ],
-            'max': [ 2560 ]
+            'max': 2560
         },
         format: {
             to: function ( value ) {
@@ -1413,8 +1413,8 @@ $(function() {
         start: calculateGBPerIndexer(),
         step: 20,
         range: {
-            'min': [ 1, ],
-            'max': [ 1000 ]
+            'min': 1,
+            'max': 1000
         },
         format: {
             to: function ( value ) {
@@ -1450,15 +1450,15 @@ $(function() {
         return isCluster ? 2 : 1;
     };
     var updateMinimumNumberOfIndexers = function(){
-        var min = indexersSlider.noUiSlider.options.range.min[0];
+        var min = indexersSlider.noUiSlider.options.range.min;
         var new_min = Math.max(1, calculateMinimumNumberOfIndexers());
         var value = indexersSlider.noUiSlider.get();
         var new_value = Math.max(value, new_min);
         indexersSlider.noUiSlider.updateOptions({
             start: new_value,
             range: {
-                'min': [new_min],
-                'max': [ 100 ]
+                'min': new_min,
+                'max': 100
             }
         })
         indexersInput.value = new_value;
@@ -1470,8 +1470,8 @@ $(function() {
         start: indexersDefaultValue,
         step: 1,
         range: {
-            'min': [ calculateMinimumNumberOfIndexers() ],
-            'max': [ 100 ]
+            'min': calculateMinimumNumberOfIndexers(),
+            'max': 100
         },
         format: {
             to: function ( value ) {
@@ -1531,7 +1531,7 @@ $(function() {
         calculate();
     });
     var updateReplicationFactorMaxMessage=function(){
-        var max = replicationFactorSlider.noUiSlider.options.range.max[0];
+        var max = replicationFactorSlider.noUiSlider.options.range.max;
         var value = replicationFactorSlider.noUiSlider.get();
         if(value==max){
             replicationFactorMaxMessage.show();
@@ -1553,9 +1553,9 @@ $(function() {
         }
         replicationFactorSlider.noUiSlider.updateOptions({
             start: value,
-            range: { 
-                'min': 1, 
-                'max': [new_max] 
+            range: {
+                'min': 1,
+                'max': new_max
             }
         })
         replicationFactorInput.value = value;
@@ -1567,8 +1567,8 @@ $(function() {
         start: replicationFactorDefaultValue,
         step: 1,
         range: {
-            'min': [ 1 ],
-            'max': [ calculateMaximumReplicationFactor() ]
+            'min': 1,
+            'max': calculateMaximumReplicationFactor()
         },
         format: {
             to: function ( value ) {
@@ -1594,8 +1594,8 @@ $(function() {
         searchFactorSlider.noUiSlider.updateOptions({
             start: value,
             range: { 
-                'min': 1, 
-                'max': [parseInt(new_max)] 
+                'min': 1,
+                'max': new_max
             }
         })
         searchFactorInput.value = value;
@@ -1607,8 +1607,8 @@ $(function() {
         start: searchFactorDefaultValue,
         step: 1,
         range: {
-            'min': [ 1 ],
-            'max': [ calculateMaximumSearchFactor() ]
+            'min': 1,
+            'max': calculateMaximumSearchFactor()
         },
         format: {
             to: function ( value ) {
@@ -1621,7 +1621,7 @@ $(function() {
     });
 
     var updateSearchFactorMaxMessage=function(){
-        var max = searchFactorSlider.noUiSlider.options.range.max[0];
+        var max = searchFactorSlider.noUiSlider.options.range.max;
         var value = searchFactorSlider.noUiSlider.get();
         if(value==max){
             searchFactorMaxMessage.show();
@@ -1660,8 +1660,8 @@ $(function() {
         start: diskSpaceContingencyVolume1DefaultValue,
         step: 0.01,
         range: {
-            'min': [ 0 ],
-            'max': [ 0.3 ]
+            'min': 0,
+            'max': 0.3
         },
     });
 
@@ -1696,8 +1696,8 @@ $(function() {
         start: diskSpaceContingencyVolume2DefaultValue,
         step: 0.01,
         range: {
-            'min': [ 0 ],
-            'max': [ 0.3 ]
+            'min': 0,
+            'max': 0.3
         },
     });
 
@@ -1732,8 +1732,8 @@ $(function() {
         start: diskSpaceContingencyVolume3DefaultValue,
         step: 0.01,
         range: {
-            'min': [ 0 ],
-            'max': [ 0.3 ]
+            'min': 0,
+            'max': 0.3
         },
     });
        
@@ -1977,8 +1977,8 @@ $(function() {
     });
 
     function slider_input_update(slider, input, key, val) {
-        val = Math.max(val, slider.noUiSlider.options.range.min[0]);
-        val = Math.min(val, slider.noUiSlider.options.range.max[0]);
+        val = Math.max(val, slider.noUiSlider.options.range.min);
+        val = Math.min(val, slider.noUiSlider.options.range.max);
         slider.noUiSlider.set(val);
         input.value = val;
         input.select()
