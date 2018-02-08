@@ -1953,6 +1953,8 @@ $(function() {
         if(indexersCalculatedAutomatically){
             calculateNumberOfNodes();
         }
+        updateMaximumReplicationFactor();
+        updateMaximumSearchFactor();
         calculate();
     }
 
@@ -1962,15 +1964,21 @@ $(function() {
         rawVolumeInput.value = values[handle];
     });
 
+    function slider_input_update(slider, input, key, val) {
+        val = Math.max(val, slider.noUiSlider.options.range.min[0]);
+        val = Math.min(val, slider.noUiSlider.options.range.max[0]);
+        slider.noUiSlider.set(val);
+        input.value = val;
+        input.select()
+        update_state(key, val);
+    }
+
     var rawVolumeInputTimeout = null;
     rawVolumeInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(rawVolumeInputTimeout);
-        rawVolumeInputTimeout = setTimeout(function(){
-            rawVolumeSlider.noUiSlider.set(val);
-            rawVolumeInput.select()
-            update_state(dailyVolumeKey, val);
-        },500);
+        rawVolumeInputTimeout = setTimeout(slider_input_update, 500,
+            rawVolumeSlider, rawVolumeInput, dailyVolumeKey, val);
     });
 
 
@@ -1984,11 +1992,8 @@ $(function() {
     eventsPerSecondInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(eventsPerSecondInputTimeout);
-        eventsPerSecondInputTimeout = setTimeout(function(){
-            eventsPerSecondSlider.noUiSlider.set(val);
-            eventsPerSecondInput.select()
-            update_state(eventsPerSecondKey, val)
-        },500);
+        eventsPerSecondInputTimeout = setTimeout(slider_input_update, 500,
+            eventsPerSecondSlider, eventsPerSecondInput, eventsPerSecondKey, val);
     });
 
     averageEventSizeSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2001,11 +2006,8 @@ $(function() {
     averageEventSizeInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(averageEventSizeInputTimeout);
-        averageEventSizeInputTimeout = setTimeout(function(){
-            averageEventSizeSlider.noUiSlider.set(val);
-            averageEventSizeInput.select()
-            update_state(averageEventSizeKey, val)
-        },500);
+        averageEventSizeInputTimeout = setTimeout(slider_input_update, 500,
+            averageEventSizeSlider, averageEventSizeInput, averageEventSizeKey, val);
     });
 
     compressionFactorSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2018,11 +2020,8 @@ $(function() {
     compressionFactorInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(compressionFactorInputTimeout);
-        compressionFactorInputTimeout = setTimeout(function(){
-            compressionFactorSlider.noUiSlider.set(val);
-            compressionFactorInput.select()
-            update_state(compressionFactorKey, val)
-        },500);
+        compressionFactorInputTimeout = setTimeout(slider_input_update, 500,
+            compressionFactorSlider, compressionFactorInput, compressionFactorKey, val);
     });
 
     indexFactorSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2035,11 +2034,8 @@ $(function() {
     indexFactorInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(indexFactorInputTimeout);
-        indexFactorInputTimeout = setTimeout(function(){
-            indexFactorSlider.noUiSlider.set(val);
-            indexFactorInput.select()
-            update_state(indexFactorKey, val)
-        },500);
+        indexFactorInputTimeout = setTimeout(slider_input_update, 500,
+            indexFactorSlider, indexFactorInput, indexFactorKey, val);
     });
 
     hotWarmRetentionSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2052,11 +2048,8 @@ $(function() {
     hotWarmRetentionInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(hotWarmRetentionInputTimeout);
-        hotWarmRetentionInputTimeout = setTimeout(function(){
-            hotWarmRetentionSlider.noUiSlider.set(val);
-            hotWarmRetentionInput.select()
-            update_state(hotWarmRetentionKey, val)
-        },500);
+        hotWarmRetentionInputTimeout = setTimeout(slider_input_update, 500,
+            hotWarmRetentionSlider, hotWarmRetentionInput, hotWarmRetentionKey, val);
     });
 
     coldRetentionSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2069,11 +2062,8 @@ $(function() {
     coldRetentionInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(coldRetentionInputTimeout);
-        coldRetentionInputTimeout = setTimeout(function(){
-            coldRetentionSlider.noUiSlider.set(val);
-            coldRetentionInput.select()
-            update_state(coldRetentionKey, val)
-        },500);
+        coldRetentionInputTimeout = setTimeout(slider_input_update, 500,
+            coldRetentionSlider, coldRetentionInput, coldRetentionKey, val);
     });
 
     frozenRetentionSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2086,11 +2076,8 @@ $(function() {
     frozenRetentionInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(frozenRetentionInputTimeout);
-        frozenRetentionInputTimeout = setTimeout(function(){
-            frozenRetentionSlider.noUiSlider.set(val);
-            frozenRetentionInput.select()
-            update_state(frozenRetentionKey, val)
-        },500);
+        frozenRetentionInputTimeout = setTimeout(slider_input_update, 500,
+            frozenRetentionSlider, frozenRetentionInput, frozenRetentionKey, val);
     });
 
     gbPerIndexerSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2121,11 +2108,8 @@ $(function() {
     gbPerIndexerInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(gbPerIndexerInputTimeout);
-        gbPerIndexerInputTimeout = setTimeout(function(){
-            gbPerIndexerSlider.noUiSlider.set(val);
-            gbPerIndexerInput.select()
-            update_state(gbPerIndexerKey, val);
-        },500);
+        gbPerIndexerInputTimeout = setTimeout(slider_input_update, 500,
+            gbPerIndexerSlider, gbPerIndexerInput, gbPerIndexerKey, val);
     });
 
     indexersSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2139,11 +2123,8 @@ $(function() {
     indexersInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(indexersInputTimeout);
-        indexersInputTimeout = setTimeout(function(){
-            indexersSlider.noUiSlider.set(val);
-            indexersInput.select()
-            update_state(indexersKey, val);
-        },500);
+        indexersInputTimeout = setTimeout(slider_input_update, 500,
+            indexersSlider, indexersInput, indexersKey, val);
     });
 
     searchFactorSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2157,11 +2138,8 @@ $(function() {
     searchFactorInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(searchFactorInputTimeout);
-        searchFactorInputTimeout = setTimeout(function(){
-            searchFactorSlider.noUiSlider.set(val);
-            searchFactorInput.select()
-            update_state(searchFactorKey, val)
-        },500);
+        searchFactorInputTimeout = setTimeout(slider_input_update, 500,
+            searchFactorSlider, searchFactorInput, searchFactorKey, val);
     });
 
     replicationFactorSlider.noUiSlider.on('change', function( values, handle ) {
@@ -2176,11 +2154,8 @@ $(function() {
     replicationFactorInput.addEventListener('keyup', function(){
         var val = this.value
         clearTimeout(replicationFactorInputTimeout);
-        replicationFactorInputTimeout = setTimeout(function(){
-            replicationFactorSlider.noUiSlider.set(val);
-            replicationFactorInput.select()
-            update_state(replicationFactorKey, val)
-        },500);
+        replicationFactorInputTimeout = setTimeout(slider_input_update, 500,
+            replicationFactorSlider, replicationFactorInput, replicationFactorKey, val);
     });
 
     diskSpaceContingencyVolume1Slider.noUiSlider.on('change', function( values, handle ) {
