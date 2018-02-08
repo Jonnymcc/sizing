@@ -1380,6 +1380,24 @@ $(function() {
         }
         return otherAppGBPerIndexer;
     };
+
+    // Initialize slider labels
+    rawVolumeInput.value         = dailyVolumeDefaultValue;
+    eventsPerSecondInput.value   = eventsPerSecondDefaultValue;
+    averageEventSizeInput.value  = averageEventSizeDefaultValue;
+    compressionFactorInput.value = compressionFactorDefaultValue;
+    indexFactorInput.value       = indexFactorDefaultValue;
+    hotWarmRetentionInput.value  = hotWarmRetentionDefaultValue;
+    coldRetentionInput.value     = coldRetentionDefaultValue;
+    frozenRetentionInput.value   = frozenRetentionDefaultValue;
+    searchFactorInput.value      = searchFactorDefaultValue;
+    replicationFactorInput.value = replicationFactorDefaultValue;
+    gbPerIndexerInput.value      = calculateGBPerIndexer();
+    indexersInput.value          = indexersDefaultValue;
+    hotWarmPriceGBInput.value    = hotWarmPriceDefaultValue;
+    coldPriceGBInput.value       = coldPriceDefaultValue;
+    frozenPriceGBInput.value     = frozenPriceDefaultValue;
+
     var updateGbPerIndexerSlider=function(){
         dontChangeRatioBasedOnGBPerIndexerSliderChange=true;
         (function(){
