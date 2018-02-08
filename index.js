@@ -1437,6 +1437,8 @@ $(function() {
             searchFactorRetentionDiv.hide();
         }
         updateMinimumNumberOfIndexers();
+        updateMaximumReplicationFactor();
+        updateMaximumSearchFactor();
         var state = {};
         state[clusterReplicationKey] = checked?1:0;
         var hash = $.param.fragment(window.location.hash,state);
@@ -1512,6 +1514,8 @@ $(function() {
         if(indexersCalculatedAutomatically){
             calculateNumberOfNodes();
         }
+        updateMaximumReplicationFactor();
+        updateMaximumSearchFactor();
         calculate();
     });
     var updateReplicationFactorMaxMessage=function(){
