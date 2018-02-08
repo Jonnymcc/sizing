@@ -1484,10 +1484,12 @@ $(function() {
         indexersCalculatedAutomatically = calculateNumberCheckbox.is(':checked');
         if(indexersCalculatedAutomatically){
             indexersSlider.setAttribute('disabled', true);
+            indexersInput.setAttribute('disabled', true);
             apps.show();
             gbPerIndexer.show();
         }else{
             indexersSlider.removeAttribute('disabled');
+            indexersInput.removeAttribute('disabled');
             apps.hide();
             gbPerIndexer.hide();
         }
