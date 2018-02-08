@@ -45,9 +45,9 @@ $(function() {
     var dailyVolumeDefaultValue = 200;
     var compressionFactorDefaultValue = 0.15;
     var indexFactorDefaultValue = 0.35;
-    var hotWarmRetensionDefaultValue = 5;
-    var coldRetensionDefaultValue = 25;
-    var frozenRetensionDefaultValue = 60;
+    var hotWarmRetentionDefaultValue = 5;
+    var coldRetentionDefaultValue = 25;
+    var frozenRetentionDefaultValue = 60;
     var otherAppGBPerIndexer = 300;
     var esAppGBPerIndexer = 100;
     var vmwareAppGBPerIndexer = 250;
@@ -98,9 +98,9 @@ $(function() {
     var dailyVolumeKey = 'v';
     var compressionFactorKey = 'cf';
     var indexFactorKey = 'if';
-    var hotWarmRetensionKey = 'hwr';
-    var coldRetensionKey = 'cr';
-    var frozenRetensionKey = 'ar';
+    var hotWarmRetentionKey = 'hwr';
+    var coldRetentionKey = 'cr';
+    var frozenRetentionKey = 'ar';
     var appKey = 'app';
     var gbPerIndexerKey = 'gbi';
     var indexersKey = 'i';
@@ -139,12 +139,12 @@ $(function() {
     var indexFactorFromHash = $.bbq.getState(indexFactorKey);
     if($.isNumeric(indexFactorFromHash)) indexFactorDefaultValue = parseFloat(indexFactorFromHash);
 
-    var hotWarmRetensionFromHash = $.bbq.getState(hotWarmRetensionKey);
-    if($.isNumeric(hotWarmRetensionFromHash)) hotWarmRetensionDefaultValue = parseInt(hotWarmRetensionFromHash);
-    var coldRetensionFromHash = $.bbq.getState(coldRetensionKey);
-    if($.isNumeric(coldRetensionFromHash)) coldRetensionDefaultValue = parseInt(coldRetensionFromHash);
-    var frozenRetensionFromHash = $.bbq.getState(frozenRetensionKey);
-    if($.isNumeric(frozenRetensionFromHash)) frozenRetensionDefaultValue = parseInt(frozenRetensionFromHash);
+    var hotWarmRetentionFromHash = $.bbq.getState(hotWarmRetentionKey);
+    if($.isNumeric(hotWarmRetentionFromHash)) hotWarmRetentionDefaultValue = parseInt(hotWarmRetentionFromHash);
+    var coldRetentionFromHash = $.bbq.getState(coldRetentionKey);
+    if($.isNumeric(coldRetentionFromHash)) coldRetentionDefaultValue = parseInt(coldRetentionFromHash);
+    var frozenRetentionFromHash = $.bbq.getState(frozenRetentionKey);
+    if($.isNumeric(frozenRetentionFromHash)) frozenRetentionDefaultValue = parseInt(frozenRetentionFromHash);
     var gbPerIndexerFromHash = $.bbq.getState(gbPerIndexerKey);
     var appFromHash = $.bbq.getState(appKey);
     if(Object.prototype.toString.call(appFromHash)=='[object String]') appDefaultValue = appFromHash;
@@ -1270,7 +1270,7 @@ $(function() {
     });
 
     noUiSlider.create(hotWarmRetentionSlider, {
-        start: hotWarmRetensionDefaultValue,
+        start: hotWarmRetentionDefaultValue,
         range: {
             'min': [ 0, 1 ],
             '30%': [ 31, 1 ],
@@ -1288,7 +1288,7 @@ $(function() {
     });
 
     noUiSlider.create(coldRetentionSlider, {
-        start: coldRetensionDefaultValue,
+        start: coldRetentionDefaultValue,
         range: {
             'min': [ 0, 1 ],
             '30%': [ 31, 1 ],
@@ -1306,7 +1306,7 @@ $(function() {
     });
 
     noUiSlider.create(frozenRetentionSlider, {
-        start: frozenRetensionDefaultValue,
+        start: frozenRetentionDefaultValue,
         range: {
             'min': [ 0, 1 ],
             '30%': [ 31, 1 ],
@@ -2019,7 +2019,7 @@ $(function() {
 
     hotWarmRetentionSlider.noUiSlider.on('update', function( values, handle ) {
         var state = {};
-        state[hotWarmRetensionKey] = hotWarmRetentionSlider.noUiSlider.get();
+        state[hotWarmRetentionKey] = hotWarmRetentionSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
         replaceState(undefined, null, hash);
         calculate();
@@ -2038,7 +2038,7 @@ $(function() {
 
     coldRetentionSlider.noUiSlider.on('update', function( values, handle ) {
         var state = {};
-        state[coldRetensionKey] = coldRetentionSlider.noUiSlider.get();
+        state[coldRetentionKey] = coldRetentionSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
         replaceState(undefined, null, hash);
         calculate();
@@ -2057,7 +2057,7 @@ $(function() {
 
     frozenRetentionSlider.noUiSlider.on('update', function( values, handle ) {
         var state = {};
-        state[frozenRetensionKey] = frozenRetentionSlider.noUiSlider.get();
+        state[frozenRetentionKey] = frozenRetentionSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
         replaceState(undefined, null, hash);
         calculate();
