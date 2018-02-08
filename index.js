@@ -1587,6 +1587,7 @@ $(function() {
             }
         })
         searchFactorInput.value = value;
+        updateReplicationFactorMaxMessage();
         updateSearchFactorMaxMessage();
     };
 
