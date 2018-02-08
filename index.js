@@ -1546,6 +1546,7 @@ $(function() {
                 'max': [new_max] 
             }
         })
+        replicationFactorInput.value = value;
         updateReplicationFactorMaxMessage();
         updateSearchFactorMaxMessage();
     };
@@ -1585,6 +1586,7 @@ $(function() {
                 'max': [parseInt(new_max)] 
             }
         })
+        searchFactorInput.value = value;
         updateSearchFactorMaxMessage();
     };
 
