@@ -1915,7 +1915,7 @@ $(function() {
         p.append('<p><i>Unable to load list</i></p>');
     });
 
-    rawVolumeSlider.noUiSlider.on('update', function( values, handle ) {
+    rawVolumeSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[dailyVolumeKey] = rawVolumeSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -1938,7 +1938,7 @@ $(function() {
     });
 
 
-    eventsPerSecondSlider.noUiSlider.on('update', function( values, handle ) {
+    eventsPerSecondSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[eventsPerSecondKey] = eventsPerSecondSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -1960,7 +1960,7 @@ $(function() {
         },500);
     });
 
-    averageEventSizeSlider.noUiSlider.on('update', function( values, handle ) {
+    averageEventSizeSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[averageEventSizeKey] = averageEventSizeSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -1979,7 +1979,7 @@ $(function() {
         },500);
     });
 
-    compressionFactorSlider.noUiSlider.on('update', function( values, handle ) {
+    compressionFactorSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[compressionFactorKey] = compressionFactorSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -1998,7 +1998,7 @@ $(function() {
         },500);
     });
 
-    indexFactorSlider.noUiSlider.on('update', function( values, handle ) {
+    indexFactorSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[indexFactorKey] = indexFactorSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -2017,7 +2017,7 @@ $(function() {
         },500);
     });
 
-    hotWarmRetentionSlider.noUiSlider.on('update', function( values, handle ) {
+    hotWarmRetentionSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[hotWarmRetentionKey] = hotWarmRetentionSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -2036,7 +2036,7 @@ $(function() {
         },500);
     });
 
-    coldRetentionSlider.noUiSlider.on('update', function( values, handle ) {
+    coldRetentionSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[coldRetentionKey] = coldRetentionSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -2055,7 +2055,7 @@ $(function() {
         },500);
     });
 
-    frozenRetentionSlider.noUiSlider.on('update', function( values, handle ) {
+    frozenRetentionSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[frozenRetentionKey] = frozenRetentionSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -2074,7 +2074,7 @@ $(function() {
         },500);
     });
 
-    gbPerIndexerSlider.noUiSlider.on('update', function( values, handle ) {
+    gbPerIndexerSlider.noUiSlider.on('change', function( values, handle ) {
         var state;
         if(!dontChangeRatioBasedOnGBPerIndexerSliderChange){
             ignoreOtherAppRatioChangeEvent = true;
@@ -2108,7 +2108,7 @@ $(function() {
         },500);
     });
 
-    indexersSlider.noUiSlider.on('update', function( values, handle ) {
+    indexersSlider.noUiSlider.on('change', function( values, handle ) {
         if(!calculatingNumberOfNodes){
             if(!indexersCalculatedAutomatically){
                 var state = {};
@@ -2136,7 +2136,7 @@ $(function() {
         },500);
     });
 
-    searchFactorSlider.noUiSlider.on('update', function( values, handle ) {
+    searchFactorSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[searchFactorKey] = searchFactorSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -2156,7 +2156,7 @@ $(function() {
         },500);
     });
 
-    replicationFactorSlider.noUiSlider.on('update', function( values, handle ) {
+    replicationFactorSlider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[replicationFactorKey] = replicationFactorSlider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -2177,7 +2177,7 @@ $(function() {
         },500);
     });
 
-    diskSpaceContingencyVolume1Slider.noUiSlider.on('update', function( values, handle ) {
+    diskSpaceContingencyVolume1Slider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[diskSpaceContingencyVolume1Key] = diskSpaceContingencyVolume1Slider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -2186,7 +2186,7 @@ $(function() {
         calculate();
     });
 
-    diskSpaceContingencyVolume2Slider.noUiSlider.on('update', function( values, handle ) {
+    diskSpaceContingencyVolume2Slider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[diskSpaceContingencyVolume2Key] = diskSpaceContingencyVolume2Slider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
@@ -2195,7 +2195,7 @@ $(function() {
         calculate();
     });
 
-    diskSpaceContingencyVolume3Slider.noUiSlider.on('update', function( values, handle ) {
+    diskSpaceContingencyVolume3Slider.noUiSlider.on('change', function( values, handle ) {
         var state = {};
         state[diskSpaceContingencyVolume3Key] = diskSpaceContingencyVolume3Slider.noUiSlider.get();
         var hash = $.param.fragment(window.location.hash,state);
