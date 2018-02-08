@@ -1401,7 +1401,9 @@ $(function() {
     var updateGbPerIndexerSlider=function(){
         dontChangeRatioBasedOnGBPerIndexerSliderChange=true;
         (function(){
-            gbPerIndexerSlider.noUiSlider.set(calculateGBPerIndexer());
+            gbPerIndexer = calculateGBPerIndexer();
+            gbPerIndexerSlider.noUiSlider.set(gbPerIndexer);
+            gbPerIndexerInput.value = gbPerIndexer;
             dontChangeRatioBasedOnGBPerIndexerSliderChange=false;
         })();
     };
@@ -1476,6 +1478,7 @@ $(function() {
             var gbPerIndexerValue = gbPerIndexerSlider.noUiSlider.get();
             var numberOfNodes = Math.ceil(rawVolume/gbPerIndexerValue);
             indexersSlider.noUiSlider.set(parseInt(numberOfNodes));
+            indexersInput.value = parseInt(numberOfNodes);
             calculatingNumberOfNodes=false;
         }
     };
