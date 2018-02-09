@@ -1981,8 +1981,10 @@ $(function() {
 
     rawVolumeSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(dailyVolumeKey, val);
-        rawVolumeInput.value = values[handle];
+        rawVolumeInput.value = val;
+        clearTimeout(rawVolumeInputTimeout);
+        rawVolumeInputTimeout = setTimeout(slider_input_update, 500,
+            rawVolumeSlider, rawVolumeInput, dailyVolumeKey, val);
     });
 
     var rawVolumeInputTimeout = null;
@@ -1996,8 +1998,10 @@ $(function() {
 
     eventsPerSecondSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(eventsPerSecondKey, val)
-        eventsPerSecondInput.value = values[handle];
+        eventsPerSecondInput.value = val;
+        clearTimeout(eventsPerSecondInputTimeout);
+        eventsPerSecondInputTimeout = setTimeout(slider_input_update, 500,
+            eventsPerSecondSlider, eventsPerSecondInput, eventsPerSecondKey, val);
     });
 
     var eventsPerSecondInputTimeout = null;
@@ -2010,8 +2014,10 @@ $(function() {
 
     averageEventSizeSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(averageEventSizeKey, val)
-        averageEventSizeInput.value = values[handle];
+        averageEventSizeInput.value = val;
+        clearTimeout(averageEventSizeInputTimeout);
+        averageEventSizeInputTimeout = setTimeout(slider_input_update, 500,
+            averageEventSizeSlider, averageEventSizeInput, averageEventSizeKey, val);
     });
 
     var averageEventSizeInputTimeout = null;
@@ -2024,8 +2030,10 @@ $(function() {
 
     compressionFactorSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(compressionFactorKey, val)
-        compressionFactorInput.value = values[handle];
+        compressionFactorInput.value = val;
+        clearTimeout(compressionFactorInputTimeout);
+        compressionFactorInputTimeout = setTimeout(slider_input_update, 500,
+            compressionFactorSlider, compressionFactorInput, compressionFactorKey, val);
     });
 
     var compressionFactorInputTimeout = null;
@@ -2038,8 +2046,10 @@ $(function() {
 
     indexFactorSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(indexFactorKey, val)
-        indexFactorInput.value = values[handle];
+        indexFactorInput.value = val;
+        clearTimeout(indexFactorInputTimeout);
+        indexFactorInputTimeout = setTimeout(slider_input_update, 500,
+            indexFactorSlider, indexFactorInput, indexFactorKey, val);
     });
 
     var indexFactorInputTimeout = null;
@@ -2052,8 +2062,10 @@ $(function() {
 
     hotWarmRetentionSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(hotWarmRetentionKey, val)
-        hotWarmRetentionInput.value = values[handle];
+        hotWarmRetentionInput.value = val;
+        clearTimeout(hotWarmRetentionInputTimeout);
+        hotWarmRetentionInputTimeout = setTimeout(slider_input_update, 500,
+            hotWarmRetentionSlider, hotWarmRetentionInput, hotWarmRetentionKey, val);
     });
 
     var hotWarmRetentionInputTimeout = null;
@@ -2066,8 +2078,10 @@ $(function() {
 
     coldRetentionSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(coldRetentionKey, val)
-        coldRetentionInput.value = values[handle];
+        coldRetentionInput.value = val;
+        clearTimeout(coldRetentionInputTimeout);
+        coldRetentionInputTimeout = setTimeout(slider_input_update, 500,
+            coldRetentionSlider, coldRetentionInput, coldRetentionKey, val);
     });
 
     var coldRetentionInputTimeout = null;
@@ -2080,8 +2094,10 @@ $(function() {
 
     frozenRetentionSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(frozenRetentionKey, val)
-        frozenRetentionInput.value = values[handle];
+        frozenRetentionInput.value = val;
+        clearTimeout(frozenRetentionInputTimeout);
+        frozenRetentionInputTimeout = setTimeout(slider_input_update, 500,
+            frozenRetentionSlider, frozenRetentionInput, frozenRetentionKey, val);
     });
 
     var frozenRetentionInputTimeout = null;
@@ -2111,9 +2127,11 @@ $(function() {
             delete state[gbPerIndexerKey];
             replaceState(undefined, null, $.param.fragment(window.location.hash,state,2));
         }
-        calculateNumberOfNodes();
-        calculate();
-        gbPerIndexerInput.value = values[handle];
+        var val = values[handle];
+        gbPerIndexerInput.value = val;
+        clearTimeout(gbPerIndexerInputTimeout);
+        gbPerIndexerInputTimeout = setTimeout(slider_input_update, 500,
+            gbPerIndexerSlider, gbPerIndexerInput, gbPerIndexerKey, val);
     });
 
     var gbPerIndexerInputTimeout = null;
@@ -2126,9 +2144,10 @@ $(function() {
 
     indexersSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        updateMaximumReplicationFactor();
-        update_state(indexersKey, val)
-        indexersInput.value = values[handle];
+        indexersInput.value = val;
+        clearTimeout(indexersInputTimeout);
+        indexersInputTimeout = setTimeout(slider_input_update, 500,
+            indexersSlider, indexersInput, indexersKey, val);
     });
 
     var indexersInputTimeout = null;
@@ -2141,9 +2160,10 @@ $(function() {
 
     searchFactorSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(searchFactorKey, val)
-        updateSearchFactorMaxMessage();
-        searchFactorInput.value = values[handle];
+        searchFactorInput.value = val;
+        clearTimeout(searchFactorInputTimeout);
+        searchFactorInputTimeout = setTimeout(slider_input_update, 500,
+            searchFactorSlider, searchFactorInput, searchFactorKey, val);
     });
 
     var searchFactorInputTimeout = null;
@@ -2156,10 +2176,10 @@ $(function() {
 
     replicationFactorSlider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
-        update_state(replicationFactorKey, val)
-        updateReplicationFactorMaxMessage();
-        updateMaximumSearchFactor();
-        replicationFactorInput.value = values[handle];
+        replicationFactorInput.value = val;
+        clearTimeout(replicationFactorInputTimeout);
+        replicationFactorInputTimeout = setTimeout(slider_input_update, 500,
+            replicationFactorSlider, replicationFactorInput, replicationFactorKey, val);
     });
 
     var replicationFactorInputTimeout = null;
