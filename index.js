@@ -1979,7 +1979,7 @@ $(function() {
         calculate();
     }
 
-    rawVolumeSlider.noUiSlider.on('change', function( values, handle ) {
+    rawVolumeSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         rawVolumeInput.value = val;
         clearTimeout(rawVolumeInputTimeout);
@@ -1996,7 +1996,7 @@ $(function() {
     });
 
 
-    eventsPerSecondSlider.noUiSlider.on('change', function( values, handle ) {
+    eventsPerSecondSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         eventsPerSecondInput.value = val;
         clearTimeout(eventsPerSecondInputTimeout);
@@ -2012,7 +2012,7 @@ $(function() {
             eventsPerSecondSlider, eventsPerSecondInput, eventsPerSecondKey, val);
     });
 
-    averageEventSizeSlider.noUiSlider.on('change', function( values, handle ) {
+    averageEventSizeSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         averageEventSizeInput.value = val;
         clearTimeout(averageEventSizeInputTimeout);
@@ -2028,7 +2028,7 @@ $(function() {
             averageEventSizeSlider, averageEventSizeInput, averageEventSizeKey, val);
     });
 
-    compressionFactorSlider.noUiSlider.on('change', function( values, handle ) {
+    compressionFactorSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         compressionFactorInput.value = val;
         clearTimeout(compressionFactorInputTimeout);
@@ -2044,7 +2044,7 @@ $(function() {
             compressionFactorSlider, compressionFactorInput, compressionFactorKey, val);
     });
 
-    indexFactorSlider.noUiSlider.on('change', function( values, handle ) {
+    indexFactorSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         indexFactorInput.value = val;
         clearTimeout(indexFactorInputTimeout);
@@ -2060,7 +2060,7 @@ $(function() {
             indexFactorSlider, indexFactorInput, indexFactorKey, val);
     });
 
-    hotWarmRetentionSlider.noUiSlider.on('change', function( values, handle ) {
+    hotWarmRetentionSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         hotWarmRetentionInput.value = val;
         clearTimeout(hotWarmRetentionInputTimeout);
@@ -2076,7 +2076,7 @@ $(function() {
             hotWarmRetentionSlider, hotWarmRetentionInput, hotWarmRetentionKey, val);
     });
 
-    coldRetentionSlider.noUiSlider.on('change', function( values, handle ) {
+    coldRetentionSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         coldRetentionInput.value = val;
         clearTimeout(coldRetentionInputTimeout);
@@ -2092,7 +2092,7 @@ $(function() {
             coldRetentionSlider, coldRetentionInput, coldRetentionKey, val);
     });
 
-    frozenRetentionSlider.noUiSlider.on('change', function( values, handle ) {
+    frozenRetentionSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         frozenRetentionInput.value = val;
         clearTimeout(frozenRetentionInputTimeout);
@@ -2108,7 +2108,7 @@ $(function() {
             frozenRetentionSlider, frozenRetentionInput, frozenRetentionKey, val);
     });
 
-    gbPerIndexerSlider.noUiSlider.on('change', function( values, handle ) {
+    gbPerIndexerSlider.noUiSlider.on('slide', function( values, handle ) {
         var state;
         if(!dontChangeRatioBasedOnGBPerIndexerSliderChange){
             ignoreOtherAppRatioChangeEvent = true;
@@ -2142,7 +2142,7 @@ $(function() {
             gbPerIndexerSlider, gbPerIndexerInput, gbPerIndexerKey, val);
     });
 
-    indexersSlider.noUiSlider.on('change', function( values, handle ) {
+    indexersSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         indexersInput.value = val;
         clearTimeout(indexersInputTimeout);
@@ -2158,7 +2158,7 @@ $(function() {
             indexersSlider, indexersInput, indexersKey, val);
     });
 
-    searchFactorSlider.noUiSlider.on('change', function( values, handle ) {
+    searchFactorSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         searchFactorInput.value = val;
         clearTimeout(searchFactorInputTimeout);
@@ -2174,7 +2174,7 @@ $(function() {
             searchFactorSlider, searchFactorInput, searchFactorKey, val);
     });
 
-    replicationFactorSlider.noUiSlider.on('change', function( values, handle ) {
+    replicationFactorSlider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         replicationFactorInput.value = val;
         clearTimeout(replicationFactorInputTimeout);
@@ -2190,21 +2190,21 @@ $(function() {
             replicationFactorSlider, replicationFactorInput, replicationFactorKey, val);
     });
 
-    diskSpaceContingencyVolume1Slider.noUiSlider.on('change', function( values, handle ) {
+    diskSpaceContingencyVolume1Slider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         update_state(diskSpaceContingencyVolume1Key, val);
         diskSpaceContingencyVolume1Div.text(Math.round(val*100) +' %');
         calculate();
     });
 
-    diskSpaceContingencyVolume2Slider.noUiSlider.on('change', function( values, handle ) {
+    diskSpaceContingencyVolume2Slider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         update_state(diskSpaceContingencyVolume2Key, val);
         diskSpaceContingencyVolume2Div.text(Math.round(val*100) +' %');
         calculate();
     });
 
-    diskSpaceContingencyVolume3Slider.noUiSlider.on('change', function( values, handle ) {
+    diskSpaceContingencyVolume3Slider.noUiSlider.on('slide', function( values, handle ) {
         var val = values[handle];
         update_state(diskSpaceContingencyVolume3Key, val);
         diskSpaceContingencyVolume3Div.text(Math.round(val*100) +' %');
