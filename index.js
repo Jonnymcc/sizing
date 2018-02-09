@@ -1400,20 +1400,17 @@ $(function() {
 
     var updateGbPerIndexerSlider=function(){
         dontChangeRatioBasedOnGBPerIndexerSliderChange=true;
-        (function(){
-            gbPerIndexer = calculateGBPerIndexer();
-            gbPerIndexerSlider.noUiSlider.set(gbPerIndexer);
-            gbPerIndexerInput.value = gbPerIndexer;
-            dontChangeRatioBasedOnGBPerIndexerSliderChange=false;
-        })();
+        slider_input_update(gbPerIndexerSlider, gbPerIndexerInput,
+            gbPerIndexerKey, calculateGBPerIndexer());
+        dontChangeRatioBasedOnGBPerIndexerSliderChange=false;
     };
     var dontChangeRatioBasedOnGBPerIndexerSliderChange = false;
 
     noUiSlider.create(gbPerIndexerSlider, {
         start: calculateGBPerIndexer(),
-        step: 20,
+        step: 10,
         range: {
-            'min': 1,
+            'min': 0,
             'max': 1000
         },
         format: {
