@@ -1594,7 +1594,7 @@ $(function() {
         searchFactorSlider.noUiSlider.updateOptions({
             start: value,
             range: { 
-                'min': 1,
+                'min': 0,
                 'max': new_max
             }
         })
@@ -1607,12 +1607,12 @@ $(function() {
         start: searchFactorDefaultValue,
         step: 1,
         range: {
-            'min': 1,
+            'min': 0,
             'max': calculateMaximumSearchFactor()
         },
         format: {
             to: function ( value ) {
-                return Math.round(value);
+                return value == 0 ? 1 : value;
             },
             from: function ( value ) {
                 return value;
@@ -1962,6 +1962,15 @@ $(function() {
         state[key] = value;
         var hash = $.param.fragment(window.location.hash,state);
         replaceState(undefined, null, hash);
+    }
+
+    function slider_input_update(slider, input, key, val) {
+        val = Math.max(val, slider.noUiSlider.options.range.min);
+        val = Math.min(val, slider.noUiSlider.options.range.max);
+        slider.noUiSlider.set(val);
+        input.value = slider.noUiSlider.get();
+        input.select()
+        update_state(key, slider.noUiSlider.get());
         if(indexersCalculatedAutomatically){
             calculateNumberOfNodes();
         }
@@ -1975,15 +1984,6 @@ $(function() {
         update_state(dailyVolumeKey, val);
         rawVolumeInput.value = values[handle];
     });
-
-    function slider_input_update(slider, input, key, val) {
-        val = Math.max(val, slider.noUiSlider.options.range.min);
-        val = Math.min(val, slider.noUiSlider.options.range.max);
-        slider.noUiSlider.set(val);
-        input.value = val;
-        input.select()
-        update_state(key, val);
-    }
 
     var rawVolumeInputTimeout = null;
     rawVolumeInput.addEventListener('keyup', function(){
