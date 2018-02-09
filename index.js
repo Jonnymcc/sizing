@@ -2173,21 +2173,21 @@ $(function() {
     diskSpaceContingencyVolume1Slider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
         update_state(diskSpaceContingencyVolume1Key, val);
-        diskSpaceContingencyVolume1Div.text(values[handle] +' %');
+        diskSpaceContingencyVolume1Div.text(Math.round(val*100) +' %');
         calculate();
     });
 
     diskSpaceContingencyVolume2Slider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
         update_state(diskSpaceContingencyVolume2Key, val);
-        diskSpaceContingencyVolume2Div.text(values[handle]+' %');
+        diskSpaceContingencyVolume2Div.text(Math.round(val*100) +' %');
         calculate();
     });
 
     diskSpaceContingencyVolume3Slider.noUiSlider.on('change', function( values, handle ) {
         var val = values[handle];
         update_state(diskSpaceContingencyVolume3Key, val);
-        diskSpaceContingencyVolume3Div.text(values[handle]+' %');
+        diskSpaceContingencyVolume3Div.text(Math.round(val*100) +' %');
         calculate();
     });
 });
